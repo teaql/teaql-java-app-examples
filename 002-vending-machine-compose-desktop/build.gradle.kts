@@ -23,8 +23,8 @@ dependencies {
     implementation("io.teaql:teaql-core:1.511-RELEASE")
     implementation("io.teaql:teaql-sqlite:1.511-RELEASE")
     implementation("org.xerial:sqlite-jdbc:3.45.2.0")
-    implementation("io.teaql:teaql-provider-jdbc:1.510-RELEASE")
-    implementation("io.teaql:teaql-data-service-sql:1.510-RELEASE")
+    implementation("io.teaql:teaql-provider-jdbc:1.511-RELEASE")
+    implementation("io.teaql:teaql-data-service-sql:1.511-RELEASE")
 }
 
 sourceSets {
