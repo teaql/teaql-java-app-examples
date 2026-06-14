@@ -602,21 +602,6 @@ fun initDatabase() {
         val count = Q.products().comment("init").purpose("check db").executeForList(ctx).size()
         if (count == 0) {
             val machine = VendingMachine.refer(1L)
-            
-            val statuses = mapOf(
-                1001L to Pair("PENDING", "Pending"),
-                1002L to Pair("PAID", "Paid"),
-                1003L to Pair("DISPENSING", "Dispensing"),
-                1004L to Pair("COMPLETED", "Completed")
-            )
-            for ((sId, pair) in statuses) {
-                val s = com.doublechaintech.vendingmachineservice.orderstatus.OrderStatus()
-                s.internalSet("id", sId) // explicitly set ID
-                s.updateCode(pair.first)
-                s.updateName(pair.second)
-                s.updateVendingMachine(machine)
-                s.auditAs<com.doublechaintech.vendingmachineservice.orderstatus.OrderStatus>("init status").save(ctx)
-            }
 
             val seedData = listOf(
                 arrayOf("Budweiser Beer", 15, 50, "https://example.com/bud.jpg"),
