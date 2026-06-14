@@ -441,35 +441,30 @@ fun AdminBackstageScreen() {
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text("Status: ${order.status?.name ?: "Unknown"}", fontSize = 14.sp)
                                 
-                                if (order.status?.code == "PAID" || order.status?.code == "DISPENSING") {
-                                    Spacer(modifier = Modifier.height(8.dp))
-                                    Row {
-                                        if (order.status?.code == "PAID") {
-                                            Button(onClick = {
-                                                updateOrderStatus(order, "Dispense")
-                                                coroutineScope.launch {
-                                                    withContext(Dispatchers.IO) {
-                                                        dashboardData = fetchOrders()
-                                                    }
-                                                }
-                                            }) {
-                                                Text("完成取货")
-                                            }
-                                        } else if (order.status?.code == "DISPENSING") {
-                                            Button(
-                                                onClick = {
-                                                    updateOrderStatus(order, "Complete")
-                                                    coroutineScope.launch {
-                                                        withContext(Dispatchers.IO) {
-                                                            dashboardData = fetchOrders()
-                                                        }
-                                                    }
-                                                },
-                                                colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF4CAF50), contentColor = Color.White)
-                                            ) {
-                                                Text("订单完成")
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                    Button(onClick = {
+                                        updateOrderStatus(order, "Dispense")
+                                        coroutineScope.launch {
+                                            withContext(Dispatchers.IO) {
+                                                dashboardData = fetchOrders()
                                             }
                                         }
+                                    }) {
+                                        Text("Dispense")
+                                    }
+                                    Button(
+                                        onClick = {
+                                            updateOrderStatus(order, "Complete")
+                                            coroutineScope.launch {
+                                                withContext(Dispatchers.IO) {
+                                                    dashboardData = fetchOrders()
+                                                }
+                                            }
+                                        },
+                                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF4CAF50), contentColor = Color.White)
+                                    ) {
+                                        Text("Complete")
                                     }
                                 }
                             }
