@@ -68,7 +68,7 @@ object TeaQLManager {
         io.teaql.core.meta.EntityMetaFactory.registerGlobal(metaFactory)
         
         val dataSource = org.sqlite.SQLiteDataSource()
-        dataSource.url = "jdbc:sqlite:vending_world_cup.db"
+        dataSource.url = "jdbc:sqlite:vending_machine.db"
         val adapter = io.teaql.provider.jdbc.JdbcSqlExecutor(dataSource)
         val dataService = SqliteDataServiceExecutor("default", adapter, dataSource)
         
