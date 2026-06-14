@@ -4,6 +4,7 @@ import com.doublechaintech.vendingmachineservice.product.Product
 import com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.launch
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
@@ -128,6 +129,8 @@ fun NavItem(title: String, icon: ImageVector, isSelected: Boolean, onClick: () -
 @Composable
 fun PurchaseHallScreen() {
     var products by remember { mutableStateOf(emptyList<Product>()) }
+    val scaffoldState = rememberScaffoldState()
+    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         SystemLogger.log("Navigated to Purchase Hall.")
@@ -136,25 +139,35 @@ fun PurchaseHallScreen() {
         }
     }
 
-    if (products.isEmpty()) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator()
-        }
-    } else {
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = 200.dp),
-            contentPadding = PaddingValues(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            items(products) { product ->
-                ProductCard(product, onPurchase = {
-                    SystemLogger.log("Initiating purchase for ${product.name}")
-                    purchaseProduct(product)
-                    SystemLogger.log("Purchase complete. Reloading products...")
-                    // Reload
-                    products = fetchProducts()
-                })
+    Scaffold(scaffoldState = scaffoldState, backgroundColor = Color.Transparent) { padding ->
+        if (products.isEmpty()) {
+            Box(modifier = Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        } else {
+            LazyVerticalGrid(
+                columns = GridCells.Adaptive(minSize = 200.dp),
+                contentPadding = PaddingValues(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = Modifier.padding(padding)
+            ) {
+                items(products) { product ->
+                    ProductCard(product, onPurchase = {
+                        SystemLogger.log("Initiating purchase for ${product.name}")
+                        purchaseProduct(product)
+                        SystemLogger.log("Purchase complete. Reloading products...")
+                        products = fetchProducts()
+                        
+                        // Show snackbar
+                        coroutineScope.launch {
+                            scaffoldState.snackbarHostState.showSnackbar(
+                                message = "Successfully purchased ${product.name}!",
+                                duration = SnackbarDuration.Short
+                            )
+                        }
+                    })
+                }
             }
         }
     }
@@ -171,6 +184,8 @@ fun ProductCard(product: Product, onPurchase: () -> Unit) {
             Text(product.name, fontWeight = FontWeight.Bold, fontSize = 16.sp, maxLines = 1)
             Spacer(modifier = Modifier.height(8.dp))
             Text("$${product.price}", color = MaterialTheme.colors.secondary, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+            Spacer(modifier = Modifier.height(4.dp))
+            Text("库存 (Stock): ${product.stock}", fontSize = 12.sp, color = Color.Gray)
             Spacer(modifier = Modifier.height(8.dp))
             Button(
                 onClick = onPurchase, 
