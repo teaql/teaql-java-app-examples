@@ -170,6 +170,9 @@ fun NavItem(title: String, icon: ImageVector, isSelected: Boolean, onClick: () -
 fun PurchaseHallScreen() {
     var products by remember { mutableStateOf(emptyList<Product>()) }
     val cart = remember { mutableStateListOf<Product>() }
+    var showCheckoutDialog by remember { mutableStateOf(false) }
+    var paymentMethod by remember { mutableStateOf("Credit Card") }
+    var paymentInfo by remember { mutableStateOf("") }
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
 
@@ -228,13 +231,7 @@ fun PurchaseHallScreen() {
                     Button(
                         onClick = {
                             if (cart.isNotEmpty()) {
-                                SystemLogger.log("Initiating checkout for ${cart.size} items")
-                                checkoutCart(cart)
-                                cart.clear()
-                                products = fetchProducts()
-                                coroutineScope.launch {
-                                    scaffoldState.snackbarHostState.showSnackbar("Checkout complete!")
-                                }
+                                showCheckoutDialog = true
                             }
                         },
                         modifier = Modifier.fillMaxWidth(),
@@ -244,6 +241,64 @@ fun PurchaseHallScreen() {
                     }
                 }
             }
+        }
+        
+        if (showCheckoutDialog) {
+            AlertDialog(
+                onDismissRequest = { showCheckoutDialog = false },
+                title = { Text("Checkout Payment", fontWeight = FontWeight.Bold) },
+                text = {
+                    Column {
+                        Text("Select Payment Method:")
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            RadioButton(selected = paymentMethod == "Credit Card", onClick = { paymentMethod = "Credit Card" })
+                            Text("Credit Card", fontSize = 14.sp)
+                            Spacer(modifier = Modifier.width(8.dp))
+                            RadioButton(selected = paymentMethod == "Apple Pay", onClick = { paymentMethod = "Apple Pay" })
+                            Text("Apple Pay", fontSize = 14.sp)
+                            Spacer(modifier = Modifier.width(8.dp))
+                            RadioButton(selected = paymentMethod == "Google Pay", onClick = { paymentMethod = "Google Pay" })
+                            Text("Google Pay", fontSize = 14.sp)
+                        }
+                        Spacer(modifier = Modifier.height(16.dp))
+                        OutlinedTextField(
+                            value = paymentInfo,
+                            onValueChange = { paymentInfo = it },
+                            label = { Text(if (paymentMethod == "Credit Card") "Card Number" else "Account ID / Email") },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                },
+                confirmButton = {
+                    Button(onClick = {
+                        if (paymentInfo.isNotBlank()) {
+                            SystemLogger.log("Initiating checkout for ${cart.size} items via $paymentMethod")
+                            checkoutCart(cart, paymentMethod)
+                            cart.clear()
+                            showCheckoutDialog = false
+                            paymentInfo = ""
+                            coroutineScope.launch {
+                                withContext(Dispatchers.IO) {
+                                    products = fetchProducts()
+                                }
+                                scaffoldState.snackbarHostState.showSnackbar("Checkout complete!")
+                            }
+                        } else {
+                            coroutineScope.launch {
+                                scaffoldState.snackbarHostState.showSnackbar("Please enter payment details.")
+                            }
+                        }
+                    }) {
+                        Text("Pay & Submit")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showCheckoutDialog = false }) {
+                        Text("Cancel")
+                    }
+                }
+            )
         }
     }
 }
@@ -273,11 +328,48 @@ fun ProductCard(product: Product, onAddToCart: () -> Unit) {
     }
 }
 
+fun fetchOrders(): List<VendingOrder> {
+    val ctx = TeaQLManager.userContext
+    return try {
+        Q.vendingOrders().comment("fetch").purpose("admin dashboard").executeForList(ctx).toList()
+    } catch (e: Exception) {
+        SystemLogger.log("Failed to fetch orders: ${e.message}")
+        e.printStackTrace()
+        emptyList()
+    }
+}
+
 @Composable
 fun AdminBackstageScreen() {
+    var orders by remember { mutableStateOf(emptyList<VendingOrder>()) }
+    
+    LaunchedEffect(Unit) {
+        withContext(Dispatchers.IO) {
+            orders = fetchOrders()
+        }
+    }
+    
     Card(modifier = Modifier.fillMaxSize(), elevation = 2.dp) {
-        Box(contentAlignment = Alignment.Center) {
-            Text("Admin Dashboard & Orders", fontSize = 24.sp, color = Color.Gray)
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text("Admin Dashboard - Order History", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            Spacer(modifier = Modifier.height(16.dp))
+            if (orders.isEmpty()) {
+                Text("No orders found.", color = Color.Gray)
+            } else {
+                LazyColumn(modifier = Modifier.fillMaxSize()) {
+                    items(orders) { order ->
+                        Card(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp), elevation = 4.dp) {
+                            Column(modifier = Modifier.padding(12.dp)) {
+                                Text("Order ID: ${order.id}", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                                Spacer(modifier = Modifier.height(4.dp))
+                                Text("Title: ${order.title}", fontSize = 14.sp)
+                                Spacer(modifier = Modifier.height(2.dp))
+                                Text("Total Amount: $${order.totalAmount}", fontSize = 14.sp, color = MaterialTheme.colors.primary)
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -360,7 +452,7 @@ fun fetchProducts(): List<Product> {
     }
 }
 
-fun checkoutCart(cart: List<Product>) {
+fun checkoutCart(cart: List<Product>, paymentMethodName: String) {
     val ctx = TeaQLManager.userContext
     try {
         SystemLogger.log("Initiating TeaQL Checkout Transaction...")
@@ -399,7 +491,12 @@ fun checkoutCart(cart: List<Product>) {
         
         val payment = OrderPayment()
         payment.updateName("Payment-${order.title}")
-        payment.updatePaymentMethodToCreditCard()
+        when (paymentMethodName) {
+            "Credit Card" -> payment.updatePaymentMethodToCreditCard()
+            "Apple Pay" -> payment.updatePaymentMethodToApplePay()
+            "Google Pay" -> payment.updatePaymentMethodToGooglePay()
+            else -> payment.updatePaymentMethodToCreditCard()
+        }
         payment.updateAmount(totalAmount)
         payment.updatePaymentStatusToSuccess()
         payment.updateVendingOrder(order)
