@@ -129,6 +129,7 @@ fun NavItem(title: String, icon: ImageVector, isSelected: Boolean, onClick: () -
 @Composable
 fun PurchaseHallScreen() {
     var products by remember { mutableStateOf(emptyList<Product>()) }
+    val cart = remember { mutableStateListOf<Product>() }
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
 
@@ -145,28 +146,64 @@ fun PurchaseHallScreen() {
                 CircularProgressIndicator()
             }
         } else {
-            LazyVerticalGrid(
-                columns = GridCells.Adaptive(minSize = 200.dp),
-                contentPadding = PaddingValues(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier.padding(padding)
-            ) {
-                items(products) { product ->
-                    ProductCard(product, onPurchase = {
-                        SystemLogger.log("Initiating purchase for ${product.name}")
-                        purchaseProduct(product)
-                        SystemLogger.log("Purchase complete. Reloading products...")
-                        products = fetchProducts()
-                        
-                        // Show snackbar
-                        coroutineScope.launch {
-                            scaffoldState.snackbarHostState.showSnackbar(
-                                message = "Successfully purchased ${product.name}!",
-                                duration = SnackbarDuration.Short
-                            )
+            Row(modifier = Modifier.fillMaxSize().padding(padding)) {
+                // Products Grid (Left)
+                LazyVerticalGrid(
+                    columns = GridCells.Adaptive(minSize = 200.dp),
+                    contentPadding = PaddingValues(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    modifier = Modifier.weight(2f)
+                ) {
+                    items(products) { product ->
+                        ProductCard(product, onAddToCart = {
+                            SystemLogger.log("Added to cart: ${product.name}")
+                            cart.add(product)
+                        })
+                    }
+                }
+
+                // Shopping Cart (Right)
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
+                        .background(Color.White, RoundedCornerShape(8.dp))
+                        .padding(16.dp)
+                ) {
+                    Text("Shopping Cart", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                    Spacer(modifier = Modifier.height(16.dp))
+                    
+                    val totalPrice = cart.sumOf { it.price }
+                    
+                    LazyColumn(modifier = Modifier.weight(1f)) {
+                        items(cart) { item ->
+                            Text("- ${item.name} ($${item.price})", fontSize = 14.sp)
+                            Spacer(modifier = Modifier.height(4.dp))
                         }
-                    })
+                    }
+                    
+                    Divider(modifier = Modifier.padding(vertical = 8.dp))
+                    Text("Total: $$totalPrice", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                    Spacer(modifier = Modifier.height(16.dp))
+                    
+                    Button(
+                        onClick = {
+                            if (cart.isNotEmpty()) {
+                                SystemLogger.log("Initiating checkout for ${cart.size} items")
+                                checkoutCart(cart)
+                                cart.clear()
+                                products = fetchProducts()
+                                coroutineScope.launch {
+                                    scaffoldState.snackbarHostState.showSnackbar("Checkout complete!")
+                                }
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        enabled = cart.isNotEmpty()
+                    ) {
+                        Text("Checkout")
+                    }
                 }
             }
         }
@@ -174,7 +211,7 @@ fun PurchaseHallScreen() {
 }
 
 @Composable
-fun ProductCard(product: Product, onPurchase: () -> Unit) {
+fun ProductCard(product: Product, onAddToCart: () -> Unit) {
     Card(elevation = 4.dp, shape = RoundedCornerShape(8.dp), modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             Box(modifier = Modifier.size(100.dp).background(Color.LightGray, RoundedCornerShape(8.dp)), contentAlignment = Alignment.Center) {
@@ -188,11 +225,11 @@ fun ProductCard(product: Product, onPurchase: () -> Unit) {
             Text("库存 (Stock): ${product.stock}", fontSize = 12.sp, color = Color.Gray)
             Spacer(modifier = Modifier.height(8.dp))
             Button(
-                onClick = onPurchase, 
+                onClick = onAddToCart, 
                 modifier = Modifier.fillMaxWidth(),
                 enabled = product.stock > 0
             ) {
-                Text(if (product.stock > 0) "购买 (Buy)" else "售罄 (Sold Out)")
+                Text(if (product.stock > 0) "加入购物车 (Add to Cart)" else "售罄 (Sold Out)")
             }
         }
     }
@@ -333,7 +370,7 @@ fun fetchProducts(): List<Product> {
     return list
 }
 
-fun purchaseProduct(product: Product) {
+fun checkoutCart(cart: List<Product>) {
     val connection = java.sql.DriverManager.getConnection("jdbc:sqlite:vending_world_cup.db")
     connection.autoCommit = false
     try {
@@ -347,34 +384,38 @@ fun purchaseProduct(product: Product) {
         val orderId = orderKeys.getLong(1)
         SystemLogger.log("Created Vending Order ID=$orderId ($orderName)")
 
-        // 2. Create Vending Order Item
+        // 2. Insert Order Items & Update Stock
         val insertItem = connection.prepareStatement("INSERT INTO vending_order_item_data (name, vending_order, product, quantity, amount, version) VALUES (?, ?, ?, 1, ?, 1)")
-        insertItem.setString(1, "Item-${product.name}")
-        insertItem.setLong(2, orderId)
-        insertItem.setLong(3, product.id ?: 0L)
-        insertItem.setInt(4, product.price)
-        insertItem.executeUpdate()
-        SystemLogger.log("Added Order Item: ${product.name} (Amount: $${product.price})")
+        val updateStock = connection.prepareStatement("UPDATE product_data SET stock = stock - 1 WHERE id = ? AND stock > 0")
+        
+        var totalAmount = 0
+        for (product in cart) {
+            insertItem.setString(1, "Item-${product.name}")
+            insertItem.setLong(2, orderId)
+            insertItem.setLong(3, product.id ?: 0L)
+            insertItem.setInt(4, product.price)
+            insertItem.executeUpdate()
+            
+            updateStock.setLong(1, product.id ?: 0L)
+            val rows = updateStock.executeUpdate()
+            if (rows == 0) {
+                throw Exception("Out of stock for ${product.name}!")
+            }
+            
+            totalAmount += product.price
+            SystemLogger.log("Added Order Item: ${product.name} (Amount: $${product.price})")
+        }
 
-        // 3. Create Order Payment (Using US Payment Methods)
+        // 3. Create Order Payment
         val paymentMethods = listOf("Google Pay", "Apple Pay", "Credit Card")
         val chosenMethod = paymentMethods.random()
         val insertPayment = connection.prepareStatement("INSERT INTO order_payment_data (name, vending_order, payment_method, amount, payment_status, version) VALUES (?, ?, ?, ?, 'PAID', 1)")
         insertPayment.setString(1, "Payment-$orderName")
         insertPayment.setLong(2, orderId)
         insertPayment.setString(3, chosenMethod)
-        insertPayment.setInt(4, product.price)
+        insertPayment.setInt(4, totalAmount)
         insertPayment.executeUpdate()
-        SystemLogger.log("Processed Payment of $${product.price} via $chosenMethod [Status: PAID]")
-
-        // 4. Update Product Stock
-        val updateStock = connection.prepareStatement("UPDATE product_data SET stock = stock - 1 WHERE id = ? AND stock > 0")
-        updateStock.setLong(1, product.id ?: 0L)
-        val rows = updateStock.executeUpdate()
-        if (rows == 0) {
-            throw Exception("Out of stock!")
-        }
-        SystemLogger.log("Deducted stock for ${product.name}.")
+        SystemLogger.log("Processed Payment of $$totalAmount via $chosenMethod [Status: PAID]")
 
         connection.commit()
         SystemLogger.log("Transaction committed successfully.")
