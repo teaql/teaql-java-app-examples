@@ -394,6 +394,9 @@ fun checkoutCart(cart: List<Product>) {
             SystemLogger.log("Added Order Item: ${product.name} (Amount: $${product.price})")
         }
         
+        order.updateTotalAmount(totalAmount)
+        order.auditAs<VendingOrder>("update order amount").save(ctx)
+        
         val payment = OrderPayment()
         payment.updateName("Payment-${order.title}")
         payment.updatePaymentMethodToCreditCard()
