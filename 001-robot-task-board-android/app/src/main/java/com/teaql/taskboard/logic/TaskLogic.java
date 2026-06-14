@@ -1,9 +1,9 @@
 package com.teaql.taskboard.logic;
 
-import com.doublechaintech.robottaskboardservice.task.Task;
-import com.doublechaintech.robottaskboardservice.taskstatus.TaskStatus;
-import com.doublechaintech.robottaskboardservice.platform.Platform;
-import com.doublechaintech.robottaskboardservice.Q;
+import com.example.robottaskboardservice.task.Task;
+import com.example.robottaskboardservice.taskstatus.TaskStatus;
+import com.example.robottaskboardservice.platform.Platform;
+import com.example.robottaskboardservice.Q;
 import io.teaql.core.UserContext;
 import io.teaql.core.SmartList;
 

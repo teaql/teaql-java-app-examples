@@ -1,6 +1,6 @@
 # TeaQL Java Coding Agent Instructions
 
-This project uses the TeaQL-generated Java domain package `com.doublechaintech.robottaskboardservice`.
+This project uses the TeaQL-generated Java domain package `com.example.robottaskboardservice`.
 
 ## Core Rule
 
@@ -53,8 +53,8 @@ When the environment variable `TEAQL_ENFORCE_INTENT` is set to `strict`, missing
 ## Main Imports
 
 ```java
-import com.doublechaintech.robottaskboardservice.E;
-import com.doublechaintech.robottaskboardservice.Q;
+import com.example.robottaskboardservice.E;
+import com.example.robottaskboardservice.Q;
 ```
 
 The generated Java stack provides:

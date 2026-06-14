@@ -1,7 +1,7 @@
-package com.doublechaintech.robottaskboardservice;
+package com.example.robottaskboardservice;
 
-import com.doublechaintech.robottaskboardservice.platform.Platform;
-import com.doublechaintech.robottaskboardservice.taskstatus.TaskStatus;
+import com.example.robottaskboardservice.platform.Platform;
+import com.example.robottaskboardservice.taskstatus.TaskStatus;
 
 public interface Constants  {
   public static final long PLATFORM_ID = 1l;

@@ -1,13 +1,13 @@
-package com.doublechaintech.robottaskboardservice;
+package com.example.robottaskboardservice;
 
-import com.doublechaintech.robottaskboardservice.platform.Platform;
-import com.doublechaintech.robottaskboardservice.platform.PlatformExpression;
-import com.doublechaintech.robottaskboardservice.task.Task;
-import com.doublechaintech.robottaskboardservice.task.TaskExpression;
-import com.doublechaintech.robottaskboardservice.tasklog.TaskLog;
-import com.doublechaintech.robottaskboardservice.tasklog.TaskLogExpression;
-import com.doublechaintech.robottaskboardservice.taskstatus.TaskStatus;
-import com.doublechaintech.robottaskboardservice.taskstatus.TaskStatusExpression;
+import com.example.robottaskboardservice.platform.Platform;
+import com.example.robottaskboardservice.platform.PlatformExpression;
+import com.example.robottaskboardservice.task.Task;
+import com.example.robottaskboardservice.task.TaskExpression;
+import com.example.robottaskboardservice.tasklog.TaskLog;
+import com.example.robottaskboardservice.tasklog.TaskLogExpression;
+import com.example.robottaskboardservice.taskstatus.TaskStatus;
+import com.example.robottaskboardservice.taskstatus.TaskStatusExpression;
 import io.teaql.core.value.ValueExpression;
 
 public class E  {

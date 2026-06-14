@@ -1,7 +1,7 @@
-package com.doublechaintech.robottaskboardservice.tasklog;
+package com.example.robottaskboardservice.tasklog;
 
-import com.doublechaintech.robottaskboardservice.task.Task;
-import com.doublechaintech.robottaskboardservice.task.TaskExpression;
+import com.example.robottaskboardservice.task.Task;
+import com.example.robottaskboardservice.task.TaskExpression;
 import io.teaql.core.UserContext;
 import io.teaql.core.value.BaseEntityExpression;
 import io.teaql.core.value.Expression;

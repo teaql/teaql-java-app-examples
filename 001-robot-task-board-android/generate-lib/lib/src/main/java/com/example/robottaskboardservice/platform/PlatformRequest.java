@@ -1,10 +1,10 @@
-package com.doublechaintech.robottaskboardservice.platform;
+package com.example.robottaskboardservice.platform;
 
-import com.doublechaintech.robottaskboardservice.Q;
-import com.doublechaintech.robottaskboardservice.task.Task;
-import com.doublechaintech.robottaskboardservice.task.TaskRequest;
-import com.doublechaintech.robottaskboardservice.taskstatus.TaskStatus;
-import com.doublechaintech.robottaskboardservice.taskstatus.TaskStatusRequest;
+import com.example.robottaskboardservice.Q;
+import com.example.robottaskboardservice.task.Task;
+import com.example.robottaskboardservice.task.TaskRequest;
+import com.example.robottaskboardservice.taskstatus.TaskStatus;
+import com.example.robottaskboardservice.taskstatus.TaskStatusRequest;
 import io.teaql.core.AggrFunction;
 import io.teaql.core.BaseRequest;
 import io.teaql.core.PropertyReference;

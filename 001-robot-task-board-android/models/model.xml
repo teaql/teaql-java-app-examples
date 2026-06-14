@@ -4,7 +4,7 @@
       english_name="Robot Task Board"
       data_service="sqlite"
       name="robot-task-board-service"
-      org="doublechaintech"
+      org="example"
       _module_key="root">
 
   <!-- Constants -->

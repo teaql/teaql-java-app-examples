@@ -2,10 +2,10 @@ package com.teaql.taskboard.ui;
 
 import com.teaql.taskboard.R;
 import com.teaql.taskboard.logic.TeaQLManager;
-import com.doublechaintech.robottaskboardservice.task.Task;
-import com.doublechaintech.robottaskboardservice.taskstatus.TaskStatus;
-import com.doublechaintech.robottaskboardservice.platform.Platform;
-import com.doublechaintech.robottaskboardservice.Q;
+import com.example.robottaskboardservice.task.Task;
+import com.example.robottaskboardservice.taskstatus.TaskStatus;
+import com.example.robottaskboardservice.platform.Platform;
+import com.example.robottaskboardservice.Q;
 import io.teaql.core.UserContext;
 import io.teaql.core.SmartList;
 import com.teaql.taskboard.logic.TaskLogic;

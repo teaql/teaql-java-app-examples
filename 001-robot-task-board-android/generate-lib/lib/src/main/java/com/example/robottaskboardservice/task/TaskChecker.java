@@ -1,13 +1,13 @@
-package com.doublechaintech.robottaskboardservice.task;
+package com.example.robottaskboardservice.task;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.ReflectUtil;
-import com.doublechaintech.robottaskboardservice.platform.Platform;
-import com.doublechaintech.robottaskboardservice.platform.PlatformChecker;
-import com.doublechaintech.robottaskboardservice.tasklog.TaskLog;
-import com.doublechaintech.robottaskboardservice.tasklog.TaskLogChecker;
-import com.doublechaintech.robottaskboardservice.taskstatus.TaskStatus;
-import com.doublechaintech.robottaskboardservice.taskstatus.TaskStatusChecker;
+import com.example.robottaskboardservice.platform.Platform;
+import com.example.robottaskboardservice.platform.PlatformChecker;
+import com.example.robottaskboardservice.tasklog.TaskLog;
+import com.example.robottaskboardservice.tasklog.TaskLogChecker;
+import com.example.robottaskboardservice.taskstatus.TaskStatus;
+import com.example.robottaskboardservice.taskstatus.TaskStatusChecker;
 import io.teaql.core.UserContext;
 import io.teaql.core.checker.Checker;
 import io.teaql.core.checker.ObjectLocation;

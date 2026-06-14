@@ -4,8 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.doublechaintech.robottaskboardservice.EntityMetaRegistry;
-import com.doublechaintech.robottaskboardservice.platform.Platform;
+import com.example.robottaskboardservice.EntityMetaRegistry;
+import com.example.robottaskboardservice.platform.Platform;
 
 import io.teaql.android.AndroidSqliteDataServiceExecutor;
 import io.teaql.core.UserContext;
@@ -72,7 +72,7 @@ public class TeaQLManager {
 
     private static void initializeDataIfEmpty(UserContext ctx) {
         try {
-            int count = com.doublechaintech.robottaskboardservice.Q.platforms().comment("Init").purpose("Check").executeForList(ctx).size();
+            int count = com.example.robottaskboardservice.Q.platforms().comment("Init").purpose("Check").executeForList(ctx).size();
             if (count == 0) {
                 // Insert Platform
                 Platform platform = new Platform();
@@ -81,21 +81,21 @@ public class TeaQLManager {
                 platform.auditAs("Init").save(ctx);
 
                 // Insert Constants for Task Status
-                com.doublechaintech.robottaskboardservice.taskstatus.TaskStatus todo = new com.doublechaintech.robottaskboardservice.taskstatus.TaskStatus();
+                com.example.robottaskboardservice.taskstatus.TaskStatus todo = new com.example.robottaskboardservice.taskstatus.TaskStatus();
                 todo.updateId(1001L);
                 todo.updateName("TODO");
                 todo.updateCode("TODO");
                 todo.updatePlatform(platform);
                 todo.auditAs("Init").save(ctx);
 
-                com.doublechaintech.robottaskboardservice.taskstatus.TaskStatus inProgress = new com.doublechaintech.robottaskboardservice.taskstatus.TaskStatus();
+                com.example.robottaskboardservice.taskstatus.TaskStatus inProgress = new com.example.robottaskboardservice.taskstatus.TaskStatus();
                 inProgress.updateId(1002L);
                 inProgress.updateName("In Progress");
                 inProgress.updateCode("IN_PROGRESS");
                 inProgress.updatePlatform(platform);
                 inProgress.auditAs("Init").save(ctx);
 
-                com.doublechaintech.robottaskboardservice.taskstatus.TaskStatus done = new com.doublechaintech.robottaskboardservice.taskstatus.TaskStatus();
+                com.example.robottaskboardservice.taskstatus.TaskStatus done = new com.example.robottaskboardservice.taskstatus.TaskStatus();
                 done.updateId(1003L);
                 done.updateName("Done");
                 done.updateCode("DONE");
@@ -103,21 +103,21 @@ public class TeaQLManager {
                 done.auditAs("Init").save(ctx);
                 
                 // Insert Sample Tasks
-                com.doublechaintech.robottaskboardservice.task.Task task1 = new com.doublechaintech.robottaskboardservice.task.Task();
+                com.example.robottaskboardservice.task.Task task1 = new com.example.robottaskboardservice.task.Task();
                 task1.updateId(1L);
                 task1.updateName("Setup Database");
                 task1.updatePlatform(platform);
                 task1.updateStatusToDone();
                 task1.auditAs("Init").save(ctx);
 
-                com.doublechaintech.robottaskboardservice.task.Task task2 = new com.doublechaintech.robottaskboardservice.task.Task();
+                com.example.robottaskboardservice.task.Task task2 = new com.example.robottaskboardservice.task.Task();
                 task2.updateId(2L);
                 task2.updateName("Connect TeaQL");
                 task2.updatePlatform(platform);
                 task2.updateStatusToInProgress();
                 task2.auditAs("Init").save(ctx);
 
-                com.doublechaintech.robottaskboardservice.task.Task task3 = new com.doublechaintech.robottaskboardservice.task.Task();
+                com.example.robottaskboardservice.task.Task task3 = new com.example.robottaskboardservice.task.Task();
                 task3.updateId(3L);
                 task3.updateName("Render UI");
                 task3.updatePlatform(platform);

@@ -1,12 +1,12 @@
-package com.doublechaintech.robottaskboardservice.task;
+package com.example.robottaskboardservice.task;
 
-import com.doublechaintech.robottaskboardservice.Q;
-import com.doublechaintech.robottaskboardservice.platform.Platform;
-import com.doublechaintech.robottaskboardservice.platform.PlatformRequest;
-import com.doublechaintech.robottaskboardservice.tasklog.TaskLog;
-import com.doublechaintech.robottaskboardservice.tasklog.TaskLogRequest;
-import com.doublechaintech.robottaskboardservice.taskstatus.TaskStatus;
-import com.doublechaintech.robottaskboardservice.taskstatus.TaskStatusRequest;
+import com.example.robottaskboardservice.Q;
+import com.example.robottaskboardservice.platform.Platform;
+import com.example.robottaskboardservice.platform.PlatformRequest;
+import com.example.robottaskboardservice.tasklog.TaskLog;
+import com.example.robottaskboardservice.tasklog.TaskLogRequest;
+import com.example.robottaskboardservice.taskstatus.TaskStatus;
+import com.example.robottaskboardservice.taskstatus.TaskStatusRequest;
 import io.teaql.core.AggrFunction;
 import io.teaql.core.BaseRequest;
 import io.teaql.core.PropertyReference;
@@ -720,19 +720,19 @@ public class TaskRequest<T extends Task> extends BaseRequest<T> {
     }
 
     public TaskRequest<T> withStatusIsTodo(){
-       filterByStatus(com.doublechaintech.robottaskboardservice.Constants.TASK_STATUS_TODO);
+       filterByStatus(com.example.robottaskboardservice.Constants.TASK_STATUS_TODO);
        return this;
     }
 
 
     public TaskRequest<T> withStatusIsInProgress(){
-       filterByStatus(com.doublechaintech.robottaskboardservice.Constants.TASK_STATUS_IN_PROGRESS);
+       filterByStatus(com.example.robottaskboardservice.Constants.TASK_STATUS_IN_PROGRESS);
        return this;
     }
 
 
     public TaskRequest<T> withStatusIsDone(){
-       filterByStatus(com.doublechaintech.robottaskboardservice.Constants.TASK_STATUS_DONE);
+       filterByStatus(com.example.robottaskboardservice.Constants.TASK_STATUS_DONE);
        return this;
     }
 

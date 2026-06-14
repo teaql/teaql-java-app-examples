@@ -1,9 +1,9 @@
-package com.doublechaintech.robottaskboardservice.platform;
+package com.example.robottaskboardservice.platform;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.doublechaintech.robottaskboardservice.task.Task;
-import com.doublechaintech.robottaskboardservice.taskstatus.TaskStatus;
+import com.example.robottaskboardservice.task.Task;
+import com.example.robottaskboardservice.taskstatus.TaskStatus;
 import io.teaql.core.BaseEntity;
 import io.teaql.core.EntityStatus;
 import io.teaql.core.FrameworkInternal;

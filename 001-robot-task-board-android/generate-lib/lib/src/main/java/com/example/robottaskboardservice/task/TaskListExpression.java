@@ -1,4 +1,4 @@
-package com.doublechaintech.robottaskboardservice.task;
+package com.example.robottaskboardservice.task;
 
 import io.teaql.core.SmartList;
 import io.teaql.core.value.Expression;
