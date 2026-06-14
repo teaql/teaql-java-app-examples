@@ -337,14 +337,14 @@ fun ProductCard(product: Product, onAddToCart: () -> Unit) {
             Spacer(modifier = Modifier.height(8.dp))
             Text("$${product.price}", color = MaterialTheme.colors.secondary, fontSize = 18.sp, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(4.dp))
-            Text("Stock: ${product.stock}", fontSize = 12.sp, color = Color.Gray)
+            Text("Stock: ${product.stock ?: 0}", fontSize = 12.sp, color = Color.Gray)
             Spacer(modifier = Modifier.height(8.dp))
             Button(
                 onClick = onAddToCart, 
                 modifier = Modifier.fillMaxWidth(),
-                enabled = product.stock > 0
+                enabled = (product.stock ?: 0) > 0
             ) {
-                Text(if (product.stock > 0) "Add to Cart" else "Sold Out")
+                Text(if ((product.stock ?: 0) > 0) "Add to Cart" else "Sold Out")
             }
         }
     }
