@@ -38,7 +38,8 @@ public class TaskLogic {
                     .comment("Update status").purpose("Drag and drop")
                     .executeForOne(ctx);
             if (task != null) {
-                task.transitStatus(ctx, newStatusCode);
+                task.transitStatus(newStatusCode);
+                task.auditAs("Moved task status from drag-and-drop").save(ctx);
             }
         } catch (NumberFormatException ignored) {
         }

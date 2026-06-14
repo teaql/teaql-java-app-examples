@@ -1,11 +1,10 @@
 package com.teaql.taskboard.logic;
 
 import com.example.robottaskboardservice.task.Task;
-import io.teaql.core.UserContext;
 
 public class BusinessTask extends Task {
 
-    public void transitStatus(UserContext ctx, String newStatusCode) {
+    public void transitStatus(String newStatusCode) {
         switch (newStatusCode) {
             case "TODO":
                 this.updateStatusToTodo();
@@ -19,6 +18,5 @@ public class BusinessTask extends Task {
             default:
                 return;
         }
-        this.auditAs("Moved task status from drag-and-drop").save(ctx);
     }
 }
