@@ -582,7 +582,20 @@ fun AdminBackstageScreen() {
     }
 }
 
+fun getLogColor(text: String): Color {
+    return when {
+        text.contains("ERROR", ignoreCase = true) || text.contains("Failed", ignoreCase = true) || text.contains("Exception", ignoreCase = true) -> Color(0xFFE57373)
+        text.contains("WARN", ignoreCase = true) -> Color(0xFFFFB74D)
+        text.contains("DEBUG", ignoreCase = true) -> Color(0xFF81C784)
+        text.contains("INFO", ignoreCase = true) -> Color(0xFF64B5F6)
+        text.contains("Fetched", ignoreCase = true) || text.contains("SELECT", ignoreCase = true) -> Color(0xFFBA68C8)
+        else -> Color(0xFFE0E0E0)
+    }
+}
+
 @Composable
+
+
 fun SystemLogsScreen() {
     val clipboardManager = LocalClipboardManager.current
     var showSnackbar by remember { mutableStateOf(false) }
@@ -606,10 +619,12 @@ fun SystemLogsScreen() {
             if (showSnackbar) {
                 Text("Logs copied to clipboard!", color = Color(0xFF4CAF50), modifier = Modifier.padding(bottom = 8.dp))
             }
-            LazyColumn(modifier = Modifier.weight(1f).fillMaxWidth()) {
-                items(SystemLogger.logs, key = { it.id }) { log ->
-                    Text(log.text, fontSize = 12.sp, color = Color.Green, fontFamily = FontFamily.Monospace)
-                    Divider(color = Color.DarkGray, thickness = 1.dp)
+            Box(modifier = Modifier.weight(1f).fillMaxWidth().background(Color(0xFF1E1E1E), shape = RoundedCornerShape(8.dp)).padding(8.dp)) {
+                LazyColumn(modifier = Modifier.fillMaxSize()) {
+                    items(SystemLogger.logs, key = { it.id }) { log ->
+                        Text(log.text, fontSize = 13.sp, color = getLogColor(log.text), fontFamily = FontFamily.Monospace)
+                        Divider(color = Color(0xFF333333), thickness = 1.dp, modifier = Modifier.padding(vertical = 4.dp))
+                    }
                 }
             }
         }
