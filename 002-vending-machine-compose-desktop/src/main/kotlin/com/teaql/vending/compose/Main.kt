@@ -54,6 +54,7 @@ object TeaQLManager {
     fun init(customLogSink: CustomLogSink) {
         val metaFactory = SimpleEntityMetaFactory()
         EntityMetaRegistry().assemble(metaFactory)
+        io.teaql.core.meta.EntityMetaFactory.registerGlobal(metaFactory)
         
         val dataSource = org.sqlite.SQLiteDataSource()
         dataSource.url = "jdbc:sqlite:vending_world_cup.db"
