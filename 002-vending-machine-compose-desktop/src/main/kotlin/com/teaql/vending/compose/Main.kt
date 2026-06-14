@@ -300,9 +300,7 @@ fun initDatabase() {
     try {
         val count = Q.products().comment("init").purpose("check db").executeForList(ctx).size()
         if (count == 0) {
-            val machine = VendingMachine()
-            machine.updateName("World Cup Vending Machine")
-            ctx.saveGraph(machine)
+            val machine = VendingMachine.refer(1L)
 
             val seedData = listOf(
                 arrayOf("Budweiser Beer", 15, 50, "https://example.com/bud.jpg"),
@@ -320,7 +318,7 @@ fun initDatabase() {
                 p.updateStock(pData[2] as Int)
                 p.updateImageUrl(pData[3] as String)
                 p.updateVendingMachine(machine)
-                ctx.saveGraph(p)
+                p.auditAs<Product>("init product").save(ctx)
             }
             SystemLogger.log("Seed data initialized via TeaQL.")
         }
@@ -336,6 +334,7 @@ fun fetchProducts(): List<Product> {
         Q.products().comment("fetch").purpose("display products").executeForList(ctx).toList()
     } catch (e: Exception) {
         SystemLogger.log("Failed to fetch products: ${e.message}")
+        e.printStackTrace()
         emptyList()
     }
 }
@@ -348,7 +347,7 @@ fun checkoutCart(cart: List<Product>) {
         val order = VendingOrder()
         order.updateTitle("Order-" + System.currentTimeMillis())
         order.updateStatusToPaid()
-        ctx.saveGraph(order)
+        order.auditAs<VendingOrder>("create order").save(ctx)
         
         var totalAmount = 0
         for (product in cart) {
@@ -359,13 +358,13 @@ fun checkoutCart(cart: List<Product>) {
             item.updatePrice(product.price)
             item.updateAmount(product.price)
             item.updateVendingOrder(order)
-            ctx.saveGraph(item)
+            item.auditAs<VendingOrderItem>("add item").save(ctx)
             
             val pDb = Q.products().withIdIs(product.id.toLong()).comment("fetch").purpose("stock check").executeForOne(ctx)
             if (pDb != null) {
                 pDb.updateStock(pDb.stock - 1)
                 if (pDb.stock < 0) throw Exception("Out of stock for ${pDb.name}!")
-                ctx.saveGraph(pDb)
+                pDb.auditAs<Product>("update stock").save(ctx)
             } else {
                 throw Exception("Product not found: ${product.name}")
             }
@@ -381,7 +380,7 @@ fun checkoutCart(cart: List<Product>) {
         payment.updatePaymentStatusToSuccess()
         payment.updateVendingOrder(order)
         
-        ctx.saveGraph(payment)
+        payment.auditAs<OrderPayment>("process payment").save(ctx)
         SystemLogger.log("Transaction committed successfully via TeaQL.")
     } catch (e: Exception) {
         SystemLogger.log("Transaction failed: ${e.message}")
