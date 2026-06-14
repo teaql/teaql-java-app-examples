@@ -84,17 +84,8 @@ public static void updateTaskStatus(UserContext ctx, String taskIdStr, String ne
                 .comment("Update status").purpose("Drag and drop")
                 .executeForOne(ctx);
         if (!E.task(task).isNull()) {
-            switch (newStatusCode) {
-                case "TODO":
-                    E.task(task).updateStatusToTodo().save("Moved task status from drag-and-drop", ctx).eval();
-                    break;
-                case "IN_PROGRESS":
-                    E.task(task).updateStatusToInProgress().save("Moved task status from drag-and-drop", ctx).eval();
-                    break;
-                case "DONE":
-                    E.task(task).updateStatusToDone().save("Moved task status from drag-and-drop", ctx).eval();
-                    break;
-            }
+            task.transitStatus(newStatusCode);
+            task.auditAs("Moved task status from drag-and-drop").save(ctx);
         }
     } catch (NumberFormatException ignored) {
     }
