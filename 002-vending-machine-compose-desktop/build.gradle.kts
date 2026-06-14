@@ -19,8 +19,8 @@ dependencies {
     implementation(compose.desktop.currentOs)
     
     // Depend on our generated TeaQL core and local app logic!
-    implementation("io.teaql:teaql-core:1.198-RELEASE")
-    implementation("io.teaql:teaql-sqlite:1.198-RELEASE")
+    implementation("io.teaql:teaql-core:1.500-RELEASE")
+    implementation("io.teaql:teaql-sqlite:1.500-RELEASE")
     // If the Android project was built as a library, we could depend on it.
     // For now, let's just make it run as an empty Compose window to show it works!
 }
