@@ -12,6 +12,7 @@ repositories {
     mavenLocal()
     mavenCentral()
     google()
+    maven("https://maven.teaql.io/repository/maven-releases/")
 }
 
 dependencies {

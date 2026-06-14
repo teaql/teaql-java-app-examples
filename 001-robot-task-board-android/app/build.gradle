@@ -72,11 +72,11 @@ dependencies {
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
     
     // TEAQL pure Java domain dependencies
-    implementation ('io.teaql:teaql-sql:1.198-RELEASE') {
+    implementation ('io.teaql:teaql-sql:1.500-RELEASE') {
         exclude group: 'org.springframework'
     }
-    implementation 'io.teaql:teaql-android:1.198-RELEASE'
-    implementation ('io.teaql:teaql-sqlite:1.198-RELEASE') {
+    implementation 'io.teaql:teaql-android:1.500-RELEASE'
+    implementation ('io.teaql:teaql-sqlite:1.500-RELEASE') {
         exclude group: 'org.springframework'
     }
     implementation 'cn.hutool:hutool-core:5.8.20'

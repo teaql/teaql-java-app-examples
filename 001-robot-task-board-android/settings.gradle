@@ -11,7 +11,7 @@ dependencyResolutionManagement {
         mavenLocal()
         google()
         mavenCentral()
-        maven { url 'https://nexus.teaql.io/repository/maven-releases/' }
+        maven { url 'https://maven.teaql.io/repository/maven-releases/' }
     }
 }
 rootProject.name = "RobotTaskBoard"
