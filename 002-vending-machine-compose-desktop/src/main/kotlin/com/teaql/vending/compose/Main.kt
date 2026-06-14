@@ -45,6 +45,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.loadImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -360,16 +361,19 @@ fun AsyncImage(url: String, modifier: Modifier = Modifier, contentDescription: S
     }
 
     Box(modifier = modifier.background(if (imageBitmap == null) Color.LightGray else Color.Transparent), contentAlignment = Alignment.Center) {
-        if (imageBitmap != null) {
-            Image(
-                bitmap = imageBitmap!!,
-                contentDescription = contentDescription,
-                modifier = Modifier.matchParentSize(),
-                contentScale = ContentScale.Crop
-            )
-        } else {
-            Text(fallbackText, fontSize = 12.sp, color = Color.White)
-        }
+        val bitmap = imageBitmap ?: remember { ImageBitmap(1, 1) }
+        Image(
+            bitmap = bitmap,
+            contentDescription = contentDescription,
+            modifier = Modifier.matchParentSize().alpha(if (imageBitmap != null) 1f else 0f),
+            contentScale = ContentScale.Crop
+        )
+        Text(
+            text = fallbackText, 
+            fontSize = 12.sp, 
+            color = Color.White,
+            modifier = Modifier.alpha(if (imageBitmap == null) 1f else 0f)
+        )
     }
 }
 
