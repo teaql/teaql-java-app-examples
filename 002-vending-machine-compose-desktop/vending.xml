@@ -1,0 +1,67 @@
+<root alias_model_name="vending_machine_desktop"
+      chinese_name="自动售货机"
+      english_name="Vending Machine"
+      name="vending-machine-service"
+      cfg_mask_china_mobile="false"
+      data_service="sqlite"
+      org="doublechaintech"
+      _module_key="root">
+
+  <vending_machine _name="Vending Machine"
+                   _module="Core"
+                   _module_key="core"
+                   name="Main Machine"
+                   _audit_mask_fields="name"
+                   create_time="createTime()"
+                   update_time="updateTime()"/>
+
+  <order_status _name="Order Status"
+                _module="Core"
+                _module_key="core"
+                vending_machine="vending_machine()"
+                id="id()" name="string()" code="string()"
+                _constant="true" _identifier="code"
+                _audit_mask_fields="name">
+    <_value id="1001" name="Pending" code="PENDING" color="gray" display_order="1" progress="0"/>
+    <_value id="1002" name="Paid" code="PAID" color="blue" display_order="2" progress="50"/>
+    <_value id="1003" name="Dispensing" code="DISPENSING" color="orange" display_order="3" progress="80"/>
+    <_value id="1004" name="Completed" code="COMPLETED" color="green" display_order="4" progress="100"/>
+  </order_status>
+
+  <payment_method _name="Payment Method"
+                  _module="Core"
+                  _module_key="core"
+                  vending_machine="vending_machine()"
+                  id="id()" name="string()" code="string()"
+                  _constant="true" _identifier="code"
+                  _audit_mask_fields="name">
+    <_value id="2001" name="WeChat Pay" code="WECHAT" color="green" display_order="1"/>
+    <_value id="2002" name="AliPay" code="ALIPAY" color="blue" display_order="2"/>
+    <_value id="2003" name="Credit Card" code="CREDIT_CARD" color="gray" display_order="3"/>
+  </payment_method>
+
+  <product _name="Product"
+           _module="Core"
+           _module_key="core"
+           name="Coca Cola"
+           price="300"
+           stock="100"
+           image_url="https://example.com/cola.png"
+           vending_machine="vending_machine()"
+           _audit_mask_fields="name"
+           create_time="createTime()"
+           update_time="updateTime()"/>
+
+  <vending_order _name="Vending Order"
+                 _module="Core"
+                 _module_key="core"
+                 title="Order-001"
+                 product="product()"
+                 amount="300"
+                 status="order_status()"
+                 payment_method="payment_method()"
+                 payment_time="updateTime()"
+                 transaction_id="TX-12345678"
+                 create_time="createTime()"
+                 update_time="updateTime()"/>
+</root>

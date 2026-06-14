@@ -1,0 +1,194 @@
+package com.doublechaintech.vendingmachineservice.product;
+
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine;
+import com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder;
+import io.teaql.core.BaseEntity;
+import io.teaql.core.EntityStatus;
+import io.teaql.core.FrameworkInternal;
+import io.teaql.core.RemoteInput;
+import io.teaql.core.SmartList;
+import java.time.LocalDateTime;
+
+/**
+ * [TEAQL AI WARNING]
+ * TeaQL was explicitly designed to PREVENT AI hallucinations and random guessing.
+ * DO NOT GUESS METHOD NAMES!
+ * The methods listed below are the ONLY valid ways to interact with this entity.
+ * If you encounter compilation errors (e.g., method not found), DO NOT guess another method name.
+ * Read the method signatures in this file before proceeding.
+ */
+public class Product extends BaseEntity implements RemoteInput {
+    public static String INTERNAL_TYPE = "Product";
+
+    public static final String NAME_PROPERTY = "name";
+    public static final String PRICE_PROPERTY = "price";
+    public static final String STOCK_PROPERTY = "stock";
+    public static final String IMAGE_URL_PROPERTY = "imageUrl";
+    public static final String VENDING_MACHINE_PROPERTY = "vendingMachine";
+    public static final String CREATE_TIME_PROPERTY = "createTime";
+    public static final String UPDATE_TIME_PROPERTY = "updateTime";
+    public static final String VENDING_ORDER_LIST_PROPERTY = "vendingOrderList";
+    private String name;
+    private Integer price;
+    private Integer stock;
+    private String imageUrl;
+    private VendingMachine vendingMachine;
+    private LocalDateTime createTime;
+    private LocalDateTime updateTime;
+    private SmartList<VendingOrder> vendingOrderList;
+
+    public String getName(){
+        return this.name;
+    }
+    public Integer getPrice(){
+        return this.price;
+    }
+    public Integer getStock(){
+        return this.stock;
+    }
+    public String getImageUrl(){
+        return this.imageUrl;
+    }
+    public VendingMachine getVendingMachine(){
+        return this.vendingMachine;
+    }
+    public LocalDateTime getCreateTime(){
+        return this.createTime;
+    }
+    public LocalDateTime getUpdateTime(){
+        return this.updateTime;
+    }
+    public SmartList<VendingOrder> getVendingOrderList(){
+        return this.vendingOrderList;
+    }
+    public Product updateName(String name){
+        name = StrUtil.trim(name);
+        if(ObjectUtil.equal(this.name, name)){
+            return this;
+        }
+        handleUpdate(NAME_PROPERTY, getName(), name);
+        this.name = name;
+        return this;
+    }
+    public Product updatePrice(Integer price){
+        if(ObjectUtil.equal(this.price, price)){
+            return this;
+        }
+        handleUpdate(PRICE_PROPERTY, getPrice(), price);
+        this.price = price;
+        return this;
+    }
+    public Product updateStock(Integer stock){
+        if(ObjectUtil.equal(this.stock, stock)){
+            return this;
+        }
+        handleUpdate(STOCK_PROPERTY, getStock(), stock);
+        this.stock = stock;
+        return this;
+    }
+    public Product updateImageUrl(String imageUrl){
+        imageUrl = StrUtil.trim(imageUrl);
+        if(ObjectUtil.equal(this.imageUrl, imageUrl)){
+            return this;
+        }
+        handleUpdate(IMAGE_URL_PROPERTY, getImageUrl(), imageUrl);
+        this.imageUrl = imageUrl;
+        return this;
+    }
+    public Product updateVendingMachine(VendingMachine vendingMachine){
+        if(ObjectUtil.equal(this.vendingMachine, vendingMachine)){
+            return this;
+        }
+        handleUpdate(VENDING_MACHINE_PROPERTY, getVendingMachine(), vendingMachine);
+        this.vendingMachine = vendingMachine;
+        return this;
+    }
+    public Product updateCreateTime(LocalDateTime createTime){
+        if(ObjectUtil.equal(this.createTime, createTime)){
+            return this;
+        }
+        handleUpdate(CREATE_TIME_PROPERTY, getCreateTime(), createTime);
+        this.createTime = createTime;
+        return this;
+    }
+    public Product updateUpdateTime(LocalDateTime updateTime){
+        if(ObjectUtil.equal(this.updateTime, updateTime)){
+            return this;
+        }
+        handleUpdate(UPDATE_TIME_PROPERTY, getUpdateTime(), updateTime);
+        this.updateTime = updateTime;
+        return this;
+    }
+    public Product addVendingOrder(VendingOrder vendingOrder){
+        if (vendingOrder == null){
+            return this;
+        }
+
+        if(null == this.vendingOrderList){
+            this.vendingOrderList = new SmartList<>();
+        }
+
+        this.vendingOrderList.add(vendingOrder);
+        vendingOrder.cacheRelation(VendingOrder.PRODUCT_PROPERTY, this);
+        return this;
+    }
+
+    public static Product refer(Long id){
+        Product refer = new Product();
+        refer.internalSet("id", id);
+        refer.set$status(EntityStatus.REFER);
+        return refer;
+    }
+    @Override
+    public String typeName(){
+        return INTERNAL_TYPE;
+    }
+
+    public Product comment(String comment){
+        this.setComment(comment);
+        return this;
+    }
+
+    // ===== Framework Internal: generated switch dispatch =====
+    @Override
+    @FrameworkInternal
+    public void internalSet(String property, Object value) {
+        switch (property) {
+            case "name": this.name = StrUtil.trim((String) value); break;
+
+            case "price": this.price = (Integer) value; break;
+
+            case "stock": this.stock = (Integer) value; break;
+
+            case "imageUrl": this.imageUrl = StrUtil.trim((String) value); break;
+
+            case "vendingMachine": this.vendingMachine = (VendingMachine) value; break;
+
+            case "createTime": this.createTime = (LocalDateTime) value; break;
+
+            case "updateTime": this.updateTime = (LocalDateTime) value; break;
+
+            case "vendingOrderList": this.vendingOrderList = (SmartList<VendingOrder>) value; break;
+            default: super.internalSet(property, value);
+        }
+    }
+
+    @Override
+    @FrameworkInternal
+    public Object internalGet(String property) {
+        switch (property) {
+            case "name": return this.name;
+            case "price": return this.price;
+            case "stock": return this.stock;
+            case "imageUrl": return this.imageUrl;
+            case "vendingMachine": return this.vendingMachine;
+            case "createTime": return this.createTime;
+            case "updateTime": return this.updateTime;
+            case "vendingOrderList": return this.vendingOrderList;
+            default: return super.internalGet(property);
+        }
+    }
+
+}
