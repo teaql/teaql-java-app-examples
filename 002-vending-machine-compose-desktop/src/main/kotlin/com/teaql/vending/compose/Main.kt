@@ -339,9 +339,9 @@ data class AdminDashboardData(
 fun fetchOrders(): AdminDashboardData {
     val ctx = TeaQLManager.userContext
     return try {
-        val ordersSmartList = Q.vendingOrders()
+        val ordersSmartList = Q.vendingOrders().selectSelf()
             .facetByStatusAs("order_status", Q.orderStatuses().selectSelf(), true)
-            .selectStatus()
+            .selectStatusWith(Q.orderStatuses().selectName().selectCode())
             .comment("fetch").purpose("admin dashboard").executeForList(ctx)
             
         val counts = mutableMapOf<String, Int>()
