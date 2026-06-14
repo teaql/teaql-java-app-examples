@@ -340,35 +340,20 @@ fun fetchOrders(): AdminDashboardData {
     val ctx = TeaQLManager.userContext
     return try {
         val ordersSmartList = Q.vendingOrders()
-            .facetByStatusAs("order_status", Q.orderStatuses(), true)
-            .count()
+            .selectStatus()
             .comment("fetch").purpose("admin dashboard").executeForList(ctx)
             
         val counts = mutableMapOf<String, Int>()
-        val facets = ordersSmartList.facets
-        if (facets == null) {
-            SystemLogger.log("DEBUG: facets map is null!")
-        } else {
-            SystemLogger.log("DEBUG: facets map keys: ${facets.keys}")
-            val statusFacetList = facets["order_status"] as? io.teaql.core.SmartList<*>
-            if (statusFacetList == null) {
-                SystemLogger.log("DEBUG: order_status facet list is null! Check keys: ${facets.keys}")
-            } else {
-                for (item in statusFacetList) {
-                    if (item != null) {
-                        try {
-                            val name = item.javaClass.getMethod("getName").invoke(item) as String
-                            val count = (item.javaClass.getMethod("getCount").invoke(item) as Number).toInt()
-                            counts[name] = count
-                            SystemLogger.log("DEBUG: Facet parsed: $name -> $count")
-                        } catch (e: Exception) {
-                            SystemLogger.log("DEBUG: Facet parse error: ${e.message}")
-                            e.printStackTrace()
-                        }
-                    }
-                }
+        // Since the underlying engine hasn't implemented facet aggregation yet,
+        // we manually aggregate the stats in memory.
+        for (order in ordersSmartList) {
+            if (order != null) {
+                val statusName = order.status?.name ?: "UNKNOWN"
+                counts[statusName] = counts.getOrDefault(statusName, 0) + 1
             }
         }
+        
+        SystemLogger.log("DEBUG: Manually aggregated ${counts.size} status types.")
         AdminDashboardData(ordersSmartList.toList(), counts)
     } catch (e: Throwable) {
         SystemLogger.log("FATAL ERROR in fetchOrders: ${e.javaClass.name} - ${e.message}")
