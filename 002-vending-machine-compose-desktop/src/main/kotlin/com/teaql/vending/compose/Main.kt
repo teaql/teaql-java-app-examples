@@ -45,6 +45,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -282,9 +284,28 @@ fun AdminBackstageScreen() {
 
 @Composable
 fun SystemLogsScreen() {
+    val clipboardManager = LocalClipboardManager.current
+    var showSnackbar by remember { mutableStateOf(false) }
+
     Card(modifier = Modifier.fillMaxSize(), elevation = 2.dp) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text("System Operation Logs", fontSize = 20.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(bottom = 16.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text("System Operation Logs", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                Button(onClick = {
+                    val allLogs = SystemLogger.logs.joinToString("\n")
+                    clipboardManager.setText(AnnotatedString(allLogs))
+                    showSnackbar = true
+                }) {
+                    Text("Copy Logs")
+                }
+            }
+            if (showSnackbar) {
+                Text("Logs copied to clipboard!", color = Color(0xFF4CAF50), modifier = Modifier.padding(bottom = 8.dp))
+            }
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(SystemLogger.logs) { log ->
                     Text(log, modifier = Modifier.padding(vertical = 4.dp), fontFamily = FontFamily.Monospace, fontSize = 14.sp)
