@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">TeaQL Task Board</string>
+    <string name="tab_board">Task Board</string>
+    <string name="tab_logs">SQL Logs</string>
+    <string name="status_todo">TODO</string>
+    <string name="status_in_progress">IN PROGRESS</string>
+    <string name="status_done">DONE</string>
+</resources>

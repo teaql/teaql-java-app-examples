@@ -1,0 +1,49 @@
+<root alias_model_name="robot_task_board"
+      cfg_mask_china_mobile="false"
+      chinese_name="机器人任务看板"
+      english_name="Robot Task Board"
+      data_service="sqlite"
+      name="robot-task-board-service"
+      org="doublechaintech"
+      _module_key="root">
+
+  <!-- Constants -->
+  <task_status _name="Task Status"
+               _module="Task Management"
+               _module_key="task-management"
+               platform="platform()"
+               id="id()" name="string()" code="string()"
+               _constant="true" _identifier="code">
+    <_value id="1001" name="TODO" code="TODO"/>
+    <_value id="1002" name="In Progress" code="IN_PROGRESS"/>
+    <_value id="1003" name="Done" code="DONE"/>
+  </task_status>
+
+  <!-- Domain Root -->
+  <platform _name="Platform"
+            _module="Task Management"
+            _module_key="task-management"
+            name="Task Board Platform"
+            create_time="createTime()"
+            update_time="updateTime()"/>
+
+  <!-- Business Objects -->
+  <task _name="Task"
+        _module="Task Management"
+        _module_key="task-management"
+        name="Build Android App"
+        platform="platform()"
+        status="task_status()"
+        create_time="createTime()"
+        update_time="updateTime()"/>
+
+  <task_log _name="Task Log"
+            _module="Task Management"
+            _module_key="task-management"
+            _log="true"
+            query="UPDATE tasks SET status = 'DONE'"
+            created_by="System"
+            task="task()"
+            create_time="createTime()"/>
+
+</root>
