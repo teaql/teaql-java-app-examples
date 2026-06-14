@@ -61,6 +61,8 @@ import java.io.InputStream
 
 object TeaQLManager {
     lateinit var userContext: UserContext
+    lateinit var runtime: TeaQLRuntime
+    lateinit var customSink: CustomLogSink
 
     fun init(customLogSink: CustomLogSink) {
         val metaFactory = SimpleEntityMetaFactory()
@@ -72,16 +74,21 @@ object TeaQLManager {
         val adapter = io.teaql.provider.jdbc.JdbcSqlExecutor(dataSource)
         val dataService = SqliteDataServiceExecutor("default", adapter, dataSource)
         
-        val runtime = TeaQLRuntime.Builder()
+        runtime = TeaQLRuntime.Builder()
             .metadata(metaFactory)
             .dataService("default", dataService)
             .build()
             
-        val ctx = DefaultUserContext(runtime)
-        ctx.registerCustomSink(customLogSink)
-        userContext = ctx
+        customSink = customLogSink
+        userContext = newContext()
         
-        dataService.ensureSchema(ctx)
+        dataService.ensureSchema(userContext)
+    }
+    
+    fun newContext(): UserContext {
+        val ctx = DefaultUserContext(runtime)
+        ctx.registerCustomSink(customSink)
+        return ctx
     }
 }
 
@@ -383,16 +390,16 @@ data class AdminDashboardData(
 )
 
 fun fetchOrders(): AdminDashboardData {
-    val ctx = TeaQLManager.userContext
+    val ctx = TeaQLManager.newContext()
     return try {
         val ordersSmartList = Q.vendingOrders()
             .facetByStatusAs("order_status", Q.orderStatuses().selectSelf(), true)
-            .selectStatus()
+            .selectStatusWith(Q.orderStatuses().selectName().selectCode())
             .selectTotalAmount()
             .selectVendingOrderItemListWith(
                 Q.vendingOrderItems().top(3).count().selectProductWith(
-                    Q.products().selectImageUrl()
-                )
+                    Q.products().selectImageUrl().selectName()
+                ).selectName()
             )
             .comment("fetch").purpose("admin dashboard").executeForList(ctx)
             
@@ -423,7 +430,7 @@ fun fetchOrders(): AdminDashboardData {
 }
 
 fun updateOrderStatus(order: VendingOrder, action: String) {
-    val ctx = TeaQLManager.userContext
+    val ctx = TeaQLManager.newContext()
     try {
         if (action == "Dispense") {
             order.updateStatusToDispensing()
@@ -623,9 +630,11 @@ fun initDatabase() {
 }
 
 fun fetchProducts(): List<Product> {
-    val ctx = TeaQLManager.userContext
+    val ctx = TeaQLManager.newContext()
     return try {
-        Q.products().comment("fetch").purpose("display products").executeForList(ctx).toList()
+        Q.products()
+            .comment("fetch").purpose("shopping dashboard").executeForList(ctx)
+            .toList()
     } catch (e: Exception) {
         SystemLogger.log("Failed to fetch products: ${e.message}")
         e.printStackTrace()
@@ -634,7 +643,7 @@ fun fetchProducts(): List<Product> {
 }
 
 fun checkoutCart(cart: List<Product>, paymentMethodName: String) {
-    val ctx = TeaQLManager.userContext
+    val ctx = TeaQLManager.newContext()
     try {
         SystemLogger.log("Initiating TeaQL Checkout Transaction...")
         
