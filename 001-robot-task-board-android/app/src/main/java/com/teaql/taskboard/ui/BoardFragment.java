@@ -9,6 +9,7 @@ import com.example.robottaskboardservice.Q;
 import io.teaql.core.UserContext;
 import io.teaql.core.SmartList;
 import com.teaql.taskboard.logic.TaskLogic;
+import com.teaql.taskboard.logic.BusinessTask;
 
 import android.content.ClipData;
 import android.content.ClipDescription;
@@ -70,7 +71,7 @@ public class BoardFragment extends Fragment {
 
         UserContext ctx = TeaQLManager.getCtx();
         if (ctx == null) return;
-        SmartList<Task> tasks = TaskLogic.getAllTasks(ctx);
+        SmartList<BusinessTask> tasks = TaskLogic.getAllTasks(ctx);
         for (Task task : tasks) {
             View taskView = LayoutInflater.from(getContext()).inflate(R.layout.item_task, null);
             TextView tvName = taskView.findViewById(R.id.tvTaskName);
