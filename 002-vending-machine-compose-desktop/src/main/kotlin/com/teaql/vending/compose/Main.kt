@@ -20,6 +20,7 @@ import kotlinx.coroutines.withContext
 import kotlinx.coroutines.launch
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -39,7 +40,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.loadImageBitmap
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -50,6 +55,8 @@ import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.net.URL
+import java.io.InputStream
 
 object TeaQLManager {
     lateinit var userContext: UserContext
@@ -311,9 +318,12 @@ fun PurchaseHallScreen() {
 fun ProductCard(product: Product, onAddToCart: () -> Unit) {
     Card(elevation = 4.dp, shape = RoundedCornerShape(8.dp), modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-            Box(modifier = Modifier.size(100.dp).background(Color.LightGray, RoundedCornerShape(8.dp)), contentAlignment = Alignment.Center) {
-                Text(product.name.take(2), fontSize = 24.sp, color = Color.White)
-            }
+            AsyncImage(
+                url = product.imageUrl ?: "",
+                contentDescription = product.name,
+                modifier = Modifier.size(100.dp).clip(RoundedCornerShape(8.dp)),
+                fallbackText = product.name.take(2)
+            )
             Spacer(modifier = Modifier.height(16.dp))
             Text(product.name, fontWeight = FontWeight.Bold, fontSize = 16.sp, maxLines = 1)
             Spacer(modifier = Modifier.height(8.dp))
@@ -328,6 +338,37 @@ fun ProductCard(product: Product, onAddToCart: () -> Unit) {
             ) {
                 Text(if (product.stock > 0) "Add to Cart" else "Sold Out")
             }
+        }
+    }
+}
+
+@Composable
+fun AsyncImage(url: String, modifier: Modifier = Modifier, contentDescription: String? = null, fallbackText: String = "IMG") {
+    var imageBitmap by remember { mutableStateOf<ImageBitmap?>(null) }
+
+    LaunchedEffect(url) {
+        if (url.isNotBlank()) {
+            withContext(Dispatchers.IO) {
+                try {
+                    val stream = URL(url).openStream()
+                    imageBitmap = loadImageBitmap(stream)
+                } catch (e: Exception) {
+                    // SystemLogger.log("Failed to load image: ${e.message}")
+                }
+            }
+        }
+    }
+
+    if (imageBitmap != null) {
+        Image(
+            bitmap = imageBitmap!!,
+            contentDescription = contentDescription,
+            modifier = modifier,
+            contentScale = ContentScale.Crop
+        )
+    } else {
+        Box(modifier = modifier.background(Color.LightGray), contentAlignment = Alignment.Center) {
+            Text(fallbackText, fontSize = 12.sp, color = Color.White)
         }
     }
 }
@@ -454,14 +495,13 @@ fun AdminBackstageScreen() {
                                     Row(verticalAlignment = Alignment.CenterVertically) {
                                         itemsList.forEach { item ->
                                             val pName = item.product?.name ?: "IT"
-                                            Box(
-                                                modifier = Modifier
-                                                    .size(32.dp)
-                                                    .background(Color.LightGray, CircleShape),
-                                                contentAlignment = Alignment.Center
-                                            ) {
-                                                Text(pName.take(2), fontSize = 12.sp, color = Color.White)
-                                            }
+                                            val pUrl = item.product?.imageUrl ?: ""
+                                            AsyncImage(
+                                                url = pUrl,
+                                                contentDescription = pName,
+                                                modifier = Modifier.size(32.dp).clip(CircleShape),
+                                                fallbackText = pName.take(2)
+                                            )
                                             Spacer(modifier = Modifier.width(4.dp))
                                         }
                                         val totalCount = itemsList.totalCount
