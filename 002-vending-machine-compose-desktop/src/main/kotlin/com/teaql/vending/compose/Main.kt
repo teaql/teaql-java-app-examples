@@ -170,7 +170,7 @@ fun ProductCard(product: Product, onPurchase: () -> Unit) {
             Spacer(modifier = Modifier.height(16.dp))
             Text(product.name, fontWeight = FontWeight.Bold, fontSize = 16.sp, maxLines = 1)
             Spacer(modifier = Modifier.height(8.dp))
-            Text("¥${product.price}", color = MaterialTheme.colors.secondary, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+            Text("$${product.price}", color = MaterialTheme.colors.secondary, fontSize = 18.sp, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(8.dp))
             Button(
                 onClick = onPurchase, 
@@ -339,7 +339,7 @@ fun purchaseProduct(product: Product) {
         insertItem.setLong(3, product.id ?: 0L)
         insertItem.setInt(4, product.price)
         insertItem.executeUpdate()
-        SystemLogger.log("Added Order Item: ${product.name} (Amount: ¥${product.price})")
+        SystemLogger.log("Added Order Item: ${product.name} (Amount: $${product.price})")
 
         // 3. Create Order Payment (Using US Payment Methods)
         val paymentMethods = listOf("Google Pay", "Apple Pay", "Credit Card")
@@ -350,7 +350,7 @@ fun purchaseProduct(product: Product) {
         insertPayment.setString(3, chosenMethod)
         insertPayment.setInt(4, product.price)
         insertPayment.executeUpdate()
-        SystemLogger.log("Processed Payment of ¥${product.price} via $chosenMethod [Status: PAID]")
+        SystemLogger.log("Processed Payment of $${product.price} via $chosenMethod [Status: PAID]")
 
         // 4. Update Product Stock
         val updateStock = connection.prepareStatement("UPDATE product_data SET stock = stock - 1 WHERE id = ? AND stock > 0")
