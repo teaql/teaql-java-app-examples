@@ -37,12 +37,14 @@ import java.time.format.DateTimeFormatter
 import io.teaql.core.log.CustomLogSink
 
 object SystemLogger {
-    val logs = mutableStateListOf<String>()
+    private val _logs = mutableStateListOf<String>()
+    val logs: List<String> get() = _logs
 
     fun log(message: String) {
         val timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"))
-        logs.add(0, "[$timestamp] $message")
-        println("[$timestamp] $message")
+        val finalMessage = "[$timestamp] $message"
+        _logs.add(0, finalMessage)
+        println(finalMessage)
     }
 }
 
@@ -371,10 +373,12 @@ fun fetchProducts(): List<Product> {
 }
 
 fun checkoutCart(cart: List<Product>) {
-    val connection = java.sql.DriverManager.getConnection("jdbc:sqlite:vending_world_cup.db")
-    connection.autoCommit = false
+    var connection: java.sql.Connection? = null
     try {
-        // 1. Create Vending Order
+        connection = java.sql.DriverManager.getConnection("jdbc:sqlite:vending_world_cup.db")
+        connection.autoCommit = false
+        
+        SystemLogger.log("[TeaQL Core] Executing Query: INSERT INTO vending_order_data")
         val insertOrder = connection.prepareStatement("INSERT INTO vending_order_data (name, vending_machine, version) VALUES (?, 1, 1)", java.sql.Statement.RETURN_GENERATED_KEYS)
         val orderName = "Order-" + System.currentTimeMillis()
         insertOrder.setString(1, orderName)
@@ -420,10 +424,19 @@ fun checkoutCart(cart: List<Product>) {
         connection.commit()
         SystemLogger.log("Transaction committed successfully.")
     } catch (e: Exception) {
-        connection.rollback()
         SystemLogger.log("Transaction failed: ${e.message}")
+        e.printStackTrace()
+        try {
+            connection?.rollback()
+        } catch (re: Exception) {
+            SystemLogger.log("Rollback failed: ${re.message}")
+        }
     } finally {
-        connection.close()
+        try {
+            connection?.close()
+        } catch (ce: Exception) {
+            // Ignore close errors
+        }
     }
 }
 
