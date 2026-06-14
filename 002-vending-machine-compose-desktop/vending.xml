@@ -35,9 +35,10 @@
                   id="id()" name="string()" code="string()"
                   _constant="true" _identifier="code"
                   _audit_mask_fields="name">
-    <_value id="2001" name="WeChat Pay" code="WECHAT" color="green" display_order="1"/>
-    <_value id="2002" name="AliPay" code="ALIPAY" color="blue" display_order="2"/>
-    <_value id="2003" name="Credit Card" code="CREDIT_CARD" color="gray" display_order="3"/>
+    <_value id="2001" name="Google Pay" code="GOOGLE_PAY" color="blue" display_order="1"/>
+    <_value id="2002" name="Apple Pay" code="APPLE_PAY" color="black" display_order="2"/>
+    <_value id="2003" name="PayPal" code="PAYPAL" color="blue" display_order="3"/>
+    <_value id="2004" name="Credit Card" code="CREDIT_CARD" color="gray" display_order="4"/>
   </payment_method>
 
   <payment_status _name="Payment Status"

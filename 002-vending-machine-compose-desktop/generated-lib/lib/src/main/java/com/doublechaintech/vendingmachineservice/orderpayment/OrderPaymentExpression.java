@@ -58,11 +58,14 @@ public class OrderPaymentExpression<T, E, U extends OrderPayment> extends Expres
        return new PaymentMethodExpression(this, $it ->  ((OrderPayment)$it).getPaymentMethod());
     }
 
-    public OrderPaymentExpression<T, U, U> updatePaymentMethodToWechat(){
-       return new OrderPaymentExpression(this, $it ->  ((OrderPayment)$it).updatePaymentMethodToWechat());
+    public OrderPaymentExpression<T, U, U> updatePaymentMethodToGooglePay(){
+       return new OrderPaymentExpression(this, $it ->  ((OrderPayment)$it).updatePaymentMethodToGooglePay());
     }
-    public OrderPaymentExpression<T, U, U> updatePaymentMethodToAlipay(){
-       return new OrderPaymentExpression(this, $it ->  ((OrderPayment)$it).updatePaymentMethodToAlipay());
+    public OrderPaymentExpression<T, U, U> updatePaymentMethodToApplePay(){
+       return new OrderPaymentExpression(this, $it ->  ((OrderPayment)$it).updatePaymentMethodToApplePay());
+    }
+    public OrderPaymentExpression<T, U, U> updatePaymentMethodToPaypal(){
+       return new OrderPaymentExpression(this, $it ->  ((OrderPayment)$it).updatePaymentMethodToPaypal());
     }
     public OrderPaymentExpression<T, U, U> updatePaymentMethodToCreditCard(){
        return new OrderPaymentExpression(this, $it ->  ((OrderPayment)$it).updatePaymentMethodToCreditCard());

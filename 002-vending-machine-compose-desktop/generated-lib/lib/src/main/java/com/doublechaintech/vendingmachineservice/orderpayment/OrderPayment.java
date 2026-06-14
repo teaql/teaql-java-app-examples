@@ -143,19 +143,26 @@ public class OrderPayment extends BaseEntity implements RemoteInput {
         this.updateTime = updateTime;
         return this;
     }
-    public boolean isPaymentMethodWechat(){
-        return ObjectUtil.equals(getPaymentMethod(), Constants.PAYMENT_METHOD_WECHAT);
+    public boolean isPaymentMethodGooglePay(){
+        return ObjectUtil.equals(getPaymentMethod(), Constants.PAYMENT_METHOD_GOOGLE_PAY);
     }
 
-    public OrderPayment updatePaymentMethodToWechat(){
-        return updatePaymentMethod(Constants.PAYMENT_METHOD_WECHAT);
+    public OrderPayment updatePaymentMethodToGooglePay(){
+        return updatePaymentMethod(Constants.PAYMENT_METHOD_GOOGLE_PAY);
     }
-    public boolean isPaymentMethodAlipay(){
-        return ObjectUtil.equals(getPaymentMethod(), Constants.PAYMENT_METHOD_ALIPAY);
+    public boolean isPaymentMethodApplePay(){
+        return ObjectUtil.equals(getPaymentMethod(), Constants.PAYMENT_METHOD_APPLE_PAY);
     }
 
-    public OrderPayment updatePaymentMethodToAlipay(){
-        return updatePaymentMethod(Constants.PAYMENT_METHOD_ALIPAY);
+    public OrderPayment updatePaymentMethodToApplePay(){
+        return updatePaymentMethod(Constants.PAYMENT_METHOD_APPLE_PAY);
+    }
+    public boolean isPaymentMethodPaypal(){
+        return ObjectUtil.equals(getPaymentMethod(), Constants.PAYMENT_METHOD_PAYPAL);
+    }
+
+    public OrderPayment updatePaymentMethodToPaypal(){
+        return updatePaymentMethod(Constants.PAYMENT_METHOD_PAYPAL);
     }
     public boolean isPaymentMethodCreditCard(){
         return ObjectUtil.equals(getPaymentMethod(), Constants.PAYMENT_METHOD_CREDIT_CARD);

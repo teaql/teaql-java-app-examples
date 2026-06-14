@@ -1114,14 +1114,20 @@ public class OrderPaymentRequest<T extends OrderPayment> extends BaseRequest<T> 
        return this;
     }
 
-    public OrderPaymentRequest<T> withPaymentMethodIsWechat(){
-       filterByPaymentMethod(com.doublechaintech.vendingmachineservice.Constants.PAYMENT_METHOD_WECHAT);
+    public OrderPaymentRequest<T> withPaymentMethodIsGooglePay(){
+       filterByPaymentMethod(com.doublechaintech.vendingmachineservice.Constants.PAYMENT_METHOD_GOOGLE_PAY);
        return this;
     }
 
 
-    public OrderPaymentRequest<T> withPaymentMethodIsAlipay(){
-       filterByPaymentMethod(com.doublechaintech.vendingmachineservice.Constants.PAYMENT_METHOD_ALIPAY);
+    public OrderPaymentRequest<T> withPaymentMethodIsApplePay(){
+       filterByPaymentMethod(com.doublechaintech.vendingmachineservice.Constants.PAYMENT_METHOD_APPLE_PAY);
+       return this;
+    }
+
+
+    public OrderPaymentRequest<T> withPaymentMethodIsPaypal(){
+       filterByPaymentMethod(com.doublechaintech.vendingmachineservice.Constants.PAYMENT_METHOD_PAYPAL);
        return this;
     }
 
