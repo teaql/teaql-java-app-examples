@@ -408,7 +408,11 @@ fun AdminBackstageScreen() {
             if (dashboardData.statusCounts.isNotEmpty()) {
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
                     dashboardData.statusCounts.forEach { (status, count) ->
-                        Card(elevation = 2.dp, backgroundColor = Color(0xFFF0F0F0)) {
+                        Card(
+                            modifier = Modifier.weight(1f).padding(horizontal = 4.dp),
+                            elevation = 2.dp, 
+                            backgroundColor = Color(0xFFF0F0F0)
+                        ) {
                             Column(modifier = Modifier.padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                                 Text(status, fontWeight = FontWeight.Bold, fontSize = 14.sp)
                                 Text(count.toString(), fontSize = 24.sp, color = MaterialTheme.colors.primary)
