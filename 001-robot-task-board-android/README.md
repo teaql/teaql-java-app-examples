@@ -1,76 +1,76 @@
 # Robot Task Board - TeaQL Android App Example
 
-这是一个基于 TeaQL 框架构建的 Android 本地任务看板示例应用（单机纯本地，零后端网络依赖）。
+This is an Android local task board example application built on the TeaQL framework (purely local, zero backend network dependencies).
 
-本项目最大的特点在于：**极简的业务代码** 与 **坚如磐石的数据流向控制**。所有的底层 CRUD、验证规则、关系绑定以及建表逻辑全部通过 `model.xml` 声明式元数据驱动生成，让 Android 端的开发者只关注真正的业务流转。
+The most prominent feature of this project is its **minimalist business logic** and **rock-solid data flow control**. All underlying CRUD operations, validation rules, relationship bindings, and table schema generation are driven entirely by the declarative metadata in `model.xml`. This allows Android developers to focus purely on the actual business flow.
 
-## 代码规模：用最少的代码做最多的事
+## Code Scale: Do More with Less Code
 
-目前 Android 原生工程（`app/src`）的所有业务逻辑及 UI 布局总行数仅为 **738 行**。AI 时代，更少的代码意味着更小的排错负担、更少的 Bug，以及更高的业务掌控力。
+Currently, the total number of lines for all business logic and UI layouts in the native Android project (`app/src`) is only **738 lines**. In the AI era, less code means lower cognitive load for debugging, fewer bugs, and higher control over the business logic.
 
-| 文件路径                               | 代码行数 | 说明                                        |
-| :------------------------------------- | :------- | :------------------------------------------ |
-| **Java 逻辑与 UI (总计 540 行)**        |          |                                             |
-| `BoardFragment.java`                   | 148 行   | 看板拖拽与 UI 数据绑定核心逻辑              |
-| `TeaQLManager.java`                    | 135 行   | TeaQL 框架与本地 SQLite 初始化和生命周期管理|
-| `MainActivity.java`                    | 56 行    | 宿主 Activity                               |
-| `LogAdapter.java`                      | 55 行    | SQL 审计日志列表的 RecyclerView Adapter     |
-| `LogsFragment.java`                    | 50 行    | 底部面板，展示实时日志                      |
-| `TeaQLLogSinkImpl.java`                | 47 行    | TeaQL 自定义日志拦截器（拦截底层 SQL 执行） |
-| `TaskLogic.java`                       | 45 行    | 纯业务核心逻辑：新建任务、更新状态、读取列表|
-| `LogEntry.java`                        | 14 行    | 简单的数据载体类                            |
-| **Android XML 布局与资源 (总计 198 行)**|          |                                             |
-| `fragment_board.xml`                   | 78 行    | 看板主体界面布局                            |
-| `item_log.xml`                         | 25 行    | 日志列表单项布局                            |
-| `AndroidManifest.xml`                  | 20 行    | 应用清单文件                                |
-| `activity_main.xml`                    | 17 行    | 宿主布局                                    |
-| `item_task.xml`                        | 17 行    | 看板上的卡片组件布局                        |
-| `fragment_logs.xml`                    | 12 行    | 日志展示区布局                              |
-| `themes.xml`                           | 11 行    | App 主题定义                                |
-| `strings.xml`                          | 8 行     | 字符资源                                    |
+| File Path                               | LOC   | Description                                 |
+| :-------------------------------------- | :---- | :------------------------------------------ |
+| **Java Logic and UI (Total: 540 lines)**|       |                                             |
+| `BoardFragment.java`                    | 148   | Core logic for board drag-and-drop & UI binding |
+| `TeaQLManager.java`                     | 135   | Initialization and lifecycle management of TeaQL & SQLite |
+| `MainActivity.java`                     | 56    | Host Activity                               |
+| `LogAdapter.java`                       | 55    | RecyclerView Adapter for SQL audit logs     |
+| `LogsFragment.java`                     | 50    | Bottom panel displaying real-time logs      |
+| `TeaQLLogSinkImpl.java`                 | 47    | Custom TeaQL log interceptor for underlying SQL execution |
+| `TaskLogic.java`                        | 45    | Pure business core: create task, update status, read list |
+| `LogEntry.java`                         | 14    | Simple data carrier class                   |
+| **Android XML Layouts & Resources (Total: 198 lines)**|       |                                             |
+| `fragment_board.xml`                    | 78    | Main board UI layout                        |
+| `item_log.xml`                          | 25    | Layout for a single log list item           |
+| `AndroidManifest.xml`                   | 20    | Application manifest file                   |
+| `activity_main.xml`                     | 17    | Host layout                                 |
+| `item_task.xml`                         | 17    | Layout for the task card component on the board |
+| `fragment_logs.xml`                     | 12    | Layout for the log display area             |
+| `themes.xml`                            | 11    | App theme definitions                       |
+| `strings.xml`                           | 8     | String resources                            |
 
 ---
 
-## 核心业务场景与代码示例
+## Core Business Scenarios and Code Examples
 
-通过强类型生成的 Java API（存放在 `generate-lib`），我们抛弃了容易出错的面条代码（Spaghetti code）。所有的查询、设值、日志埋点都有编译器的强制防护。
+By leveraging strongly-typed generated Java APIs (located in `generate-lib`), we eliminate error-prone spaghetti code. All queries, value assignments, and log instrumentations are strictly safeguarded by the compiler.
 
-### 1. 新建对象并落库 (Create)
-由于在元数据中标记了常量字段强约束，我们调用 `updateStatusToTodo()` 等方法来设值，而非法直接使用 `updateStatus(status)` 赋值。同时，保存时**必须指定三位一体的审计日志意图（auditAs）**，否则禁止调用 `save()`。
+### 1. Create Object and Persist (Create)
+Since we have enforced strict constraints on constant fields in the metadata, we assign values by calling methods like `updateStatusToTodo()`, and direct assignments via `updateStatus(status)` are prohibited. Furthermore, when saving, the **trinity audit log intent (`auditAs`) must be specified**, otherwise calling `save()` is forbidden.
 
 ```java
 // TaskLogic.java
 public static void createNewTask(UserContext ctx, String taskName) {
-    // 按需初始化平台，自动携带执行意图进行查询
+    // Initialize platform on demand, automatically carrying execution intent for query
     Platform platform = Q.platforms().withIdIs(1L)
                          .comment("Init").purpose("New task").executeForOne(ctx);
     
     Task newTask = new Task();
-    newTask.updateId(System.currentTimeMillis() % 100000L); // 本地模拟分布式ID
+    newTask.updateId(System.currentTimeMillis() % 100000L); // Local simulated distributed ID
     newTask.updateName(taskName);
-    newTask.updateStatusToTodo(); // 严格类型约束：由底层生成器强加的安全网，仅开放常量方法
+    newTask.updateStatusToTodo(); // Strict typing constraint: safety net enforced by underlying generator, exposing only constant methods
     newTask.updatePlatform(platform);
     
-    // 强制意图声明落库
+    // Persist with forced intent declaration
     newTask.auditAs("Create new task from UI").save(ctx);
 }
 ```
 
-### 2. 查询数据与流式过滤 (Query)
-框架通过 `Q.xxx()` 暴露 DSL 风格的强类型查询能力。
+### 2. Query Data with Fluent Filtering (Query)
+The framework exposes DSL-style strongly-typed query capabilities through `Q.xxx()`.
 
 ```java
 // TaskLogic.java
 public static SmartList<Task> getAllTasks(UserContext ctx) {
     return Q.tasks()
-            .selectStatus()  // 仅查询关联的 Status 字段，减少数据量
-            .comment("Load board").purpose("Display tasks") // 携带审计标识
+            .selectStatus()  // Only query the associated Status field to reduce payload
+            .comment("Load board").purpose("Display tasks") // Attach audit identifiers
             .executeForList(ctx);
 }
 ```
 
-### 3. 更新特定数据状态 (Update)
-针对拖拽看板的任务状态变更，不再进行先查后改的无效操作，而是通过明确的快捷意图方法进行强校验的变更。
+### 3. Update Specific Data Status (Update)
+Instead of executing an invalid "query-then-update" sequence when a task status changes via drag-and-drop on the board, state changes are handled by calling explicit shortcut intent methods with strong validation.
 
 ```java
 // TaskLogic.java
@@ -81,7 +81,7 @@ public static void updateTaskStatus(UserContext ctx, String taskIdStr, String ne
                  .executeForOne(ctx);
                  
     if (task != null) {
-        // 根据状态码调用安全的生成方法
+        // Invoke safe generated methods based on status code
         switch (newStatusCode) {
             case "TODO": task.updateStatusToTodo(); break;
             case "IN_PROGRESS": task.updateStatusToInProgress(); break;
@@ -92,8 +92,8 @@ public static void updateTaskStatus(UserContext ctx, String taskIdStr, String ne
 }
 ```
 
-### 4. 拦截底层行为：定制 User Context Custom Log
-我们通过实现 `CustomLogSink` 可以极其容易地劫持底层的 SQL 执行过程，并将其呈现到 Android 界面上：
+### 4. Intercepting Underlying Behaviors: Customizing User Context Log
+By implementing `CustomLogSink`, we can easily hijack the underlying SQL execution process and present it on the Android UI:
 
 ```java
 // TeaQLLogSinkImpl.java
@@ -101,14 +101,14 @@ public class TeaQLLogSinkImpl implements CustomLogSink {
     private static final TeaQLLogSinkImpl INSTANCE = new TeaQLLogSinkImpl();
     private final List<LogEntry> logs = new ArrayList<>();
     
-    // 劫持底层回调
+    // Hijack underlying callback
     @Override
     public void onLog(String formattedLogContent) {
         synchronized (logs) {
             String time = sdf.format(new Date());
             logs.add(new LogEntry(formattedLogContent, time));
             if (listener != null) {
-                // 通知前端 RecyclerView 刷新
+                // Notify frontend RecyclerView to refresh
                 listener.onLogAdded();
             }
         }
@@ -116,10 +116,10 @@ public class TeaQLLogSinkImpl implements CustomLogSink {
 }
 ```
 
-将其注册给运行时的 `UserContext` 即可全局生效：
+Simply register it to the runtime `UserContext` to make it globally effective:
 
 ```java
-// 初始化 UserContext (摘自 TeaQLManager)
+// Initialize UserContext (Snippet from TeaQLManager)
 AndroidUserContextImpl ctx = new AndroidUserContextImpl(AndroidEnvironment.getInstance());
 ctx.setCustomLogSink(TeaQLLogSinkImpl.getInstance());
 ```

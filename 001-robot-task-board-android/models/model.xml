@@ -1,6 +1,6 @@
 <root alias_model_name="robot_task_board"
       cfg_mask_china_mobile="false"
-      chinese_name="机器人任务看板"
+      chinese_name="Robot Task Board"
       english_name="Robot Task Board"
       data_service="sqlite"
       name="robot-task-board-service"
