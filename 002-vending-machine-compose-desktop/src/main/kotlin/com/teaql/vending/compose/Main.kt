@@ -33,6 +33,7 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import io.teaql.core.log.CustomLogSink
 
 object SystemLogger {
     val logs = mutableStateListOf<String>()
@@ -41,6 +42,14 @@ object SystemLogger {
         val timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"))
         logs.add(0, "[$timestamp] $message")
         println("[$timestamp] $message")
+    }
+}
+
+class GlobalLiveLogsSink : CustomLogSink {
+    override fun onLog(formattedLogContent: String?) {
+        if (formattedLogContent != null) {
+            SystemLogger.log("[TeaQL Core] $formattedLogContent")
+        }
     }
 }
 
@@ -364,6 +373,9 @@ fun purchaseProduct(product: Product) {
 
 fun main() = application {
     initDatabase()
+
+    val customLogSink = GlobalLiveLogsSink()
+    SystemLogger.log("Registered Global Live Logs Engine (CustomLogSink)")
 
     Window(onCloseRequest = ::exitApplication, title = "TeaQL Vending Machine Desktop",
         state = androidx.compose.ui.window.rememberWindowState(width = 1000.dp, height = 700.dp)) {
