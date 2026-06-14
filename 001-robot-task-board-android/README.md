@@ -120,8 +120,8 @@ Simply register it to the runtime `UserContext` to make it globally effective:
 
 ```java
 // Initialize UserContext (Snippet from TeaQLManager)
-AndroidUserContextImpl ctx = new AndroidUserContextImpl(AndroidEnvironment.getInstance());
-ctx.setCustomLogSink(TeaQLLogSinkImpl.getInstance());
+DefaultUserContext ctx = new DefaultUserContext(runtime);
+ctx.registerCustomSink(TeaQLLogSinkImpl.getInstance());
 ```
 
 ### 5. Executed Query and Update Logs
