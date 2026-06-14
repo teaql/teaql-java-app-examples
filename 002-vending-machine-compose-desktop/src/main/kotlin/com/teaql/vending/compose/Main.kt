@@ -1,4 +1,4 @@
-package com.teaql.taskboard.compose
+package com.teaql.vending.compose
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.*
@@ -13,7 +13,7 @@ import androidx.compose.ui.window.application
 @Composable
 @Preview
 fun App() {
-    var text by remember { mutableStateOf("Hello, World!") }
+    var text by remember { mutableStateOf("Welcome to Vending Machine!") }
     var count by remember { mutableStateOf(0) }
 
     MaterialTheme {
@@ -26,16 +26,16 @@ fun App() {
             Spacer(Modifier.height(16.dp))
             Button(onClick = {
                 count++
-                text = "Hello, Desktop! (Clicked $count times)"
+                text = "Dispensed Item! (Total: $count)"
             }) {
-                Text("Click me!")
+                Text("Buy Now")
             }
         }
     }
 }
 
 fun main() = application {
-    Window(onCloseRequest = ::exitApplication, title = "TeaQL Task Board (Compose)") {
+    Window(onCloseRequest = ::exitApplication, title = "TeaQL Vending Machine (Compose)") {
         App()
     }
 }

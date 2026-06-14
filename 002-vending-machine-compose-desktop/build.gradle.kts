@@ -5,7 +5,7 @@ plugins {
     id("org.jetbrains.compose") version "1.6.0"
 }
 
-group = "com.teaql.taskboard.compose"
+group = "com.teaql.vending.compose"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -27,7 +27,7 @@ dependencies {
 
 compose.desktop {
     application {
-        mainClass = "com.teaql.taskboard.compose.MainKt"
+        mainClass = "com.teaql.vending.compose.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
