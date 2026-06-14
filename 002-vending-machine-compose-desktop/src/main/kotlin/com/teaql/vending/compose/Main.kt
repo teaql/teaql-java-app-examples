@@ -389,10 +389,10 @@ data class AdminDashboardData(
     val statusCounts: Map<String, Int>
 )
 
-fun fetchOrders(): AdminDashboardData {
+fun fetchOrders(searchKeyword: String = ""): AdminDashboardData {
     val ctx = TeaQLManager.newContext()
     return try {
-        val ordersSmartList = Q.vendingOrders()
+        var query = Q.vendingOrders()
             .facetByStatusAs("order_status", Q.orderStatuses().selectSelf(), true)
             .selectStatusWith(Q.orderStatuses().selectName().selectCode())
             .selectTotalAmount()
@@ -401,7 +401,12 @@ fun fetchOrders(): AdminDashboardData {
                     Q.products().selectImageUrl().selectName()
                 ).selectName()
             )
-            .comment("fetch").purpose("admin dashboard").executeForList(ctx)
+
+        if (searchKeyword.isNotBlank()) {
+            query = query.findWithJson("{\"title\":\"$searchKeyword\"}") as com.doublechaintech.vendingmachineservice.vendingorder.VendingOrderRequest<VendingOrder>
+        }
+
+        val ordersSmartList = query.comment("fetch").purpose("admin dashboard").executeForList(ctx)
             
         val counts = mutableMapOf<String, Int>()
         val facets = ordersSmartList.getFacets()
@@ -449,18 +454,28 @@ fun updateOrderStatus(order: VendingOrder, action: String) {
 
 @Composable
 fun AdminBackstageScreen() {
+    var searchKeyword by remember { mutableStateOf("") }
     var dashboardData by remember { mutableStateOf(AdminDashboardData(emptyList(), emptyMap())) }
     val coroutineScope = rememberCoroutineScope()
     
-    LaunchedEffect(Unit) {
+    LaunchedEffect(searchKeyword) {
         withContext(Dispatchers.IO) {
-            dashboardData = fetchOrders()
+            dashboardData = fetchOrders(searchKeyword)
         }
     }
     
     Card(modifier = Modifier.fillMaxSize(), elevation = 2.dp) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text("Admin Dashboard", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
+                Text("Admin Dashboard", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                OutlinedTextField(
+                    value = searchKeyword,
+                    onValueChange = { searchKeyword = it },
+                    label = { Text("Search by Title") },
+                    modifier = Modifier.width(300.dp),
+                    singleLine = true
+                )
+            }
             Spacer(modifier = Modifier.height(16.dp))
             
             // Facet Dashboard Stats
@@ -528,29 +543,34 @@ fun AdminBackstageScreen() {
                                 }
                                 
                                 Spacer(modifier = Modifier.height(8.dp))
+                                val statusCode = order.status?.code ?: ""
                                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                    Button(onClick = {
-                                        updateOrderStatus(order, "Dispense")
-                                        coroutineScope.launch {
-                                            withContext(Dispatchers.IO) {
-                                                dashboardData = fetchOrders()
-                                            }
-                                        }
-                                    }) {
-                                        Text("Dispense")
-                                    }
-                                    Button(
-                                        onClick = {
-                                            updateOrderStatus(order, "Complete")
+                                    if (statusCode == "PAID") {
+                                        Button(onClick = {
+                                            updateOrderStatus(order, "Dispense")
                                             coroutineScope.launch {
                                                 withContext(Dispatchers.IO) {
-                                                    dashboardData = fetchOrders()
+                                                    dashboardData = fetchOrders(searchKeyword)
                                                 }
                                             }
-                                        },
-                                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF4CAF50), contentColor = Color.White)
-                                    ) {
-                                        Text("Complete")
+                                        }) {
+                                            Text("Dispense")
+                                        }
+                                    }
+                                    if (statusCode == "DISPENSING") {
+                                        Button(
+                                            onClick = {
+                                                updateOrderStatus(order, "Complete")
+                                                coroutineScope.launch {
+                                                    withContext(Dispatchers.IO) {
+                                                        dashboardData = fetchOrders(searchKeyword)
+                                                    }
+                                                }
+                                            },
+                                            colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF4CAF50), contentColor = Color.White)
+                                        ) {
+                                            Text("Complete")
+                                        }
                                     }
                                 }
                             }

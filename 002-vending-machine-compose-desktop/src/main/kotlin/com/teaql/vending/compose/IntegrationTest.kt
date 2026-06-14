@@ -15,6 +15,21 @@ fun main() {
     dummyOrder.updateStatusToPaid()
     dummyOrder.auditAs<VendingOrder>("create order").save(TeaQLManager.userContext)
     
+    val ctx = TeaQLManager.userContext
+    
+    val p = com.doublechaintech.vendingmachineservice.product.Product()
+    p.updateName("Sample Product")
+    p.updateImageUrl("https://example.com/img.png")
+    p.auditAs<com.doublechaintech.vendingmachineservice.product.Product>("create product").save(ctx)
+
+    for (i in 0 until 4) {
+        val item = com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem()
+        item.updateName("Test Item $i")
+        item.updateVendingOrder(dummyOrder)
+        item.updateProduct(p)
+        item.auditAs<com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem>("add item").save(ctx)
+    }
+    
     println("Running fetchOrders()...")
     val dashboardData = fetchOrders()
     
@@ -24,6 +39,15 @@ fun main() {
         println("Order Title: ${order.title}")
         println("Order Status Name: ${order.status?.name ?: "NULL"}")
         println("Order Status Code: ${order.status?.code ?: "NULL"}")
+        
+        val items = order.vendingOrderItemList
+        println("Items count: ${items?.size() ?: 0}")
+        println("Total items count from SmartList: ${items?.totalCount ?: 0}")
+        if (items != null) {
+            for (item in items) {
+                println(" - Item: ${item.name}, Product: ${item.product?.name}, Image: ${item.product?.imageUrl}")
+            }
+        }
         println("---")
     }
     
