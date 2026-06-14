@@ -35,7 +35,7 @@ sourceSets {
 
 compose.desktop {
     application {
-        mainClass = "com.teaql.vending.compose.IntegrationTestKt"
+        mainClass = "com.teaql.vending.compose.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
