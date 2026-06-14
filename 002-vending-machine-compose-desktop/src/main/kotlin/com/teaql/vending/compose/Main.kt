@@ -345,6 +345,14 @@ fun fetchOrders(): AdminDashboardData {
             .comment("fetch").purpose("admin dashboard").executeForList(ctx)
             
         val counts = mutableMapOf<String, Int>()
+        try {
+            val allStatuses = Q.orderStatuses().selectName().executeForList(ctx)
+            for (status in allStatuses) {
+                counts[status.name] = 0
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
         val facets = ordersSmartList.getFacets()
         if (facets != null) {
             val statusFacetList = facets.get("order_status")
@@ -449,7 +457,7 @@ fun AdminBackstageScreen() {
                                                     }
                                                 }
                                             }) {
-                                                Text("Dispense")
+                                                Text("完成取货")
                                             }
                                         } else if (order.status?.code == "DISPENSING") {
                                             Button(
@@ -463,7 +471,7 @@ fun AdminBackstageScreen() {
                                                 },
                                                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF4CAF50), contentColor = Color.White)
                                             ) {
-                                                Text("Complete")
+                                                Text("订单完成")
                                             }
                                         }
                                     }
