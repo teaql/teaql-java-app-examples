@@ -22,6 +22,7 @@ dependencies {
     // Depend on our generated TeaQL core and local app logic!
     implementation("io.teaql:teaql-core:1.500-RELEASE")
     implementation("io.teaql:teaql-sqlite:1.500-RELEASE")
+    implementation("org.xerial:sqlite-jdbc:3.41.2.1")
     implementation("cn.hutool:hutool-all:5.8.20")
 }
 
