@@ -29,6 +29,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
@@ -342,6 +343,12 @@ fun fetchOrders(): AdminDashboardData {
         val ordersSmartList = Q.vendingOrders()
             .facetByStatusAs("order_status", Q.orderStatuses().selectSelf(), true)
             .selectStatus()
+            .selectTotalAmount()
+            .selectVendingOrderItemListWith(
+                Q.vendingOrderItems().top(3).count().selectProductWith(
+                    Q.products().selectImageUrl()
+                )
+            )
             .comment("fetch").purpose("admin dashboard").executeForList(ctx)
             
         val counts = mutableMapOf<String, Int>()
@@ -437,9 +444,37 @@ fun AdminBackstageScreen() {
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text("Title: ${order.title}", fontSize = 14.sp)
                                 Spacer(modifier = Modifier.height(2.dp))
-                                Text("Total Amount: $${order.totalAmount}", fontSize = 14.sp, color = MaterialTheme.colors.primary)
+                                Text("Total Amount: $${order.totalAmount ?: "0"}", fontSize = 14.sp, color = MaterialTheme.colors.primary)
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text("Status: ${order.status?.name ?: "Unknown"}", fontSize = 14.sp)
+                                
+                                val itemsList = order.vendingOrderItemList
+                                if (itemsList != null && !itemsList.isEmpty()) {
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                    Row(verticalAlignment = Alignment.CenterVertically) {
+                                        itemsList.forEach { item ->
+                                            val pName = item.product?.name ?: "IT"
+                                            Box(
+                                                modifier = Modifier
+                                                    .size(32.dp)
+                                                    .background(Color.LightGray, CircleShape),
+                                                contentAlignment = Alignment.Center
+                                            ) {
+                                                Text(pName.take(2), fontSize = 12.sp, color = Color.White)
+                                            }
+                                            Spacer(modifier = Modifier.width(4.dp))
+                                        }
+                                        val totalCount = itemsList.totalCount
+                                        if (totalCount > 3) {
+                                            Text(
+                                                text = "+ ${totalCount - 3} items",
+                                                fontSize = 12.sp,
+                                                color = Color.Gray,
+                                                modifier = Modifier.padding(start = 4.dp)
+                                            )
+                                        }
+                                    }
+                                }
                                 
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
