@@ -643,93 +643,93 @@ public class PaymentMethodRequest<T extends PaymentMethod> extends BaseRequest<T
     public PaymentMethodRequest<T> countVendingOrdersWith(String name, VendingOrderRequest subRequest){
         return statsFromVendingOrdersAs(name, subRequest.count(), true);
     }
-    public PaymentMethodRequest<T> minAmountOfVendingOrders(){
-        return minAmountOfVendingOrdersAs("minAmountOfVendingOrders");
+    public PaymentMethodRequest<T> minTotalAmountOfVendingOrders(){
+        return minTotalAmountOfVendingOrdersAs("minTotalAmountOfVendingOrders");
     }
 
-    public PaymentMethodRequest<T> minAmountOfVendingOrdersAs(String name){
-        return minAmountOfVendingOrdersAs(name, Q.vendingOrders().unlimited());
+    public PaymentMethodRequest<T> minTotalAmountOfVendingOrdersAs(String name){
+        return minTotalAmountOfVendingOrdersAs(name, Q.vendingOrders().unlimited());
     }
 
-    public PaymentMethodRequest<T> minAmountOfVendingOrdersAs(String name, VendingOrderRequest subRequest){
-        return statsFromVendingOrdersAs(name, subRequest.minAmount(), true);
+    public PaymentMethodRequest<T> minTotalAmountOfVendingOrdersAs(String name, VendingOrderRequest subRequest){
+        return statsFromVendingOrdersAs(name, subRequest.minTotalAmount(), true);
     }
-    public PaymentMethodRequest<T> maxAmountOfVendingOrders(){
-        return maxAmountOfVendingOrdersAs("maxAmountOfVendingOrders");
-    }
-
-    public PaymentMethodRequest<T> maxAmountOfVendingOrdersAs(String name){
-        return maxAmountOfVendingOrdersAs(name, Q.vendingOrders().unlimited());
+    public PaymentMethodRequest<T> maxTotalAmountOfVendingOrders(){
+        return maxTotalAmountOfVendingOrdersAs("maxTotalAmountOfVendingOrders");
     }
 
-    public PaymentMethodRequest<T> maxAmountOfVendingOrdersAs(String name, VendingOrderRequest subRequest){
-        return statsFromVendingOrdersAs(name, subRequest.maxAmount(), true);
-    }
-    public PaymentMethodRequest<T> sumAmountOfVendingOrders(){
-        return sumAmountOfVendingOrdersAs("sumAmountOfVendingOrders");
+    public PaymentMethodRequest<T> maxTotalAmountOfVendingOrdersAs(String name){
+        return maxTotalAmountOfVendingOrdersAs(name, Q.vendingOrders().unlimited());
     }
 
-    public PaymentMethodRequest<T> sumAmountOfVendingOrdersAs(String name){
-        return sumAmountOfVendingOrdersAs(name, Q.vendingOrders().unlimited());
+    public PaymentMethodRequest<T> maxTotalAmountOfVendingOrdersAs(String name, VendingOrderRequest subRequest){
+        return statsFromVendingOrdersAs(name, subRequest.maxTotalAmount(), true);
+    }
+    public PaymentMethodRequest<T> sumTotalAmountOfVendingOrders(){
+        return sumTotalAmountOfVendingOrdersAs("sumTotalAmountOfVendingOrders");
     }
 
-    public PaymentMethodRequest<T> sumAmountOfVendingOrdersAs(String name, VendingOrderRequest subRequest){
-        return statsFromVendingOrdersAs(name, subRequest.sumAmount(), true);
-    }
-    public PaymentMethodRequest<T> avgAmountOfVendingOrders(){
-        return avgAmountOfVendingOrdersAs("avgAmountOfVendingOrders");
+    public PaymentMethodRequest<T> sumTotalAmountOfVendingOrdersAs(String name){
+        return sumTotalAmountOfVendingOrdersAs(name, Q.vendingOrders().unlimited());
     }
 
-    public PaymentMethodRequest<T> avgAmountOfVendingOrdersAs(String name){
-        return avgAmountOfVendingOrdersAs(name, Q.vendingOrders().unlimited());
+    public PaymentMethodRequest<T> sumTotalAmountOfVendingOrdersAs(String name, VendingOrderRequest subRequest){
+        return statsFromVendingOrdersAs(name, subRequest.sumTotalAmount(), true);
+    }
+    public PaymentMethodRequest<T> avgTotalAmountOfVendingOrders(){
+        return avgTotalAmountOfVendingOrdersAs("avgTotalAmountOfVendingOrders");
     }
 
-    public PaymentMethodRequest<T> avgAmountOfVendingOrdersAs(String name, VendingOrderRequest subRequest){
-        return statsFromVendingOrdersAs(name, subRequest.avgAmount(), true);
-    }
-    public PaymentMethodRequest<T> standardDeviationAmountOfVendingOrders(){
-        return standardDeviationAmountOfVendingOrdersAs("stdDevAmountOfVendingOrders");
+    public PaymentMethodRequest<T> avgTotalAmountOfVendingOrdersAs(String name){
+        return avgTotalAmountOfVendingOrdersAs(name, Q.vendingOrders().unlimited());
     }
 
-    public PaymentMethodRequest<T> standardDeviationAmountOfVendingOrdersAs(String name){
-        return standardDeviationAmountOfVendingOrdersAs(name, Q.vendingOrders().unlimited());
+    public PaymentMethodRequest<T> avgTotalAmountOfVendingOrdersAs(String name, VendingOrderRequest subRequest){
+        return statsFromVendingOrdersAs(name, subRequest.avgTotalAmount(), true);
+    }
+    public PaymentMethodRequest<T> standardDeviationTotalAmountOfVendingOrders(){
+        return standardDeviationTotalAmountOfVendingOrdersAs("stdDevTotalAmountOfVendingOrders");
     }
 
-    public PaymentMethodRequest<T> standardDeviationAmountOfVendingOrdersAs(String name, VendingOrderRequest subRequest){
-        return statsFromVendingOrdersAs(name, subRequest.standardDeviationAmount(), true);
-    }
-    public PaymentMethodRequest<T> squareRootOfPopulationStandardDeviationAmountOfVendingOrders(){
-        return squareRootOfPopulationStandardDeviationAmountOfVendingOrdersAs("stdDevPopAmountOfVendingOrders");
+    public PaymentMethodRequest<T> standardDeviationTotalAmountOfVendingOrdersAs(String name){
+        return standardDeviationTotalAmountOfVendingOrdersAs(name, Q.vendingOrders().unlimited());
     }
 
-    public PaymentMethodRequest<T> squareRootOfPopulationStandardDeviationAmountOfVendingOrdersAs(String name){
-        return squareRootOfPopulationStandardDeviationAmountOfVendingOrdersAs(name, Q.vendingOrders().unlimited());
+    public PaymentMethodRequest<T> standardDeviationTotalAmountOfVendingOrdersAs(String name, VendingOrderRequest subRequest){
+        return statsFromVendingOrdersAs(name, subRequest.standardDeviationTotalAmount(), true);
+    }
+    public PaymentMethodRequest<T> squareRootOfPopulationStandardDeviationTotalAmountOfVendingOrders(){
+        return squareRootOfPopulationStandardDeviationTotalAmountOfVendingOrdersAs("stdDevPopTotalAmountOfVendingOrders");
     }
 
-    public PaymentMethodRequest<T> squareRootOfPopulationStandardDeviationAmountOfVendingOrdersAs(String name, VendingOrderRequest subRequest){
-        return statsFromVendingOrdersAs(name, subRequest.squareRootOfPopulationStandardDeviationAmount(), true);
-    }
-    public PaymentMethodRequest<T> sampleVarianceAmountOfVendingOrders(){
-        return sampleVarianceAmountOfVendingOrdersAs("varSampAmountOfVendingOrders");
+    public PaymentMethodRequest<T> squareRootOfPopulationStandardDeviationTotalAmountOfVendingOrdersAs(String name){
+        return squareRootOfPopulationStandardDeviationTotalAmountOfVendingOrdersAs(name, Q.vendingOrders().unlimited());
     }
 
-    public PaymentMethodRequest<T> sampleVarianceAmountOfVendingOrdersAs(String name){
-        return sampleVarianceAmountOfVendingOrdersAs(name, Q.vendingOrders().unlimited());
+    public PaymentMethodRequest<T> squareRootOfPopulationStandardDeviationTotalAmountOfVendingOrdersAs(String name, VendingOrderRequest subRequest){
+        return statsFromVendingOrdersAs(name, subRequest.squareRootOfPopulationStandardDeviationTotalAmount(), true);
+    }
+    public PaymentMethodRequest<T> sampleVarianceTotalAmountOfVendingOrders(){
+        return sampleVarianceTotalAmountOfVendingOrdersAs("varSampTotalAmountOfVendingOrders");
     }
 
-    public PaymentMethodRequest<T> sampleVarianceAmountOfVendingOrdersAs(String name, VendingOrderRequest subRequest){
-        return statsFromVendingOrdersAs(name, subRequest.sampleVarianceAmount(), true);
-    }
-    public PaymentMethodRequest<T> samplePopulationVarianceAmountOfVendingOrders(){
-        return samplePopulationVarianceAmountOfVendingOrdersAs("varPopAmountOfVendingOrders");
+    public PaymentMethodRequest<T> sampleVarianceTotalAmountOfVendingOrdersAs(String name){
+        return sampleVarianceTotalAmountOfVendingOrdersAs(name, Q.vendingOrders().unlimited());
     }
 
-    public PaymentMethodRequest<T> samplePopulationVarianceAmountOfVendingOrdersAs(String name){
-        return samplePopulationVarianceAmountOfVendingOrdersAs(name, Q.vendingOrders().unlimited());
+    public PaymentMethodRequest<T> sampleVarianceTotalAmountOfVendingOrdersAs(String name, VendingOrderRequest subRequest){
+        return statsFromVendingOrdersAs(name, subRequest.sampleVarianceTotalAmount(), true);
+    }
+    public PaymentMethodRequest<T> samplePopulationVarianceTotalAmountOfVendingOrders(){
+        return samplePopulationVarianceTotalAmountOfVendingOrdersAs("varPopTotalAmountOfVendingOrders");
     }
 
-    public PaymentMethodRequest<T> samplePopulationVarianceAmountOfVendingOrdersAs(String name, VendingOrderRequest subRequest){
-        return statsFromVendingOrdersAs(name, subRequest.samplePopulationVarianceAmount(), true);
+    public PaymentMethodRequest<T> samplePopulationVarianceTotalAmountOfVendingOrdersAs(String name){
+        return samplePopulationVarianceTotalAmountOfVendingOrdersAs(name, Q.vendingOrders().unlimited());
+    }
+
+    public PaymentMethodRequest<T> samplePopulationVarianceTotalAmountOfVendingOrdersAs(String name, VendingOrderRequest subRequest){
+        return statsFromVendingOrdersAs(name, subRequest.samplePopulationVarianceTotalAmount(), true);
     }
 
    public PaymentMethodRequest<T> facetByVendingMachineAs(String facetName, VendingMachineRequest vendingMachine){

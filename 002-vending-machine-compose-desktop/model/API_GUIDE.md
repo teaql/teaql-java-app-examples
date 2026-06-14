@@ -332,7 +332,7 @@ Package: `com.doublechaintech.vendingmachineservice`
 
 
 **Children (incoming):**
-- `vendingOrderList` → VendingOrder (select with `selectVendingOrderList()`)
+- `vendingOrderItemList` → VendingOrderItem (select with `selectVendingOrderItemList()`)
 
 
 ---
@@ -349,9 +349,7 @@ Package: `com.doublechaintech.vendingmachineservice`
 |----------|------|--------|---------|
 | title |  | `getTitle()` | `updateTitle(value)` |
 
-| product |  | `getProduct()` | `updateProduct(value)` |
-
-| amount |  | `getAmount()` | `updateAmount(value)` |
+| totalAmount |  | `getTotalAmount()` | `updateTotalAmount(value)` |
 
 | status |  | `getStatus()` | `updateStatus(value)` |
 
@@ -367,11 +365,48 @@ Package: `com.doublechaintech.vendingmachineservice`
 
 
 **Relations (outgoing):**
-- `product` → references another entity (select with `selectProduct()`)
-
 - `status` → references another entity (select with `selectStatus()`)
 
 - `paymentMethod` → references another entity (select with `selectPaymentMethod()`)
+
+
+**Children (incoming):**
+- `vendingOrderItemList` → VendingOrderItem (select with `selectVendingOrderItemList()`)
+
+
+---
+
+### Entity: VendingOrderItem
+
+- **Query**: `Q.vendingOrderItems()`
+- **Filter prefix**: `with`
+- **Filter suffix**: `ing`
+- **Display name**: Vending Order Item
+- **Category**: Thing — uses `with`, `Containing`, `whichAre`
+
+| Property | Type | Getter | Updater |
+|----------|------|--------|---------|
+| name |  | `getName()` | `updateName(value)` |
+
+| vendingOrder |  | `getVendingOrder()` | `updateVendingOrder(value)` |
+
+| product |  | `getProduct()` | `updateProduct(value)` |
+
+| quantity |  | `getQuantity()` | `updateQuantity(value)` |
+
+| price |  | `getPrice()` | `updatePrice(value)` |
+
+| amount |  | `getAmount()` | `updateAmount(value)` |
+
+| createTime |  | `getCreateTime()` | `updateCreateTime(value)` |
+
+| updateTime |  | `getUpdateTime()` | `updateUpdateTime(value)` |
+
+
+**Relations (outgoing):**
+- `vendingOrder` → references another entity (select with `selectVendingOrder()`)
+
+- `product` → references another entity (select with `selectProduct()`)
 
 
 ---

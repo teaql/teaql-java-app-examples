@@ -43,4 +43,12 @@ public class Q  {
   }
 
 
+  public static com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItemRequest<com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem> vendingOrderItems(){
+      return new com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItemRequest(com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem.class).selectSelf().withVersion(Operator.GREATER_THAN, 0l);
+  }
+  public static com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItemRequest<com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem> vendingOrderItemsWithMinimalFields(){
+      return new com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItemRequest(com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem.class).withVersion(Operator.GREATER_THAN, 0l);
+  }
+
+
 }

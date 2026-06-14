@@ -3,7 +3,7 @@ package com.doublechaintech.vendingmachineservice.product;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine;
-import com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder;
+import com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem;
 import io.teaql.core.BaseEntity;
 import io.teaql.core.EntityStatus;
 import io.teaql.core.FrameworkInternal;
@@ -29,7 +29,7 @@ public class Product extends BaseEntity implements RemoteInput {
     public static final String VENDING_MACHINE_PROPERTY = "vendingMachine";
     public static final String CREATE_TIME_PROPERTY = "createTime";
     public static final String UPDATE_TIME_PROPERTY = "updateTime";
-    public static final String VENDING_ORDER_LIST_PROPERTY = "vendingOrderList";
+    public static final String VENDING_ORDER_ITEM_LIST_PROPERTY = "vendingOrderItemList";
     private String name;
     private Integer price;
     private Integer stock;
@@ -37,7 +37,7 @@ public class Product extends BaseEntity implements RemoteInput {
     private VendingMachine vendingMachine;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
-    private SmartList<VendingOrder> vendingOrderList;
+    private SmartList<VendingOrderItem> vendingOrderItemList;
 
     public String getName(){
         return this.name;
@@ -60,8 +60,8 @@ public class Product extends BaseEntity implements RemoteInput {
     public LocalDateTime getUpdateTime(){
         return this.updateTime;
     }
-    public SmartList<VendingOrder> getVendingOrderList(){
-        return this.vendingOrderList;
+    public SmartList<VendingOrderItem> getVendingOrderItemList(){
+        return this.vendingOrderItemList;
     }
     public Product updateName(String name){
         name = StrUtil.trim(name);
@@ -121,17 +121,17 @@ public class Product extends BaseEntity implements RemoteInput {
         this.updateTime = updateTime;
         return this;
     }
-    public Product addVendingOrder(VendingOrder vendingOrder){
-        if (vendingOrder == null){
+    public Product addVendingOrderItem(VendingOrderItem vendingOrderItem){
+        if (vendingOrderItem == null){
             return this;
         }
 
-        if(null == this.vendingOrderList){
-            this.vendingOrderList = new SmartList<>();
+        if(null == this.vendingOrderItemList){
+            this.vendingOrderItemList = new SmartList<>();
         }
 
-        this.vendingOrderList.add(vendingOrder);
-        vendingOrder.cacheRelation(VendingOrder.PRODUCT_PROPERTY, this);
+        this.vendingOrderItemList.add(vendingOrderItem);
+        vendingOrderItem.cacheRelation(VendingOrderItem.PRODUCT_PROPERTY, this);
         return this;
     }
 
@@ -170,7 +170,7 @@ public class Product extends BaseEntity implements RemoteInput {
 
             case "updateTime": this.updateTime = (LocalDateTime) value; break;
 
-            case "vendingOrderList": this.vendingOrderList = (SmartList<VendingOrder>) value; break;
+            case "vendingOrderItemList": this.vendingOrderItemList = (SmartList<VendingOrderItem>) value; break;
             default: super.internalSet(property, value);
         }
     }
@@ -186,7 +186,7 @@ public class Product extends BaseEntity implements RemoteInput {
             case "vendingMachine": return this.vendingMachine;
             case "createTime": return this.createTime;
             case "updateTime": return this.updateTime;
-            case "vendingOrderList": return this.vendingOrderList;
+            case "vendingOrderItemList": return this.vendingOrderItemList;
             default: return super.internalGet(property);
         }
     }

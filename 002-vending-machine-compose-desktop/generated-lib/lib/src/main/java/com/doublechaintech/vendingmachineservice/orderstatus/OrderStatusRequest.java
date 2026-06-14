@@ -643,93 +643,93 @@ public class OrderStatusRequest<T extends OrderStatus> extends BaseRequest<T> {
     public OrderStatusRequest<T> countVendingOrdersWith(String name, VendingOrderRequest subRequest){
         return statsFromVendingOrdersAs(name, subRequest.count(), true);
     }
-    public OrderStatusRequest<T> minAmountOfVendingOrders(){
-        return minAmountOfVendingOrdersAs("minAmountOfVendingOrders");
+    public OrderStatusRequest<T> minTotalAmountOfVendingOrders(){
+        return minTotalAmountOfVendingOrdersAs("minTotalAmountOfVendingOrders");
     }
 
-    public OrderStatusRequest<T> minAmountOfVendingOrdersAs(String name){
-        return minAmountOfVendingOrdersAs(name, Q.vendingOrders().unlimited());
+    public OrderStatusRequest<T> minTotalAmountOfVendingOrdersAs(String name){
+        return minTotalAmountOfVendingOrdersAs(name, Q.vendingOrders().unlimited());
     }
 
-    public OrderStatusRequest<T> minAmountOfVendingOrdersAs(String name, VendingOrderRequest subRequest){
-        return statsFromVendingOrdersAs(name, subRequest.minAmount(), true);
+    public OrderStatusRequest<T> minTotalAmountOfVendingOrdersAs(String name, VendingOrderRequest subRequest){
+        return statsFromVendingOrdersAs(name, subRequest.minTotalAmount(), true);
     }
-    public OrderStatusRequest<T> maxAmountOfVendingOrders(){
-        return maxAmountOfVendingOrdersAs("maxAmountOfVendingOrders");
-    }
-
-    public OrderStatusRequest<T> maxAmountOfVendingOrdersAs(String name){
-        return maxAmountOfVendingOrdersAs(name, Q.vendingOrders().unlimited());
+    public OrderStatusRequest<T> maxTotalAmountOfVendingOrders(){
+        return maxTotalAmountOfVendingOrdersAs("maxTotalAmountOfVendingOrders");
     }
 
-    public OrderStatusRequest<T> maxAmountOfVendingOrdersAs(String name, VendingOrderRequest subRequest){
-        return statsFromVendingOrdersAs(name, subRequest.maxAmount(), true);
-    }
-    public OrderStatusRequest<T> sumAmountOfVendingOrders(){
-        return sumAmountOfVendingOrdersAs("sumAmountOfVendingOrders");
+    public OrderStatusRequest<T> maxTotalAmountOfVendingOrdersAs(String name){
+        return maxTotalAmountOfVendingOrdersAs(name, Q.vendingOrders().unlimited());
     }
 
-    public OrderStatusRequest<T> sumAmountOfVendingOrdersAs(String name){
-        return sumAmountOfVendingOrdersAs(name, Q.vendingOrders().unlimited());
+    public OrderStatusRequest<T> maxTotalAmountOfVendingOrdersAs(String name, VendingOrderRequest subRequest){
+        return statsFromVendingOrdersAs(name, subRequest.maxTotalAmount(), true);
+    }
+    public OrderStatusRequest<T> sumTotalAmountOfVendingOrders(){
+        return sumTotalAmountOfVendingOrdersAs("sumTotalAmountOfVendingOrders");
     }
 
-    public OrderStatusRequest<T> sumAmountOfVendingOrdersAs(String name, VendingOrderRequest subRequest){
-        return statsFromVendingOrdersAs(name, subRequest.sumAmount(), true);
-    }
-    public OrderStatusRequest<T> avgAmountOfVendingOrders(){
-        return avgAmountOfVendingOrdersAs("avgAmountOfVendingOrders");
+    public OrderStatusRequest<T> sumTotalAmountOfVendingOrdersAs(String name){
+        return sumTotalAmountOfVendingOrdersAs(name, Q.vendingOrders().unlimited());
     }
 
-    public OrderStatusRequest<T> avgAmountOfVendingOrdersAs(String name){
-        return avgAmountOfVendingOrdersAs(name, Q.vendingOrders().unlimited());
+    public OrderStatusRequest<T> sumTotalAmountOfVendingOrdersAs(String name, VendingOrderRequest subRequest){
+        return statsFromVendingOrdersAs(name, subRequest.sumTotalAmount(), true);
+    }
+    public OrderStatusRequest<T> avgTotalAmountOfVendingOrders(){
+        return avgTotalAmountOfVendingOrdersAs("avgTotalAmountOfVendingOrders");
     }
 
-    public OrderStatusRequest<T> avgAmountOfVendingOrdersAs(String name, VendingOrderRequest subRequest){
-        return statsFromVendingOrdersAs(name, subRequest.avgAmount(), true);
-    }
-    public OrderStatusRequest<T> standardDeviationAmountOfVendingOrders(){
-        return standardDeviationAmountOfVendingOrdersAs("stdDevAmountOfVendingOrders");
+    public OrderStatusRequest<T> avgTotalAmountOfVendingOrdersAs(String name){
+        return avgTotalAmountOfVendingOrdersAs(name, Q.vendingOrders().unlimited());
     }
 
-    public OrderStatusRequest<T> standardDeviationAmountOfVendingOrdersAs(String name){
-        return standardDeviationAmountOfVendingOrdersAs(name, Q.vendingOrders().unlimited());
+    public OrderStatusRequest<T> avgTotalAmountOfVendingOrdersAs(String name, VendingOrderRequest subRequest){
+        return statsFromVendingOrdersAs(name, subRequest.avgTotalAmount(), true);
+    }
+    public OrderStatusRequest<T> standardDeviationTotalAmountOfVendingOrders(){
+        return standardDeviationTotalAmountOfVendingOrdersAs("stdDevTotalAmountOfVendingOrders");
     }
 
-    public OrderStatusRequest<T> standardDeviationAmountOfVendingOrdersAs(String name, VendingOrderRequest subRequest){
-        return statsFromVendingOrdersAs(name, subRequest.standardDeviationAmount(), true);
-    }
-    public OrderStatusRequest<T> squareRootOfPopulationStandardDeviationAmountOfVendingOrders(){
-        return squareRootOfPopulationStandardDeviationAmountOfVendingOrdersAs("stdDevPopAmountOfVendingOrders");
+    public OrderStatusRequest<T> standardDeviationTotalAmountOfVendingOrdersAs(String name){
+        return standardDeviationTotalAmountOfVendingOrdersAs(name, Q.vendingOrders().unlimited());
     }
 
-    public OrderStatusRequest<T> squareRootOfPopulationStandardDeviationAmountOfVendingOrdersAs(String name){
-        return squareRootOfPopulationStandardDeviationAmountOfVendingOrdersAs(name, Q.vendingOrders().unlimited());
+    public OrderStatusRequest<T> standardDeviationTotalAmountOfVendingOrdersAs(String name, VendingOrderRequest subRequest){
+        return statsFromVendingOrdersAs(name, subRequest.standardDeviationTotalAmount(), true);
+    }
+    public OrderStatusRequest<T> squareRootOfPopulationStandardDeviationTotalAmountOfVendingOrders(){
+        return squareRootOfPopulationStandardDeviationTotalAmountOfVendingOrdersAs("stdDevPopTotalAmountOfVendingOrders");
     }
 
-    public OrderStatusRequest<T> squareRootOfPopulationStandardDeviationAmountOfVendingOrdersAs(String name, VendingOrderRequest subRequest){
-        return statsFromVendingOrdersAs(name, subRequest.squareRootOfPopulationStandardDeviationAmount(), true);
-    }
-    public OrderStatusRequest<T> sampleVarianceAmountOfVendingOrders(){
-        return sampleVarianceAmountOfVendingOrdersAs("varSampAmountOfVendingOrders");
+    public OrderStatusRequest<T> squareRootOfPopulationStandardDeviationTotalAmountOfVendingOrdersAs(String name){
+        return squareRootOfPopulationStandardDeviationTotalAmountOfVendingOrdersAs(name, Q.vendingOrders().unlimited());
     }
 
-    public OrderStatusRequest<T> sampleVarianceAmountOfVendingOrdersAs(String name){
-        return sampleVarianceAmountOfVendingOrdersAs(name, Q.vendingOrders().unlimited());
+    public OrderStatusRequest<T> squareRootOfPopulationStandardDeviationTotalAmountOfVendingOrdersAs(String name, VendingOrderRequest subRequest){
+        return statsFromVendingOrdersAs(name, subRequest.squareRootOfPopulationStandardDeviationTotalAmount(), true);
+    }
+    public OrderStatusRequest<T> sampleVarianceTotalAmountOfVendingOrders(){
+        return sampleVarianceTotalAmountOfVendingOrdersAs("varSampTotalAmountOfVendingOrders");
     }
 
-    public OrderStatusRequest<T> sampleVarianceAmountOfVendingOrdersAs(String name, VendingOrderRequest subRequest){
-        return statsFromVendingOrdersAs(name, subRequest.sampleVarianceAmount(), true);
-    }
-    public OrderStatusRequest<T> samplePopulationVarianceAmountOfVendingOrders(){
-        return samplePopulationVarianceAmountOfVendingOrdersAs("varPopAmountOfVendingOrders");
+    public OrderStatusRequest<T> sampleVarianceTotalAmountOfVendingOrdersAs(String name){
+        return sampleVarianceTotalAmountOfVendingOrdersAs(name, Q.vendingOrders().unlimited());
     }
 
-    public OrderStatusRequest<T> samplePopulationVarianceAmountOfVendingOrdersAs(String name){
-        return samplePopulationVarianceAmountOfVendingOrdersAs(name, Q.vendingOrders().unlimited());
+    public OrderStatusRequest<T> sampleVarianceTotalAmountOfVendingOrdersAs(String name, VendingOrderRequest subRequest){
+        return statsFromVendingOrdersAs(name, subRequest.sampleVarianceTotalAmount(), true);
+    }
+    public OrderStatusRequest<T> samplePopulationVarianceTotalAmountOfVendingOrders(){
+        return samplePopulationVarianceTotalAmountOfVendingOrdersAs("varPopTotalAmountOfVendingOrders");
     }
 
-    public OrderStatusRequest<T> samplePopulationVarianceAmountOfVendingOrdersAs(String name, VendingOrderRequest subRequest){
-        return statsFromVendingOrdersAs(name, subRequest.samplePopulationVarianceAmount(), true);
+    public OrderStatusRequest<T> samplePopulationVarianceTotalAmountOfVendingOrdersAs(String name){
+        return samplePopulationVarianceTotalAmountOfVendingOrdersAs(name, Q.vendingOrders().unlimited());
+    }
+
+    public OrderStatusRequest<T> samplePopulationVarianceTotalAmountOfVendingOrdersAs(String name, VendingOrderRequest subRequest){
+        return statsFromVendingOrdersAs(name, subRequest.samplePopulationVarianceTotalAmount(), true);
     }
 
    public OrderStatusRequest<T> facetByVendingMachineAs(String facetName, VendingMachineRequest vendingMachine){

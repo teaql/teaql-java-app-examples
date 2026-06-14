@@ -10,6 +10,8 @@ import com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine;
 import com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachineExpression;
 import com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder;
 import com.doublechaintech.vendingmachineservice.vendingorder.VendingOrderExpression;
+import com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem;
+import com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItemExpression;
 import io.teaql.core.value.ValueExpression;
 
 public class E  {
@@ -27,5 +29,8 @@ public class E  {
   }
   public static VendingOrderExpression<VendingOrder, VendingOrder, VendingOrder> vendingOrder(VendingOrder vendingOrder){
       return new VendingOrderExpression(new ValueExpression(vendingOrder));
+  }
+  public static VendingOrderItemExpression<VendingOrderItem, VendingOrderItem, VendingOrderItem> vendingOrderItem(VendingOrderItem vendingOrderItem){
+      return new VendingOrderItemExpression(new ValueExpression(vendingOrderItem));
   }
 }

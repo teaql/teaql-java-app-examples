@@ -4,8 +4,8 @@ import com.doublechaintech.vendingmachineservice.orderstatus.OrderStatus;
 import com.doublechaintech.vendingmachineservice.orderstatus.OrderStatusExpression;
 import com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod;
 import com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethodExpression;
-import com.doublechaintech.vendingmachineservice.product.Product;
-import com.doublechaintech.vendingmachineservice.product.ProductExpression;
+import com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem;
+import com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItemListExpression;
 import io.teaql.core.UserContext;
 import io.teaql.core.value.BaseEntityExpression;
 import io.teaql.core.value.Expression;
@@ -46,19 +46,11 @@ public class VendingOrderExpression<T, E, U extends VendingOrder> extends Expres
        return new VendingOrderExpression(this, $it ->  ((VendingOrder)$it).updateTitle(title));
     }
 
-    public ProductExpression<T, U, Product> getProduct(){
-       return new ProductExpression(this, $it ->  ((VendingOrder)$it).getProduct());
+    public Expression<T, Integer> getTotalAmount(){
+       return apply(VendingOrder::getTotalAmount);
     }
-
-    public VendingOrderExpression<T, U, U> updateProduct(Product product){
-       return new VendingOrderExpression(this, $it ->  ((VendingOrder)$it).updateProduct(product));
-    }
-
-    public Expression<T, Integer> getAmount(){
-       return apply(VendingOrder::getAmount);
-    }
-    public VendingOrderExpression<T, U, U> updateAmount(Integer amount){
-       return new VendingOrderExpression(this, $it ->  ((VendingOrder)$it).updateAmount(amount));
+    public VendingOrderExpression<T, U, U> updateTotalAmount(Integer totalAmount){
+       return new VendingOrderExpression(this, $it ->  ((VendingOrder)$it).updateTotalAmount(totalAmount));
     }
 
     public OrderStatusExpression<T, U, OrderStatus> getStatus(){
@@ -120,4 +112,10 @@ public class VendingOrderExpression<T, E, U extends VendingOrder> extends Expres
        return new VendingOrderExpression(this, $it ->  ((VendingOrder)$it).updateUpdateTime(updateTime));
     }
 
+    public VendingOrderItemListExpression<T, U, VendingOrderItem> getVendingOrderItemList(){
+        return new VendingOrderItemListExpression(this, $it ->  ((VendingOrder)$it).getVendingOrderItemList());
+    }
+    public VendingOrderExpression<T, U, U> addVendingOrderItem(VendingOrderItem vendingOrderItem){
+       return new VendingOrderExpression(this, $it ->  ((VendingOrder)$it).addVendingOrderItem(vendingOrderItem));
+    }
 }

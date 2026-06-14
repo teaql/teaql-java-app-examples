@@ -5,11 +5,12 @@ import cn.hutool.core.util.StrUtil;
 import com.doublechaintech.vendingmachineservice.Constants;
 import com.doublechaintech.vendingmachineservice.orderstatus.OrderStatus;
 import com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod;
-import com.doublechaintech.vendingmachineservice.product.Product;
+import com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem;
 import io.teaql.core.BaseEntity;
 import io.teaql.core.EntityStatus;
 import io.teaql.core.FrameworkInternal;
 import io.teaql.core.RemoteInput;
+import io.teaql.core.SmartList;
 import java.time.LocalDateTime;
 
 /**
@@ -24,32 +25,29 @@ public class VendingOrder extends BaseEntity implements RemoteInput {
     public static String INTERNAL_TYPE = "VendingOrder";
 
     public static final String TITLE_PROPERTY = "title";
-    public static final String PRODUCT_PROPERTY = "product";
-    public static final String AMOUNT_PROPERTY = "amount";
+    public static final String TOTAL_AMOUNT_PROPERTY = "totalAmount";
     public static final String STATUS_PROPERTY = "status";
     public static final String PAYMENT_METHOD_PROPERTY = "paymentMethod";
     public static final String PAYMENT_TIME_PROPERTY = "paymentTime";
     public static final String TRANSACTION_ID_PROPERTY = "transactionId";
     public static final String CREATE_TIME_PROPERTY = "createTime";
     public static final String UPDATE_TIME_PROPERTY = "updateTime";
+    public static final String VENDING_ORDER_ITEM_LIST_PROPERTY = "vendingOrderItemList";
     private String title;
-    private Product product;
-    private Integer amount;
+    private Integer totalAmount;
     private OrderStatus status;
     private PaymentMethod paymentMethod;
     private LocalDateTime paymentTime;
     private String transactionId;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
+    private SmartList<VendingOrderItem> vendingOrderItemList;
 
     public String getTitle(){
         return this.title;
     }
-    public Product getProduct(){
-        return this.product;
-    }
-    public Integer getAmount(){
-        return this.amount;
+    public Integer getTotalAmount(){
+        return this.totalAmount;
     }
     public OrderStatus getStatus(){
         return this.status;
@@ -69,6 +67,9 @@ public class VendingOrder extends BaseEntity implements RemoteInput {
     public LocalDateTime getUpdateTime(){
         return this.updateTime;
     }
+    public SmartList<VendingOrderItem> getVendingOrderItemList(){
+        return this.vendingOrderItemList;
+    }
     public VendingOrder updateTitle(String title){
         title = StrUtil.trim(title);
         if(ObjectUtil.equal(this.title, title)){
@@ -78,20 +79,12 @@ public class VendingOrder extends BaseEntity implements RemoteInput {
         this.title = title;
         return this;
     }
-    public VendingOrder updateProduct(Product product){
-        if(ObjectUtil.equal(this.product, product)){
+    public VendingOrder updateTotalAmount(Integer totalAmount){
+        if(ObjectUtil.equal(this.totalAmount, totalAmount)){
             return this;
         }
-        handleUpdate(PRODUCT_PROPERTY, getProduct(), product);
-        this.product = product;
-        return this;
-    }
-    public VendingOrder updateAmount(Integer amount){
-        if(ObjectUtil.equal(this.amount, amount)){
-            return this;
-        }
-        handleUpdate(AMOUNT_PROPERTY, getAmount(), amount);
-        this.amount = amount;
+        handleUpdate(TOTAL_AMOUNT_PROPERTY, getTotalAmount(), totalAmount);
+        this.totalAmount = totalAmount;
         return this;
     }
     protected VendingOrder updateStatus(OrderStatus status){
@@ -141,6 +134,19 @@ public class VendingOrder extends BaseEntity implements RemoteInput {
         }
         handleUpdate(UPDATE_TIME_PROPERTY, getUpdateTime(), updateTime);
         this.updateTime = updateTime;
+        return this;
+    }
+    public VendingOrder addVendingOrderItem(VendingOrderItem vendingOrderItem){
+        if (vendingOrderItem == null){
+            return this;
+        }
+
+        if(null == this.vendingOrderItemList){
+            this.vendingOrderItemList = new SmartList<>();
+        }
+
+        this.vendingOrderItemList.add(vendingOrderItem);
+        vendingOrderItem.cacheRelation(VendingOrderItem.VENDING_ORDER_PROPERTY, this);
         return this;
     }
     public boolean isStatusPending(){
@@ -216,9 +222,7 @@ public class VendingOrder extends BaseEntity implements RemoteInput {
         switch (property) {
             case "title": this.title = StrUtil.trim((String) value); break;
 
-            case "product": this.product = (Product) value; break;
-
-            case "amount": this.amount = (Integer) value; break;
+            case "totalAmount": this.totalAmount = (Integer) value; break;
 
             case "status": this.status = (OrderStatus) value; break;
 
@@ -232,6 +236,7 @@ public class VendingOrder extends BaseEntity implements RemoteInput {
 
             case "updateTime": this.updateTime = (LocalDateTime) value; break;
 
+            case "vendingOrderItemList": this.vendingOrderItemList = (SmartList<VendingOrderItem>) value; break;
             default: super.internalSet(property, value);
         }
     }
@@ -241,14 +246,14 @@ public class VendingOrder extends BaseEntity implements RemoteInput {
     public Object internalGet(String property) {
         switch (property) {
             case "title": return this.title;
-            case "product": return this.product;
-            case "amount": return this.amount;
+            case "totalAmount": return this.totalAmount;
             case "status": return this.status;
             case "paymentMethod": return this.paymentMethod;
             case "paymentTime": return this.paymentTime;
             case "transactionId": return this.transactionId;
             case "createTime": return this.createTime;
             case "updateTime": return this.updateTime;
+            case "vendingOrderItemList": return this.vendingOrderItemList;
             default: return super.internalGet(property);
         }
     }

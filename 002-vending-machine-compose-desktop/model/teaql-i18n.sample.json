@@ -9,6 +9,12 @@
     "code": {
         "en": "Code"
     },
+    "quantity": {
+        "en": "Quantity"
+    },
+    "vendingOrderItem": {
+        "en": "Vending Order Item"
+    },
     "orderStatus": {
         "en": "Order Status"
     },
@@ -29,6 +35,9 @@
     },
     "vendingOrder": {
         "en": "Vending Order"
+    },
+    "totalAmount": {
+        "en": "Total Amount"
     },
     "createTime": {
         "en": "Create Time"

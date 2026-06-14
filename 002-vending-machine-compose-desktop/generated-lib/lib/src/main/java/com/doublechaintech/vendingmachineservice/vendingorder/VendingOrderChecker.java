@@ -6,8 +6,8 @@ import com.doublechaintech.vendingmachineservice.orderstatus.OrderStatus;
 import com.doublechaintech.vendingmachineservice.orderstatus.OrderStatusChecker;
 import com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod;
 import com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethodChecker;
-import com.doublechaintech.vendingmachineservice.product.Product;
-import com.doublechaintech.vendingmachineservice.product.ProductChecker;
+import com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem;
+import com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItemChecker;
 import io.teaql.core.UserContext;
 import io.teaql.core.checker.Checker;
 import io.teaql.core.checker.ObjectLocation;
@@ -42,14 +42,17 @@ public class VendingOrderChecker implements Checker<VendingOrder>{
         vendingOrder.updatePaymentTime(ReflectUtil.invoke(_ctx, "now"));vendingOrder.updateUpdateTime(ReflectUtil.invoke(_ctx, "now"));
       }
       checkTitle(_ctx, vendingOrder.getProperty(VendingOrder.TITLE_PROPERTY), newLocation(_parentLocation, VendingOrder.TITLE_PROPERTY));
-      checkProduct(_ctx, vendingOrder.getProperty(VendingOrder.PRODUCT_PROPERTY), newLocation(_parentLocation, VendingOrder.PRODUCT_PROPERTY));
-      checkAmount(_ctx, vendingOrder.getProperty(VendingOrder.AMOUNT_PROPERTY), newLocation(_parentLocation, VendingOrder.AMOUNT_PROPERTY));
+      checkTotalAmount(_ctx, vendingOrder.getProperty(VendingOrder.TOTAL_AMOUNT_PROPERTY), newLocation(_parentLocation, VendingOrder.TOTAL_AMOUNT_PROPERTY));
       checkStatus(_ctx, vendingOrder.getProperty(VendingOrder.STATUS_PROPERTY), newLocation(_parentLocation, VendingOrder.STATUS_PROPERTY));
       checkPaymentMethod(_ctx, vendingOrder.getProperty(VendingOrder.PAYMENT_METHOD_PROPERTY), newLocation(_parentLocation, VendingOrder.PAYMENT_METHOD_PROPERTY));
       checkPaymentTime(_ctx, vendingOrder.getProperty(VendingOrder.PAYMENT_TIME_PROPERTY), newLocation(_parentLocation, VendingOrder.PAYMENT_TIME_PROPERTY));
       checkTransactionId(_ctx, vendingOrder.getProperty(VendingOrder.TRANSACTION_ID_PROPERTY), newLocation(_parentLocation, VendingOrder.TRANSACTION_ID_PROPERTY));
       checkCreateTime(_ctx, vendingOrder.getProperty(VendingOrder.CREATE_TIME_PROPERTY), newLocation(_parentLocation, VendingOrder.CREATE_TIME_PROPERTY));
       checkUpdateTime(_ctx, vendingOrder.getProperty(VendingOrder.UPDATE_TIME_PROPERTY), newLocation(_parentLocation, VendingOrder.UPDATE_TIME_PROPERTY));
+      for(int i = 0; vendingOrder.getVendingOrderItemList() != null && i < vendingOrder.getVendingOrderItemList().size(); i++){
+         VendingOrderItem vendingOrderItem = vendingOrder.getVendingOrderItemList().get(i);
+         new VendingOrderItemChecker().checkAndFix(_ctx, vendingOrderItem, newLocation(_parentLocation, VendingOrder.VENDING_ORDER_ITEM_LIST_PROPERTY, i));
+      }
     }
 
     public void checkTitle(UserContext _ctx, String title, ObjectLocation _parentLocation){
@@ -60,16 +63,9 @@ public class VendingOrderChecker implements Checker<VendingOrder>{
     maxStringCheck(_ctx, _parentLocation, 100, title);
 
     }
-    public void checkProduct(UserContext _ctx, Product product, ObjectLocation _parentLocation){
-    requiredCheck(_ctx, _parentLocation, product);
-    if(ObjectUtil.isNull(product)){
-        return;
-    }
-    new ProductChecker().checkAndFix(_ctx, product, _parentLocation);
-    }
-    public void checkAmount(UserContext _ctx, Integer amount, ObjectLocation _parentLocation){
-    requiredCheck(_ctx, _parentLocation, amount);
-    if(ObjectUtil.isNull(amount)){
+    public void checkTotalAmount(UserContext _ctx, Integer totalAmount, ObjectLocation _parentLocation){
+    requiredCheck(_ctx, _parentLocation, totalAmount);
+    if(ObjectUtil.isNull(totalAmount)){
         return;
     }
     }

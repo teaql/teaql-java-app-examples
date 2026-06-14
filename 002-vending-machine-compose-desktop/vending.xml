@@ -56,12 +56,23 @@
                  _module="Core"
                  _module_key="core"
                  title="Order-001"
-                 product="product()"
-                 amount="300"
+                 total_amount="300"
                  status="order_status()"
                  payment_method="payment_method()"
                  payment_time="updateTime()"
                  transaction_id="TX-12345678"
                  create_time="createTime()"
                  update_time="updateTime()"/>
+
+  <vending_order_item _name="Vending Order Item"
+                      _module="Core"
+                      _module_key="core"
+                      name="Coca Cola x 1"
+                      vending_order="vending_order()"
+                      product="product()"
+                      quantity="1"
+                      price="300"
+                      amount="300"
+                      create_time="createTime()"
+                      update_time="updateTime()"/>
 </root>

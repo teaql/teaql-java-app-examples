@@ -2,8 +2,8 @@ package com.doublechaintech.vendingmachineservice.product;
 
 import com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine;
 import com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachineExpression;
-import com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder;
-import com.doublechaintech.vendingmachineservice.vendingorder.VendingOrderListExpression;
+import com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem;
+import com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItemListExpression;
 import io.teaql.core.UserContext;
 import io.teaql.core.value.BaseEntityExpression;
 import io.teaql.core.value.Expression;
@@ -87,10 +87,10 @@ public class ProductExpression<T, E, U extends Product> extends ExpressionAdapto
        return new ProductExpression(this, $it ->  ((Product)$it).updateUpdateTime(updateTime));
     }
 
-    public VendingOrderListExpression<T, U, VendingOrder> getVendingOrderList(){
-        return new VendingOrderListExpression(this, $it ->  ((Product)$it).getVendingOrderList());
+    public VendingOrderItemListExpression<T, U, VendingOrderItem> getVendingOrderItemList(){
+        return new VendingOrderItemListExpression(this, $it ->  ((Product)$it).getVendingOrderItemList());
     }
-    public ProductExpression<T, U, U> addVendingOrder(VendingOrder vendingOrder){
-       return new ProductExpression(this, $it ->  ((Product)$it).addVendingOrder(vendingOrder));
+    public ProductExpression<T, U, U> addVendingOrderItem(VendingOrderItem vendingOrderItem){
+       return new ProductExpression(this, $it ->  ((Product)$it).addVendingOrderItem(vendingOrderItem));
     }
 }

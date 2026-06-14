@@ -4,8 +4,8 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.ReflectUtil;
 import com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine;
 import com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachineChecker;
-import com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder;
-import com.doublechaintech.vendingmachineservice.vendingorder.VendingOrderChecker;
+import com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem;
+import com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItemChecker;
 import io.teaql.core.UserContext;
 import io.teaql.core.checker.Checker;
 import io.teaql.core.checker.ObjectLocation;
@@ -44,9 +44,9 @@ public class ProductChecker implements Checker<Product>{
       checkVendingMachine(_ctx, product.getProperty(Product.VENDING_MACHINE_PROPERTY), newLocation(_parentLocation, Product.VENDING_MACHINE_PROPERTY));
       checkCreateTime(_ctx, product.getProperty(Product.CREATE_TIME_PROPERTY), newLocation(_parentLocation, Product.CREATE_TIME_PROPERTY));
       checkUpdateTime(_ctx, product.getProperty(Product.UPDATE_TIME_PROPERTY), newLocation(_parentLocation, Product.UPDATE_TIME_PROPERTY));
-      for(int i = 0; product.getVendingOrderList() != null && i < product.getVendingOrderList().size(); i++){
-         VendingOrder vendingOrder = product.getVendingOrderList().get(i);
-         new VendingOrderChecker().checkAndFix(_ctx, vendingOrder, newLocation(_parentLocation, Product.VENDING_ORDER_LIST_PROPERTY, i));
+      for(int i = 0; product.getVendingOrderItemList() != null && i < product.getVendingOrderItemList().size(); i++){
+         VendingOrderItem vendingOrderItem = product.getVendingOrderItemList().get(i);
+         new VendingOrderItemChecker().checkAndFix(_ctx, vendingOrderItem, newLocation(_parentLocation, Product.VENDING_ORDER_ITEM_LIST_PROPERTY, i));
       }
     }
 

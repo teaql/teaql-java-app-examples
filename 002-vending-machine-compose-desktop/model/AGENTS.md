@@ -177,4 +177,5 @@ These examples use entities with the highest reverse relation counts. A high rev
 - `OrderStatus`: `Q.orderStatuses()`, reverse relations `1`, class `com.doublechaintech.vendingmachineservice.orderstatus.OrderStatus`
 - `PaymentMethod`: `Q.paymentMethods()`, reverse relations `1`, class `com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod`
 - `Product`: `Q.products()`, reverse relations `1`, class `com.doublechaintech.vendingmachineservice.product.Product`
-- `VendingOrder`: `Q.vendingOrders()`, reverse relations `0`, class `com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder`
+- `VendingOrder`: `Q.vendingOrders()`, reverse relations `1`, class `com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder`
+- `VendingOrderItem`: `Q.vendingOrderItems()`, reverse relations `0`, class `com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem`
