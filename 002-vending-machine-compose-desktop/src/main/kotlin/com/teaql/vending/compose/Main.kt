@@ -359,15 +359,15 @@ fun AsyncImage(url: String, modifier: Modifier = Modifier, contentDescription: S
         }
     }
 
-    if (imageBitmap != null) {
-        Image(
-            bitmap = imageBitmap!!,
-            contentDescription = contentDescription,
-            modifier = modifier,
-            contentScale = ContentScale.Crop
-        )
-    } else {
-        Box(modifier = modifier.background(Color.LightGray), contentAlignment = Alignment.Center) {
+    Box(modifier = modifier.background(if (imageBitmap == null) Color.LightGray else Color.Transparent), contentAlignment = Alignment.Center) {
+        if (imageBitmap != null) {
+            Image(
+                bitmap = imageBitmap!!,
+                contentDescription = contentDescription,
+                modifier = Modifier.matchParentSize(),
+                contentScale = ContentScale.Crop
+            )
+        } else {
             Text(fallbackText, fontSize = 12.sp, color = Color.White)
         }
     }
