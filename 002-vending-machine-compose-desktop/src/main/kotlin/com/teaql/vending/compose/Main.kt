@@ -339,9 +339,28 @@ fun fetchOrders(): List<VendingOrder> {
     }
 }
 
+fun updateOrderStatus(order: VendingOrder, action: String) {
+    val ctx = TeaQLManager.userContext
+    try {
+        if (action == "Dispense") {
+            order.updateStatusToDispensing()
+            order.auditAs<VendingOrder>("dispense order").save(ctx)
+            SystemLogger.log("Order ${order.id} marked as Dispensing.")
+        } else if (action == "Complete") {
+            order.updateStatusToCompleted()
+            order.auditAs<VendingOrder>("complete order").save(ctx)
+            SystemLogger.log("Order ${order.id} marked as Completed.")
+        }
+    } catch (e: Exception) {
+        SystemLogger.log("Failed to update order status: ${e.message}")
+        e.printStackTrace()
+    }
+}
+
 @Composable
 fun AdminBackstageScreen() {
     var orders by remember { mutableStateOf(emptyList<VendingOrder>()) }
+    val coroutineScope = rememberCoroutineScope()
     
     LaunchedEffect(Unit) {
         withContext(Dispatchers.IO) {
@@ -365,6 +384,40 @@ fun AdminBackstageScreen() {
                                 Text("Title: ${order.title}", fontSize = 14.sp)
                                 Spacer(modifier = Modifier.height(2.dp))
                                 Text("Total Amount: $${order.totalAmount}", fontSize = 14.sp, color = MaterialTheme.colors.primary)
+                                Spacer(modifier = Modifier.height(4.dp))
+                                Text("Status: ${order.status?.name ?: "Unknown"}", fontSize = 14.sp)
+                                
+                                if (order.status?.code == "PAID" || order.status?.code == "DISPENSING") {
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                    Row {
+                                        if (order.status?.code == "PAID") {
+                                            Button(onClick = {
+                                                updateOrderStatus(order, "Dispense")
+                                                coroutineScope.launch {
+                                                    withContext(Dispatchers.IO) {
+                                                        orders = fetchOrders()
+                                                    }
+                                                }
+                                            }) {
+                                                Text("Dispense")
+                                            }
+                                        } else if (order.status?.code == "DISPENSING") {
+                                            Button(
+                                                onClick = {
+                                                    updateOrderStatus(order, "Complete")
+                                                    coroutineScope.launch {
+                                                        withContext(Dispatchers.IO) {
+                                                            orders = fetchOrders()
+                                                        }
+                                                    }
+                                                },
+                                                colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF4CAF50), contentColor = Color.White)
+                                            ) {
+                                                Text("Complete")
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
