@@ -83,11 +83,11 @@ fun App() {
                     modifier = Modifier.padding(bottom = 32.dp)
                 )
 
-                NavItem("选品大厅 (Purchase)", Icons.Default.ShoppingCart, selectedTab == 0) { selectedTab = 0 }
+                NavItem("Purchase", Icons.Default.ShoppingCart, selectedTab == 0) { selectedTab = 0 }
                 Spacer(modifier = Modifier.height(8.dp))
-                NavItem("后台管理 (Admin)", Icons.Default.Settings, selectedTab == 1) { selectedTab = 1 }
+                NavItem("Admin", Icons.Default.Settings, selectedTab == 1) { selectedTab = 1 }
                 Spacer(modifier = Modifier.height(8.dp))
-                NavItem("运行日志 (Logs)", Icons.Default.List, selectedTab == 2) { selectedTab = 2 }
+                NavItem("Logs", Icons.Default.List, selectedTab == 2) { selectedTab = 2 }
             }
 
             // Main Content Area
@@ -222,14 +222,14 @@ fun ProductCard(product: Product, onAddToCart: () -> Unit) {
             Spacer(modifier = Modifier.height(8.dp))
             Text("$${product.price}", color = MaterialTheme.colors.secondary, fontSize = 18.sp, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(4.dp))
-            Text("库存 (Stock): ${product.stock}", fontSize = 12.sp, color = Color.Gray)
+            Text("Stock: ${product.stock}", fontSize = 12.sp, color = Color.Gray)
             Spacer(modifier = Modifier.height(8.dp))
             Button(
                 onClick = onAddToCart, 
                 modifier = Modifier.fillMaxWidth(),
                 enabled = product.stock > 0
             ) {
-                Text(if (product.stock > 0) "加入购物车 (Add to Cart)" else "售罄 (Sold Out)")
+                Text(if (product.stock > 0) "Add to Cart" else "Sold Out")
             }
         }
     }
@@ -239,7 +239,7 @@ fun ProductCard(product: Product, onAddToCart: () -> Unit) {
 fun AdminBackstageScreen() {
     Card(modifier = Modifier.fillMaxSize(), elevation = 2.dp) {
         Box(contentAlignment = Alignment.Center) {
-            Text("后台商品及订单管理", fontSize = 24.sp, color = Color.Gray)
+            Text("Admin Dashboard & Orders", fontSize = 24.sp, color = Color.Gray)
         }
     }
 }
@@ -329,13 +329,13 @@ fun initDatabase() {
             val pstmt = connection.prepareStatement(insertProduct)
             
             val products = listOf(
-                arrayOf("Budweiser Beer (百威)", 15, 50, "https://example.com/bud.jpg"),
-                arrayOf("Heineken (喜力)", 18, 40, "https://example.com/hei.jpg"),
-                arrayOf("Lays Chips (乐事)", 8, 100, "https://example.com/lays.jpg"),
-                arrayOf("Red Bull (红牛)", 12, 60, "https://example.com/redbull.jpg"),
-                arrayOf("Coca Cola (可乐)", 5, 120, "https://example.com/cola.jpg"),
-                arrayOf("Face Paint (彩绘)", 25, 30, "https://example.com/paint.jpg"),
-                arrayOf("Mini Flag (国旗)", 10, 200, "https://example.com/flag.jpg")
+                arrayOf("Budweiser Beer", 15, 50, "https://example.com/bud.jpg"),
+                arrayOf("Heineken", 18, 40, "https://example.com/hei.jpg"),
+                arrayOf("Lays Chips", 8, 100, "https://example.com/lays.jpg"),
+                arrayOf("Red Bull", 12, 60, "https://example.com/redbull.jpg"),
+                arrayOf("Coca Cola", 5, 120, "https://example.com/cola.jpg"),
+                arrayOf("Face Paint", 25, 30, "https://example.com/paint.jpg"),
+                arrayOf("Mini Flag", 10, 200, "https://example.com/flag.jpg")
             )
             for (p in products) {
                 pstmt.setString(1, p[0] as String)
