@@ -1,10 +1,10 @@
 package com.doublechaintech.vendingmachineservice.paymentmethod;
 
 import cn.hutool.core.util.ObjectUtil;
+import com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment;
+import com.doublechaintech.vendingmachineservice.orderpayment.OrderPaymentChecker;
 import com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine;
 import com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachineChecker;
-import com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder;
-import com.doublechaintech.vendingmachineservice.vendingorder.VendingOrderChecker;
 import io.teaql.core.UserContext;
 import io.teaql.core.checker.Checker;
 import io.teaql.core.checker.ObjectLocation;
@@ -32,9 +32,9 @@ public class PaymentMethodChecker implements Checker<PaymentMethod>{
       checkVendingMachine(_ctx, paymentMethod.getProperty(PaymentMethod.VENDING_MACHINE_PROPERTY), newLocation(_parentLocation, PaymentMethod.VENDING_MACHINE_PROPERTY));
       checkName(_ctx, paymentMethod.getProperty(PaymentMethod.NAME_PROPERTY), newLocation(_parentLocation, PaymentMethod.NAME_PROPERTY));
       checkCode(_ctx, paymentMethod.getProperty(PaymentMethod.CODE_PROPERTY), newLocation(_parentLocation, PaymentMethod.CODE_PROPERTY));
-      for(int i = 0; paymentMethod.getVendingOrderList() != null && i < paymentMethod.getVendingOrderList().size(); i++){
-         VendingOrder vendingOrder = paymentMethod.getVendingOrderList().get(i);
-         new VendingOrderChecker().checkAndFix(_ctx, vendingOrder, newLocation(_parentLocation, PaymentMethod.VENDING_ORDER_LIST_PROPERTY, i));
+      for(int i = 0; paymentMethod.getOrderPaymentList() != null && i < paymentMethod.getOrderPaymentList().size(); i++){
+         OrderPayment orderPayment = paymentMethod.getOrderPaymentList().get(i);
+         new OrderPaymentChecker().checkAndFix(_ctx, orderPayment, newLocation(_parentLocation, PaymentMethod.ORDER_PAYMENT_LIST_PROPERTY, i));
       }
     }
 

@@ -36,6 +36,9 @@
     "vendingOrder": {
         "en": "Vending Order"
     },
+    "orderPayment": {
+        "en": "Order Payment"
+    },
     "totalAmount": {
         "en": "Total Amount"
     },

@@ -1,5 +1,7 @@
 package com.doublechaintech.vendingmachineservice;
 
+import com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment;
+import com.doublechaintech.vendingmachineservice.orderpayment.OrderPaymentExpression;
 import com.doublechaintech.vendingmachineservice.orderstatus.OrderStatus;
 import com.doublechaintech.vendingmachineservice.orderstatus.OrderStatusExpression;
 import com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod;
@@ -29,6 +31,9 @@ public class E  {
   }
   public static VendingOrderExpression<VendingOrder, VendingOrder, VendingOrder> vendingOrder(VendingOrder vendingOrder){
       return new VendingOrderExpression(new ValueExpression(vendingOrder));
+  }
+  public static OrderPaymentExpression<OrderPayment, OrderPayment, OrderPayment> orderPayment(OrderPayment orderPayment){
+      return new OrderPaymentExpression(new ValueExpression(orderPayment));
   }
   public static VendingOrderItemExpression<VendingOrderItem, VendingOrderItem, VendingOrderItem> vendingOrderItem(VendingOrderItem vendingOrderItem){
       return new VendingOrderItemExpression(new ValueExpression(vendingOrderItem));

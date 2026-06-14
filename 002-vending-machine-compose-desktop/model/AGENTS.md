@@ -168,8 +168,8 @@ For multilingual support and translation of domain terms (e.g. validation error 
 These examples use entities with the highest reverse relation counts. A high reverse relation count means many other objects point back to this entity, making it a stronger aggregate-root candidate.
 
 - `VendingMachine`: `Q.vendingMachines()`, reverse relations `3`, class `com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine`
+- `VendingOrder`: `Q.vendingOrders()`, reverse relations `2`, class `com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder`
 - `OrderStatus`: `Q.orderStatuses()`, reverse relations `1`, class `com.doublechaintech.vendingmachineservice.orderstatus.OrderStatus`
-- `PaymentMethod`: `Q.paymentMethods()`, reverse relations `1`, class `com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod`
 
 ## All Domain Entry Points
 
@@ -177,5 +177,6 @@ These examples use entities with the highest reverse relation counts. A high rev
 - `OrderStatus`: `Q.orderStatuses()`, reverse relations `1`, class `com.doublechaintech.vendingmachineservice.orderstatus.OrderStatus`
 - `PaymentMethod`: `Q.paymentMethods()`, reverse relations `1`, class `com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod`
 - `Product`: `Q.products()`, reverse relations `1`, class `com.doublechaintech.vendingmachineservice.product.Product`
-- `VendingOrder`: `Q.vendingOrders()`, reverse relations `1`, class `com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder`
+- `VendingOrder`: `Q.vendingOrders()`, reverse relations `2`, class `com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder`
+- `OrderPayment`: `Q.orderPayments()`, reverse relations `0`, class `com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment`
 - `VendingOrderItem`: `Q.vendingOrderItems()`, reverse relations `0`, class `com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem`

@@ -58,9 +58,19 @@
                  title="Order-001"
                  total_amount="300"
                  status="order_status()"
+                 create_time="createTime()"
+                 update_time="updateTime()"/>
+
+  <order_payment _name="Order Payment"
+                 _module="Core"
+                 _module_key="core"
+                 name="Payment for Order-001"
+                 vending_order="vending_order()"
                  payment_method="payment_method()"
+                 amount="300"
                  payment_time="updateTime()"
                  transaction_id="TX-12345678"
+                 _audit_mask_fields="name"
                  create_time="createTime()"
                  update_time="updateTime()"/>
 
@@ -73,6 +83,7 @@
                       quantity="1"
                       price="300"
                       amount="300"
+                      _audit_mask_fields="name"
                       create_time="createTime()"
                       update_time="updateTime()"/>
 </root>

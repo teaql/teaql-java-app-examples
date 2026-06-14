@@ -18,6 +18,7 @@ public class EntityMetaRegistry implements EntityMetaAssembler {
     registerPaymentMethod();
     registerProduct();
     registerVendingOrder();
+    registerOrderPayment();
     registerVendingOrderItem();
   }
   private void registerVendingMachine() {
@@ -570,21 +571,6 @@ public class EntityMetaRegistry implements EntityMetaAssembler {
       ;
           ReflectUtil.invoke(entityDescriptor, "prepareSQLMeta", status, "vending_order_data", "status", "BIGINT");
 
-      PropertyDescriptor paymentMethod = 
-      entityDescriptor.addObjectProperty($factory, com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder.PAYMENT_METHOD_PROPERTY, com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod.INTERNAL_TYPE, com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod.VENDING_ORDER_LIST_PROPERTY, com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod.class)
-      ;
-          ReflectUtil.invoke(entityDescriptor, "prepareSQLMeta", paymentMethod, "vending_order_data", "payment_method", "BIGINT");
-
-      PropertyDescriptor paymentTime = 
-      entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder.PAYMENT_TIME_PROPERTY, LocalDateTime.class)
-      ;
-          ReflectUtil.invoke(entityDescriptor, "prepareSQLMeta", paymentTime, "vending_order_data", "payment_time", "TIMESTAMP");
-
-      PropertyDescriptor transactionId = 
-      entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder.TRANSACTION_ID_PROPERTY, String.class)
-      ;
-          ReflectUtil.invoke(entityDescriptor, "prepareSQLMeta", transactionId, "vending_order_data", "transaction_id", "VARCHAR(100)");
-
       PropertyDescriptor createTime = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder.CREATE_TIME_PROPERTY, LocalDateTime.class)
       ;
@@ -649,40 +635,6 @@ public class EntityMetaRegistry implements EntityMetaAssembler {
       .with("isText", "false");
 
 
-
-      entityDescriptor.findProperty(com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder.PAYMENT_TIME_PROPERTY).with("isPassword", "false")
-      .with("isVersion", "false")
-      .with("updateFunction", "now")
-      .with("javaType", "java.time.LocalDateTime")
-      .with("sqlType", "TIMESTAMP")
-      .with("isId", "false")
-      .with("isBool", "false")
-      .with("isBaseEntityField", "false")
-      .with("isNumber", "false")
-      .with("mssql_sqlType", "dateTime")
-      .with("isDateTime", "true")
-      .with("createFunction", "now")
-      .with("isDate", "true")
-      .with("isString", "false")
-      .with("graphqlType", "LocalTime")
-      .with("isTime", "true")
-      .with("isText", "false");
-
-      entityDescriptor.findProperty(com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder.TRANSACTION_ID_PROPERTY).with("isPassword", "false")
-      .with("max", "100")
-      .with("isVersion", "false")
-      .with("javaType", "java.lang.String")
-      .with("sqlType", "VARCHAR(<max>)")
-      .with("isId", "false")
-      .with("isBool", "false")
-      .with("isBaseEntityField", "false")
-      .with("isNumber", "false")
-      .with("isString", "true")
-      .with("isDate", "false")
-      .with("graphqlType", "String")
-      .with("isTime", "false")
-      .with("isText", "false");
-
       entityDescriptor.findProperty(com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder.CREATE_TIME_PROPERTY).with("isPassword", "false")
       .with("isVersion", "false")
       .with("javaType", "java.time.LocalDateTime")
@@ -736,13 +688,209 @@ public class EntityMetaRegistry implements EntityMetaAssembler {
 
       $factory.register(entityDescriptor);
   }
+  private void registerOrderPayment() {
+      EntityDescriptor entityDescriptor = new EntityDescriptor();
+      entityDescriptor.setType(com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment.INTERNAL_TYPE);
+      entityDescriptor.setTargetType(com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment.class);
+      entityDescriptor.with("name", "Order Payment")
+      .with("module", "Core")
+      .with("module_key", "core")
+      .with("audit_mask_fields", "name");
+
+      PropertyDescriptor id = 
+      entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment.ID_PROPERTY, Long.class)
+      ;
+          ReflectUtil.invoke(entityDescriptor, "prepareSQLMeta", id, "order_payment_data", "id", "BIGINT");
+
+      PropertyDescriptor name = 
+      entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment.NAME_PROPERTY, String.class)
+      ;
+          ReflectUtil.invoke(entityDescriptor, "prepareSQLMeta", name, "order_payment_data", "name", "VARCHAR(100)");
+
+      PropertyDescriptor vendingOrder = 
+      entityDescriptor.addObjectProperty($factory, com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment.VENDING_ORDER_PROPERTY, com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder.INTERNAL_TYPE, com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder.ORDER_PAYMENT_LIST_PROPERTY, com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder.class)
+      ;
+          ReflectUtil.invoke(entityDescriptor, "prepareSQLMeta", vendingOrder, "order_payment_data", "vending_order", "BIGINT");
+
+      PropertyDescriptor paymentMethod = 
+      entityDescriptor.addObjectProperty($factory, com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment.PAYMENT_METHOD_PROPERTY, com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod.INTERNAL_TYPE, com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod.ORDER_PAYMENT_LIST_PROPERTY, com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod.class)
+      ;
+          ReflectUtil.invoke(entityDescriptor, "prepareSQLMeta", paymentMethod, "order_payment_data", "payment_method", "BIGINT");
+
+      PropertyDescriptor amount = 
+      entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment.AMOUNT_PROPERTY, Integer.class)
+      ;
+          ReflectUtil.invoke(entityDescriptor, "prepareSQLMeta", amount, "order_payment_data", "amount", "INTEGER");
+
+      PropertyDescriptor paymentTime = 
+      entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment.PAYMENT_TIME_PROPERTY, LocalDateTime.class)
+      ;
+          ReflectUtil.invoke(entityDescriptor, "prepareSQLMeta", paymentTime, "order_payment_data", "payment_time", "TIMESTAMP");
+
+      PropertyDescriptor transactionId = 
+      entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment.TRANSACTION_ID_PROPERTY, String.class)
+      ;
+          ReflectUtil.invoke(entityDescriptor, "prepareSQLMeta", transactionId, "order_payment_data", "transaction_id", "VARCHAR(100)");
+
+      PropertyDescriptor createTime = 
+      entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment.CREATE_TIME_PROPERTY, LocalDateTime.class)
+      ;
+          ReflectUtil.invoke(entityDescriptor, "prepareSQLMeta", createTime, "order_payment_data", "create_time", "TIMESTAMP");
+
+      PropertyDescriptor updateTime = 
+      entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment.UPDATE_TIME_PROPERTY, LocalDateTime.class)
+      ;
+          ReflectUtil.invoke(entityDescriptor, "prepareSQLMeta", updateTime, "order_payment_data", "update_time", "TIMESTAMP");
+
+      PropertyDescriptor version = 
+      entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment.VERSION_PROPERTY, Long.class)
+      ;
+          ReflectUtil.invoke(entityDescriptor, "prepareSQLMeta", version, "order_payment_data", "version", "BIGINT");
+
+      entityDescriptor.findProperty(com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment.ID_PROPERTY).with("isPassword", "false")
+      .with("isVersion", "false")
+      .with("oracle_sqlType", "number(11)")
+      .with("javaType", "java.lang.Long")
+      .with("sqlType", "BIGINT")
+      .with("isId", "true")
+      .with("isBaseEntityField", "true")
+      .with("isBool", "false")
+      .with("isNumber", "false")
+      .with("isString", "false")
+      .with("isDate", "false")
+      .with("snowflake_sqlType", "number")
+      .with("graphqlType", "Long")
+      .with("isTime", "false")
+      .with("isText", "false");
+
+      entityDescriptor.findProperty(com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment.NAME_PROPERTY).with("isPassword", "false")
+      .with("max", "100")
+      .with("isVersion", "false")
+      .with("javaType", "java.lang.String")
+      .with("sqlType", "VARCHAR(<max>)")
+      .with("isId", "false")
+      .with("isBool", "false")
+      .with("isBaseEntityField", "false")
+      .with("isNumber", "false")
+      .with("isString", "true")
+      .with("isDate", "false")
+      .with("graphqlType", "String")
+      .with("isTime", "false")
+      .with("isText", "false");
+
+
+
+      entityDescriptor.findProperty(com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment.AMOUNT_PROPERTY).with("isPassword", "false")
+      .with("db2_sqlType", "decimal(19,7)")
+      .with("isVersion", "false")
+      .with("oracle_sqlType", "number(19,7)")
+      .with("javaType", "java.lang.Integer")
+      .with("sqlType", "INTEGER")
+      .with("isId", "false")
+      .with("isBool", "false")
+      .with("isBaseEntityField", "false")
+      .with("isNumber", "true")
+      .with("isInt", "true")
+      .with("isString", "false")
+      .with("isDate", "false")
+      .with("graphqlType", "Int")
+      .with("isTime", "false")
+      .with("isText", "false");
+
+      entityDescriptor.findProperty(com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment.PAYMENT_TIME_PROPERTY).with("isPassword", "false")
+      .with("isVersion", "false")
+      .with("updateFunction", "now")
+      .with("javaType", "java.time.LocalDateTime")
+      .with("sqlType", "TIMESTAMP")
+      .with("isId", "false")
+      .with("isBool", "false")
+      .with("isBaseEntityField", "false")
+      .with("isNumber", "false")
+      .with("mssql_sqlType", "dateTime")
+      .with("isDateTime", "true")
+      .with("createFunction", "now")
+      .with("isDate", "true")
+      .with("isString", "false")
+      .with("graphqlType", "LocalTime")
+      .with("isTime", "true")
+      .with("isText", "false");
+
+      entityDescriptor.findProperty(com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment.TRANSACTION_ID_PROPERTY).with("isPassword", "false")
+      .with("max", "100")
+      .with("isVersion", "false")
+      .with("javaType", "java.lang.String")
+      .with("sqlType", "VARCHAR(<max>)")
+      .with("isId", "false")
+      .with("isBool", "false")
+      .with("isBaseEntityField", "false")
+      .with("isNumber", "false")
+      .with("isString", "true")
+      .with("isDate", "false")
+      .with("graphqlType", "String")
+      .with("isTime", "false")
+      .with("isText", "false");
+
+      entityDescriptor.findProperty(com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment.CREATE_TIME_PROPERTY).with("isPassword", "false")
+      .with("isVersion", "false")
+      .with("javaType", "java.time.LocalDateTime")
+      .with("sqlType", "TIMESTAMP")
+      .with("isId", "false")
+      .with("isBool", "false")
+      .with("isBaseEntityField", "false")
+      .with("isNumber", "false")
+      .with("mssql_sqlType", "dateTime")
+      .with("isDateTime", "true")
+      .with("createFunction", "now")
+      .with("isDate", "true")
+      .with("isString", "false")
+      .with("graphqlType", "LocalTime")
+      .with("isTime", "true")
+      .with("isText", "false");
+
+      entityDescriptor.findProperty(com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment.UPDATE_TIME_PROPERTY).with("isPassword", "false")
+      .with("isVersion", "false")
+      .with("updateFunction", "now")
+      .with("javaType", "java.time.LocalDateTime")
+      .with("sqlType", "TIMESTAMP")
+      .with("isId", "false")
+      .with("isBool", "false")
+      .with("isBaseEntityField", "false")
+      .with("isNumber", "false")
+      .with("mssql_sqlType", "dateTime")
+      .with("isDateTime", "true")
+      .with("createFunction", "now")
+      .with("isDate", "true")
+      .with("isString", "false")
+      .with("graphqlType", "LocalTime")
+      .with("isTime", "true")
+      .with("isText", "false");
+
+      entityDescriptor.findProperty(com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment.VERSION_PROPERTY).with("isPassword", "false")
+      .with("isVersion", "true")
+      .with("oracle_sqlType", "number(11)")
+      .with("javaType", "java.lang.Long")
+      .with("sqlType", "BIGINT")
+      .with("isId", "false")
+      .with("isBaseEntityField", "true")
+      .with("isBool", "false")
+      .with("isNumber", "false")
+      .with("isString", "false")
+      .with("isDate", "false")
+      .with("snowflake_sqlType", "number")
+      .with("graphqlType", "Long")
+      .with("isTime", "false")
+      .with("isText", "false");
+
+      $factory.register(entityDescriptor);
+  }
   private void registerVendingOrderItem() {
       EntityDescriptor entityDescriptor = new EntityDescriptor();
       entityDescriptor.setType(com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem.INTERNAL_TYPE);
       entityDescriptor.setTargetType(com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem.class);
       entityDescriptor.with("name", "Vending Order Item")
       .with("module", "Core")
-      .with("module_key", "core");
+      .with("module_key", "core")
+      .with("audit_mask_fields", "name");
 
       PropertyDescriptor id = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem.ID_PROPERTY, Long.class)

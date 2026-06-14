@@ -43,6 +43,14 @@ public class Q  {
   }
 
 
+  public static com.doublechaintech.vendingmachineservice.orderpayment.OrderPaymentRequest<com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment> orderPayments(){
+      return new com.doublechaintech.vendingmachineservice.orderpayment.OrderPaymentRequest(com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment.class).selectSelf().withVersion(Operator.GREATER_THAN, 0l);
+  }
+  public static com.doublechaintech.vendingmachineservice.orderpayment.OrderPaymentRequest<com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment> orderPaymentsWithMinimalFields(){
+      return new com.doublechaintech.vendingmachineservice.orderpayment.OrderPaymentRequest(com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment.class).withVersion(Operator.GREATER_THAN, 0l);
+  }
+
+
   public static com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItemRequest<com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem> vendingOrderItems(){
       return new com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItemRequest(com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem.class).selectSelf().withVersion(Operator.GREATER_THAN, 0l);
   }

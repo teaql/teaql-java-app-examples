@@ -1,9 +1,9 @@
 package com.doublechaintech.vendingmachineservice.vendingorder;
 
+import com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment;
+import com.doublechaintech.vendingmachineservice.orderpayment.OrderPaymentListExpression;
 import com.doublechaintech.vendingmachineservice.orderstatus.OrderStatus;
 import com.doublechaintech.vendingmachineservice.orderstatus.OrderStatusExpression;
-import com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod;
-import com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethodExpression;
 import com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem;
 import com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItemListExpression;
 import io.teaql.core.UserContext;
@@ -70,34 +70,6 @@ public class VendingOrderExpression<T, E, U extends VendingOrder> extends Expres
        return new VendingOrderExpression(this, $it ->  ((VendingOrder)$it).updateStatusToCompleted());
     }
 
-    public PaymentMethodExpression<T, U, PaymentMethod> getPaymentMethod(){
-       return new PaymentMethodExpression(this, $it ->  ((VendingOrder)$it).getPaymentMethod());
-    }
-
-    public VendingOrderExpression<T, U, U> updatePaymentMethodToWechat(){
-       return new VendingOrderExpression(this, $it ->  ((VendingOrder)$it).updatePaymentMethodToWechat());
-    }
-    public VendingOrderExpression<T, U, U> updatePaymentMethodToAlipay(){
-       return new VendingOrderExpression(this, $it ->  ((VendingOrder)$it).updatePaymentMethodToAlipay());
-    }
-    public VendingOrderExpression<T, U, U> updatePaymentMethodToCreditCard(){
-       return new VendingOrderExpression(this, $it ->  ((VendingOrder)$it).updatePaymentMethodToCreditCard());
-    }
-
-    public Expression<T, LocalDateTime> getPaymentTime(){
-       return apply(VendingOrder::getPaymentTime);
-    }
-    public VendingOrderExpression<T, U, U> updatePaymentTime(LocalDateTime paymentTime){
-       return new VendingOrderExpression(this, $it ->  ((VendingOrder)$it).updatePaymentTime(paymentTime));
-    }
-
-    public Expression<T, String> getTransactionId(){
-       return apply(VendingOrder::getTransactionId);
-    }
-    public VendingOrderExpression<T, U, U> updateTransactionId(String transactionId){
-       return new VendingOrderExpression(this, $it ->  ((VendingOrder)$it).updateTransactionId(transactionId));
-    }
-
     public Expression<T, LocalDateTime> getCreateTime(){
        return apply(VendingOrder::getCreateTime);
     }
@@ -112,8 +84,14 @@ public class VendingOrderExpression<T, E, U extends VendingOrder> extends Expres
        return new VendingOrderExpression(this, $it ->  ((VendingOrder)$it).updateUpdateTime(updateTime));
     }
 
+    public OrderPaymentListExpression<T, U, OrderPayment> getOrderPaymentList(){
+        return new OrderPaymentListExpression(this, $it ->  ((VendingOrder)$it).getOrderPaymentList());
+    }
     public VendingOrderItemListExpression<T, U, VendingOrderItem> getVendingOrderItemList(){
         return new VendingOrderItemListExpression(this, $it ->  ((VendingOrder)$it).getVendingOrderItemList());
+    }
+    public VendingOrderExpression<T, U, U> addOrderPayment(OrderPayment orderPayment){
+       return new VendingOrderExpression(this, $it ->  ((VendingOrder)$it).addOrderPayment(orderPayment));
     }
     public VendingOrderExpression<T, U, U> addVendingOrderItem(VendingOrderItem vendingOrderItem){
        return new VendingOrderExpression(this, $it ->  ((VendingOrder)$it).addVendingOrderItem(vendingOrderItem));

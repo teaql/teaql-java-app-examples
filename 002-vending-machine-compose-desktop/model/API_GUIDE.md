@@ -297,7 +297,7 @@ Package: `com.doublechaintech.vendingmachineservice`
 
 
 **Children (incoming):**
-- `vendingOrderList` → VendingOrder (select with `selectVendingOrderList()`)
+- `orderPaymentList` → OrderPayment (select with `selectOrderPaymentList()`)
 
 
 ---
@@ -353,7 +353,40 @@ Package: `com.doublechaintech.vendingmachineservice`
 
 | status |  | `getStatus()` | `updateStatus(value)` |
 
+| createTime |  | `getCreateTime()` | `updateCreateTime(value)` |
+
+| updateTime |  | `getUpdateTime()` | `updateUpdateTime(value)` |
+
+
+**Relations (outgoing):**
+- `status` → references another entity (select with `selectStatus()`)
+
+
+**Children (incoming):**
+- `orderPaymentList` → OrderPayment (select with `selectOrderPaymentList()`)
+
+- `vendingOrderItemList` → VendingOrderItem (select with `selectVendingOrderItemList()`)
+
+
+---
+
+### Entity: OrderPayment
+
+- **Query**: `Q.orderPayments()`
+- **Filter prefix**: `with`
+- **Filter suffix**: `ing`
+- **Display name**: Order Payment
+- **Category**: Thing — uses `with`, `Containing`, `whichAre`
+
+| Property | Type | Getter | Updater |
+|----------|------|--------|---------|
+| name |  | `getName()` | `updateName(value)` |
+
+| vendingOrder |  | `getVendingOrder()` | `updateVendingOrder(value)` |
+
 | paymentMethod |  | `getPaymentMethod()` | `updatePaymentMethod(value)` |
+
+| amount |  | `getAmount()` | `updateAmount(value)` |
 
 | paymentTime |  | `getPaymentTime()` | `updatePaymentTime(value)` |
 
@@ -365,13 +398,9 @@ Package: `com.doublechaintech.vendingmachineservice`
 
 
 **Relations (outgoing):**
-- `status` → references another entity (select with `selectStatus()`)
+- `vendingOrder` → references another entity (select with `selectVendingOrder()`)
 
 - `paymentMethod` → references another entity (select with `selectPaymentMethod()`)
-
-
-**Children (incoming):**
-- `vendingOrderItemList` → VendingOrderItem (select with `selectVendingOrderItemList()`)
 
 
 ---

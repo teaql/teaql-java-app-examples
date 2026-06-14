@@ -1,9 +1,9 @@
 package com.doublechaintech.vendingmachineservice.paymentmethod;
 
+import com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment;
+import com.doublechaintech.vendingmachineservice.orderpayment.OrderPaymentListExpression;
 import com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine;
 import com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachineExpression;
-import com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder;
-import com.doublechaintech.vendingmachineservice.vendingorder.VendingOrderListExpression;
 import io.teaql.core.UserContext;
 import io.teaql.core.value.BaseEntityExpression;
 import io.teaql.core.value.Expression;
@@ -58,10 +58,10 @@ public class PaymentMethodExpression<T, E, U extends PaymentMethod> extends Expr
        return new PaymentMethodExpression(this, $it ->  ((PaymentMethod)$it).updateCode(code));
     }
 
-    public VendingOrderListExpression<T, U, VendingOrder> getVendingOrderList(){
-        return new VendingOrderListExpression(this, $it ->  ((PaymentMethod)$it).getVendingOrderList());
+    public OrderPaymentListExpression<T, U, OrderPayment> getOrderPaymentList(){
+        return new OrderPaymentListExpression(this, $it ->  ((PaymentMethod)$it).getOrderPaymentList());
     }
-    public PaymentMethodExpression<T, U, U> addVendingOrder(VendingOrder vendingOrder){
-       return new PaymentMethodExpression(this, $it ->  ((PaymentMethod)$it).addVendingOrder(vendingOrder));
+    public PaymentMethodExpression<T, U, U> addOrderPayment(OrderPayment orderPayment){
+       return new PaymentMethodExpression(this, $it ->  ((PaymentMethod)$it).addOrderPayment(orderPayment));
     }
 }

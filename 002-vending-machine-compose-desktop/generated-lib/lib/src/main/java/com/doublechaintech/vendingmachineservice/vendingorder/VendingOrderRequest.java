@@ -1,10 +1,10 @@
 package com.doublechaintech.vendingmachineservice.vendingorder;
 
 import com.doublechaintech.vendingmachineservice.Q;
+import com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment;
+import com.doublechaintech.vendingmachineservice.orderpayment.OrderPaymentRequest;
 import com.doublechaintech.vendingmachineservice.orderstatus.OrderStatus;
 import com.doublechaintech.vendingmachineservice.orderstatus.OrderStatusRequest;
-import com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod;
-import com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethodRequest;
 import com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem;
 import com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItemRequest;
 import io.teaql.core.AggrFunction;
@@ -88,7 +88,7 @@ public class VendingOrderRequest<T extends VendingOrder> extends BaseRequest<T> 
 
     public VendingOrderRequest<T> selectSelf(){
         super.selectSelf();
-        return selectId().selectTitle().selectTotalAmount().selectStatusIdOnly().selectPaymentMethodIdOnly().selectPaymentTime().selectTransactionId().selectCreateTime().selectUpdateTime().selectVersion();
+        return selectId().selectTitle().selectTotalAmount().selectStatusIdOnly().selectCreateTime().selectUpdateTime().selectVersion();
     }
 
     public VendingOrderRequest<T> selectSelfFields(){
@@ -97,13 +97,13 @@ public class VendingOrderRequest<T extends VendingOrder> extends BaseRequest<T> 
 
     public VendingOrderRequest<T> selectAll(){
         super.selectAll();
-        return selectId().selectTitle().selectTotalAmount().selectStatus().selectPaymentMethod().selectPaymentTime().selectTransactionId().selectCreateTime().selectUpdateTime().selectVersion();
+        return selectId().selectTitle().selectTotalAmount().selectStatus().selectCreateTime().selectUpdateTime().selectVersion();
     }
 
     public VendingOrderRequest<T> selectChildren(){
         super.selectAny();
-        selectVendingOrderItemList();
-        return selectId().selectTitle().selectTotalAmount().selectStatus().selectPaymentMethod().selectPaymentTime().selectTransactionId().selectCreateTime().selectUpdateTime().selectVersion();
+        selectOrderPaymentList().selectVendingOrderItemList();
+        return selectId().selectTitle().selectTotalAmount().selectStatus().selectCreateTime().selectUpdateTime().selectVersion();
     }
 
 
@@ -185,59 +185,6 @@ public class VendingOrderRequest<T extends VendingOrder> extends BaseRequest<T> 
        unselectProperty(VendingOrder.STATUS_PROPERTY);
        return this;
     }
-    public VendingOrderRequest<T> selectPaymentMethodIdOnly(){
-       selectProperty(VendingOrder.PAYMENT_METHOD_PROPERTY);
-       return this;
-    }
-
-    public VendingOrderRequest<T> selectPaymentMethod(){
-        return selectPaymentMethodWith(Q.paymentMethods().unlimited().selectSelf());
-    }
-
-    public VendingOrderRequest<T> selectPaymentMethodWith(PaymentMethodRequest paymentMethod){
-       selectProperty(VendingOrder.PAYMENT_METHOD_PROPERTY);
-       enhanceRelation(VendingOrder.PAYMENT_METHOD_PROPERTY, paymentMethod);
-       return this;
-    }
-
-    public VendingOrderRequest<T> unselectPaymentMethod(){
-       unselectProperty(VendingOrder.PAYMENT_METHOD_PROPERTY);
-       return this;
-    }
-    public VendingOrderRequest<T> selectPaymentTime(){
-       selectProperty(VendingOrder.PAYMENT_TIME_PROPERTY);
-       return this;
-    }
-
-    /**
-     * fill the paymentTime with customized rawSqlSegment, TEAQL uses ({rawSqlSegment} AS  paymentTime) to fetch paymentTime property.
-     * @param rawSqlSegment  customized rawSqlSegment
-     */
-
-
-
-
-    public VendingOrderRequest<T> unselectPaymentTime(){
-       unselectProperty(VendingOrder.PAYMENT_TIME_PROPERTY);
-       return this;
-    }
-    public VendingOrderRequest<T> selectTransactionId(){
-       selectProperty(VendingOrder.TRANSACTION_ID_PROPERTY);
-       return this;
-    }
-
-    /**
-     * fill the transactionId with customized rawSqlSegment, TEAQL uses ({rawSqlSegment} AS  transactionId) to fetch transactionId property.
-     * @param rawSqlSegment  customized rawSqlSegment
-     */
-
-
-
-
-    public VendingOrderRequest<T> unselectTransactionId(){
-       unselectProperty(VendingOrder.TRANSACTION_ID_PROPERTY);
-       return this;
-    }
     public VendingOrderRequest<T> selectCreateTime(){
        selectProperty(VendingOrder.CREATE_TIME_PROPERTY);
        return this;
@@ -287,6 +234,14 @@ public class VendingOrderRequest<T extends VendingOrder> extends BaseRequest<T> 
 
     public VendingOrderRequest<T> unselectVersion(){
        unselectProperty(VendingOrder.VERSION_PROPERTY);
+       return this;
+    }
+    public VendingOrderRequest<T> selectOrderPaymentList(){
+       return selectOrderPaymentListWith(Q.orderPayments().selectSelf());
+    }
+
+    public VendingOrderRequest<T> selectOrderPaymentListWith(OrderPaymentRequest orderPaymentList){
+       enhanceRelation(VendingOrder.ORDER_PAYMENT_LIST_PROPERTY, orderPaymentList);
        return this;
     }
     public VendingOrderRequest<T> selectVendingOrderItemList(){
@@ -455,167 +410,6 @@ public class VendingOrderRequest<T extends VendingOrder> extends BaseRequest<T> 
     public VendingOrderRequest<T> withStatusMatching(OrderStatusRequest status){
        return appendSearchCriteria(new SubQuerySearchCriteria(VendingOrder.STATUS_PROPERTY, status, OrderStatus.ID_PROPERTY));
     }
-
-    public VendingOrderRequest<T> filterByPaymentMethod(PaymentMethod... paymentMethod){
-      if (paymentMethod == null || paymentMethod.length == 0) {
-        throw new IllegalArgumentException("filterByPaymentMethod parameter paymentMethod cannot be empty");
-      }
-      return appendSearchCriteria(createPaymentMethodCriteria(Operator.EQUAL, (Object[])paymentMethod));
-    }
-
-    public VendingOrderRequest<T> withPaymentMethod(Operator operator, Object... values){
-       return appendSearchCriteria(createPaymentMethodCriteria(operator, values));
-    }
-
-    public VendingOrderRequest<T> withPaymentMethodIsUnknown(){
-       return withPaymentMethod(Operator.IS_NULL);
-    }
-
-    public VendingOrderRequest<T> withPaymentMethodIsKnown(){
-       return withPaymentMethod(Operator.IS_NOT_NULL);
-    }
-
-    public SearchCriteria createPaymentMethodCriteria(Operator operator, Object... values) {
-        return createBasicSearchCriteria(VendingOrder.PAYMENT_METHOD_PROPERTY, operator, values);
-    }
-
-    public VendingOrderRequest<T> filterByPaymentMethod(Long paymentMethod){
-      if(paymentMethod == null){
-         return this;
-      }
-      return withPaymentMethod(Operator.EQUAL, paymentMethod);
-    }
-    public VendingOrderRequest<T> withPaymentMethodMatching(PaymentMethodRequest paymentMethod){
-       return appendSearchCriteria(new SubQuerySearchCriteria(VendingOrder.PAYMENT_METHOD_PROPERTY, paymentMethod, PaymentMethod.ID_PROPERTY));
-    }
-
-    public VendingOrderRequest<T> filterByPaymentTime(LocalDateTime... paymentTime){
-      if (paymentTime == null || paymentTime.length == 0) {
-        throw new IllegalArgumentException("filterByPaymentTime parameter paymentTime cannot be empty");
-      }
-      return appendSearchCriteria(createPaymentTimeCriteria(Operator.EQUAL, (Object[])paymentTime));
-    }
-
-    public VendingOrderRequest<T> withPaymentTime(Operator operator, Object... values){
-       return appendSearchCriteria(createPaymentTimeCriteria(operator, values));
-    }
-
-    public VendingOrderRequest<T> withPaymentTimeIsUnknown(){
-       return withPaymentTime(Operator.IS_NULL);
-    }
-
-    public VendingOrderRequest<T> withPaymentTimeIsKnown(){
-       return withPaymentTime(Operator.IS_NOT_NULL);
-    }
-
-    public SearchCriteria createPaymentTimeCriteria(Operator operator, Object... values) {
-        return createBasicSearchCriteria(VendingOrder.PAYMENT_TIME_PROPERTY, operator, values);
-    }
-
-    public VendingOrderRequest<T> withPaymentTimeGreaterThan(LocalDateTime paymentTime){
-       return withPaymentTime(Operator.GREATER_THAN, paymentTime);
-    }
-
-    public VendingOrderRequest<T> withPaymentTimeGreaterThanOrEqualTo(LocalDateTime paymentTime){
-       return withPaymentTime(Operator.GREATER_THAN_OR_EQUAL, paymentTime);
-    }
-
-    public VendingOrderRequest<T> withPaymentTimeLessThan(LocalDateTime paymentTime){
-       return withPaymentTime(Operator.LESS_THAN, paymentTime);
-    }
-
-    public VendingOrderRequest<T> withPaymentTimeLessThanOrEqualTo(LocalDateTime paymentTime){
-       return withPaymentTime(Operator.LESS_THAN_OR_EQUAL, paymentTime);
-    }
-
-    public VendingOrderRequest<T> withPaymentTimeBetween(LocalDateTime startOfPaymentTime, LocalDateTime endOfPaymentTime){
-       return withPaymentTime(Operator.BETWEEN, startOfPaymentTime, endOfPaymentTime);
-    }
-    public VendingOrderRequest<T> withPaymentTimeBefore(LocalDateTime paymentTime){
-       return withPaymentTime(Operator.LESS_THAN, paymentTime);
-    }
-
-    public VendingOrderRequest<T> withPaymentTimeBefore(Date paymentTime){
-       return withPaymentTime(Operator.LESS_THAN, paymentTime);
-    }
-
-    public VendingOrderRequest<T> withPaymentTimeAfter(LocalDateTime paymentTime){
-       return withPaymentTime(Operator.GREATER_THAN, paymentTime);
-    }
-
-    public VendingOrderRequest<T> withPaymentTimeAfter(Date paymentTime){
-       return withPaymentTime(Operator.GREATER_THAN, paymentTime);
-    }
-
-    public VendingOrderRequest<T> withPaymentTimeBetween(Date startOfPaymentTime, Date endOfPaymentTime){
-       return withPaymentTime(Operator.BETWEEN, startOfPaymentTime, endOfPaymentTime);
-    }
-
-
-
-
-    public VendingOrderRequest<T> filterByTransactionId(String... transactionId){
-      if (transactionId == null || transactionId.length == 0) {
-        throw new IllegalArgumentException("filterByTransactionId parameter transactionId cannot be empty");
-      }
-      return appendSearchCriteria(createTransactionIdCriteria(Operator.EQUAL, (Object[])transactionId));
-    }
-
-    public VendingOrderRequest<T> withTransactionId(Operator operator, Object... values){
-       return appendSearchCriteria(createTransactionIdCriteria(operator, values));
-    }
-
-    public VendingOrderRequest<T> withTransactionIdIsUnknown(){
-       return withTransactionId(Operator.IS_NULL);
-    }
-
-    public VendingOrderRequest<T> withTransactionIdIsKnown(){
-       return withTransactionId(Operator.IS_NOT_NULL);
-    }
-
-    public SearchCriteria createTransactionIdCriteria(Operator operator, Object... values) {
-        return createBasicSearchCriteria(VendingOrder.TRANSACTION_ID_PROPERTY, operator, values);
-    }
-
-    public VendingOrderRequest<T> withTransactionIdGreaterThan(String transactionId){
-       return withTransactionId(Operator.GREATER_THAN, transactionId);
-    }
-
-    public VendingOrderRequest<T> withTransactionIdGreaterThanOrEqualTo(String transactionId){
-       return withTransactionId(Operator.GREATER_THAN_OR_EQUAL, transactionId);
-    }
-
-    public VendingOrderRequest<T> withTransactionIdLessThan(String transactionId){
-       return withTransactionId(Operator.LESS_THAN, transactionId);
-    }
-
-    public VendingOrderRequest<T> withTransactionIdLessThanOrEqualTo(String transactionId){
-       return withTransactionId(Operator.LESS_THAN_OR_EQUAL, transactionId);
-    }
-
-    public VendingOrderRequest<T> withTransactionIdBetween(String startOfTransactionId, String endOfTransactionId){
-       return withTransactionId(Operator.BETWEEN, startOfTransactionId, endOfTransactionId);
-    }
-    public VendingOrderRequest<T> withTransactionIdStartingWith(String transactionId){
-       return withTransactionId(Operator.BEGIN_WITH, transactionId);
-    }
-    public VendingOrderRequest<T> withTransactionIdContaining(String transactionId){
-       return withTransactionId(Operator.CONTAIN, transactionId);
-    }
-
-    public VendingOrderRequest<T> withTransactionIdEndingWith(String transactionId){
-       return withTransactionId(Operator.END_WITH, transactionId);
-    }
-
-    public VendingOrderRequest<T> withTransactionIdIs(String transactionId){
-       return withTransactionId(Operator.EQUAL, transactionId);
-    }
-
-    public VendingOrderRequest<T> withTransactionIdSoundingLike(String transactionId){
-       return withTransactionId(Operator.SOUNDS_LIKE, transactionId);
-    }
-
-
 
     public VendingOrderRequest<T> filterByCreateTime(LocalDateTime... createTime){
       if (createTime == null || createTime.length == 0) {
@@ -790,6 +584,21 @@ public class VendingOrderRequest<T extends VendingOrder> extends BaseRequest<T> 
        return withVersion(Operator.BETWEEN, startOfVersion, endOfVersion);
     }
 
+    public VendingOrderRequest<T> withOrderPaymentListMatching(OrderPaymentRequest orderPaymentRequest){
+        return appendSearchCriteria(new SubQuerySearchCriteria(VendingOrder.ID_PROPERTY, orderPaymentRequest, OrderPayment.VENDING_ORDER_PROPERTY));
+    }
+
+    public VendingOrderRequest<T> withoutOrderPaymentListMatching(OrderPaymentRequest orderPaymentRequest){
+        return appendSearchCriteria(SearchCriteria.not(new SubQuerySearchCriteria(VendingOrder.ID_PROPERTY, orderPaymentRequest, OrderPayment.VENDING_ORDER_PROPERTY)));
+    }
+
+    public VendingOrderRequest<T> haveOrderPayments(){
+        return withOrderPaymentListMatching(Q.orderPayments().unlimited());
+    }
+
+    public VendingOrderRequest<T> haveNoOrderPayments(){
+        return withoutOrderPaymentListMatching(Q.orderPayments().unlimited());
+    }
     public VendingOrderRequest<T> withVendingOrderItemListMatching(VendingOrderItemRequest vendingOrderItemRequest){
         return appendSearchCriteria(new SubQuerySearchCriteria(VendingOrder.ID_PROPERTY, vendingOrderItemRequest, VendingOrderItem.VENDING_ORDER_PROPERTY));
     }
@@ -887,20 +696,13 @@ public class VendingOrderRequest<T extends VendingOrder> extends BaseRequest<T> 
        return this;
     }
 
-    public VendingOrderRequest<T> groupByPaymentMethodWithDetails(){
-       return groupByPaymentMethodWithDetails(Q.paymentMethods().unlimited());
-    }
 
-    public VendingOrderRequest<T> groupByPaymentMethodWithDetails(PaymentMethodRequest subRequest){
-       aggregate(VendingOrder.PAYMENT_METHOD_PROPERTY, subRequest);
+
+
+    public VendingOrderRequest<T> groupByOrderPaymentsWithDetails(OrderPaymentRequest subRequest){
+       aggregate(VendingOrder.ORDER_PAYMENT_LIST_PROPERTY, subRequest);
        return this;
     }
-
-
-
-
-
-
     public VendingOrderRequest<T> groupByVendingOrderItemsWithDetails(VendingOrderItemRequest subRequest){
        aggregate(VendingOrder.VENDING_ORDER_ITEM_LIST_PROPERTY, subRequest);
        return this;
@@ -966,54 +768,6 @@ public class VendingOrderRequest<T extends VendingOrder> extends BaseRequest<T> 
 
     public VendingOrderRequest<T> groupByStatusWithFunction(String retName, AggrFunction function){
        groupBy(retName, VendingOrder.STATUS_PROPERTY, function);
-       return this;
-    }
-    public VendingOrderRequest<T> groupByPaymentMethodWith(PaymentMethodRequest subRequest){
-       groupBy(VendingOrder.PAYMENT_METHOD_PROPERTY, subRequest);
-       return this;
-    }
-    public VendingOrderRequest<T> groupByPaymentMethod(){
-       groupBy(VendingOrder.PAYMENT_METHOD_PROPERTY);
-       return this;
-    }
-
-    public VendingOrderRequest<T> groupByPaymentMethodAs(String retName){
-       groupBy(retName, VendingOrder.PAYMENT_METHOD_PROPERTY);
-       return this;
-    }
-
-    public VendingOrderRequest<T> groupByPaymentMethodWithFunction(String retName, AggrFunction function){
-       groupBy(retName, VendingOrder.PAYMENT_METHOD_PROPERTY, function);
-       return this;
-    }
-
-    public VendingOrderRequest<T> groupByPaymentTime(){
-       groupBy(VendingOrder.PAYMENT_TIME_PROPERTY);
-       return this;
-    }
-
-    public VendingOrderRequest<T> groupByPaymentTimeAs(String retName){
-       groupBy(retName, VendingOrder.PAYMENT_TIME_PROPERTY);
-       return this;
-    }
-
-    public VendingOrderRequest<T> groupByPaymentTimeWithFunction(String retName, AggrFunction function){
-       groupBy(retName, VendingOrder.PAYMENT_TIME_PROPERTY, function);
-       return this;
-    }
-
-    public VendingOrderRequest<T> groupByTransactionId(){
-       groupBy(VendingOrder.TRANSACTION_ID_PROPERTY);
-       return this;
-    }
-
-    public VendingOrderRequest<T> groupByTransactionIdAs(String retName){
-       groupBy(retName, VendingOrder.TRANSACTION_ID_PROPERTY);
-       return this;
-    }
-
-    public VendingOrderRequest<T> groupByTransactionIdWithFunction(String retName, AggrFunction function){
-       groupBy(retName, VendingOrder.TRANSACTION_ID_PROPERTY, function);
        return this;
     }
 
@@ -1086,24 +840,6 @@ public class VendingOrderRequest<T extends VendingOrder> extends BaseRequest<T> 
     }
 
 
-    public VendingOrderRequest<T> withPaymentMethodIsWechat(){
-       filterByPaymentMethod(com.doublechaintech.vendingmachineservice.Constants.PAYMENT_METHOD_WECHAT);
-       return this;
-    }
-
-
-    public VendingOrderRequest<T> withPaymentMethodIsAlipay(){
-       filterByPaymentMethod(com.doublechaintech.vendingmachineservice.Constants.PAYMENT_METHOD_ALIPAY);
-       return this;
-    }
-
-
-    public VendingOrderRequest<T> withPaymentMethodIsCreditCard(){
-       filterByPaymentMethod(com.doublechaintech.vendingmachineservice.Constants.PAYMENT_METHOD_CREDIT_CARD);
-       return this;
-    }
-
-
 
 
     public VendingOrderRequest<T> orderByIdAscending(){
@@ -1154,44 +890,6 @@ public class VendingOrderRequest<T extends VendingOrder> extends BaseRequest<T> 
        return this;
     }
 
-    public VendingOrderRequest<T> orderByPaymentMethodAscending(){
-       addOrderByAscending(VendingOrder.PAYMENT_METHOD_PROPERTY);
-       return this;
-    }
-
-    public VendingOrderRequest<T> orderByPaymentMethodDescending(){
-       addOrderByDescending(VendingOrder.PAYMENT_METHOD_PROPERTY);
-       return this;
-    }
-
-    public VendingOrderRequest<T> orderByPaymentTimeAscending(){
-       addOrderByAscending(VendingOrder.PAYMENT_TIME_PROPERTY);
-       return this;
-    }
-
-    public VendingOrderRequest<T> orderByPaymentTimeDescending(){
-       addOrderByDescending(VendingOrder.PAYMENT_TIME_PROPERTY);
-       return this;
-    }
-
-    public VendingOrderRequest<T> orderByTransactionIdAscending(){
-       addOrderByAscending(VendingOrder.TRANSACTION_ID_PROPERTY);
-       return this;
-    }
-
-    public VendingOrderRequest<T> orderByTransactionIdDescending(){
-       addOrderByDescending(VendingOrder.TRANSACTION_ID_PROPERTY);
-       return this;
-    }
-    public VendingOrderRequest<T> orderByTransactionIdAscendingUsingGBK(){
-       addOrderByAscendingUsingGBK(VendingOrder.TRANSACTION_ID_PROPERTY);
-       return this;
-    }
-
-    public VendingOrderRequest<T> orderByTransactionIdDescendingUsingGBK(){
-       addOrderByDescendingUsingGBK(VendingOrder.TRANSACTION_ID_PROPERTY);
-       return this;
-    }
     public VendingOrderRequest<T> orderByCreateTimeAscending(){
        addOrderByAscending(VendingOrder.CREATE_TIME_PROPERTY);
        return this;
@@ -1223,6 +921,19 @@ public class VendingOrderRequest<T extends VendingOrder> extends BaseRequest<T> 
     }
 
 
+    public VendingOrderRequest<T> statsFromOrderPaymentsAs(String name, OrderPaymentRequest subRequest){
+       return statsFromOrderPaymentsAs(name, subRequest, false);
+    }
+
+    public VendingOrderRequest<T> statsFromOrderPaymentsAs(String name, OrderPaymentRequest subRequest, boolean singleResult){
+       subRequest.setPartitionProperty(OrderPayment.VENDING_ORDER_PROPERTY);
+       addAggregateDynamicProperty(name, subRequest, singleResult);
+       return this;
+    }
+
+    public VendingOrderRequest<T> statsFromOrderPayments(OrderPaymentRequest subRequest){
+       return statsFromOrderPaymentsAs(REFINEMENTS, subRequest);
+    }
     public VendingOrderRequest<T> statsFromVendingOrderItemsAs(String name, VendingOrderItemRequest subRequest){
        return statsFromVendingOrderItemsAs(name, subRequest, false);
     }
@@ -1243,18 +954,20 @@ public class VendingOrderRequest<T extends VendingOrder> extends BaseRequest<T> 
        return status;
     }
 
-    public PaymentMethodRequest rollUpToPaymentMethod(){
-       PaymentMethodRequest paymentMethod = Q.paymentMethods().unlimited();
-       this.withPaymentMethodMatching(paymentMethod)
-           .groupByPaymentMethodWith(paymentMethod);
-       return paymentMethod;
+
+
+
+    public VendingOrderRequest<T> countOrderPayments(){
+        return countOrderPaymentsAs("Count");
     }
 
+    public VendingOrderRequest<T> countOrderPaymentsAs(String name){
+        return countOrderPaymentsWith(name, Q.orderPayments().unlimited());
+    }
 
-
-
-
-
+    public VendingOrderRequest<T> countOrderPaymentsWith(String name, OrderPaymentRequest subRequest){
+        return statsFromOrderPaymentsAs(name, subRequest.count(), true);
+    }
     public VendingOrderRequest<T> countVendingOrderItems(){
         return countVendingOrderItemsAs("Count");
     }
@@ -1265,6 +978,94 @@ public class VendingOrderRequest<T extends VendingOrder> extends BaseRequest<T> 
 
     public VendingOrderRequest<T> countVendingOrderItemsWith(String name, VendingOrderItemRequest subRequest){
         return statsFromVendingOrderItemsAs(name, subRequest.count(), true);
+    }
+    public VendingOrderRequest<T> minAmountOfOrderPayments(){
+        return minAmountOfOrderPaymentsAs("minAmountOfOrderPayments");
+    }
+
+    public VendingOrderRequest<T> minAmountOfOrderPaymentsAs(String name){
+        return minAmountOfOrderPaymentsAs(name, Q.orderPayments().unlimited());
+    }
+
+    public VendingOrderRequest<T> minAmountOfOrderPaymentsAs(String name, OrderPaymentRequest subRequest){
+        return statsFromOrderPaymentsAs(name, subRequest.minAmount(), true);
+    }
+    public VendingOrderRequest<T> maxAmountOfOrderPayments(){
+        return maxAmountOfOrderPaymentsAs("maxAmountOfOrderPayments");
+    }
+
+    public VendingOrderRequest<T> maxAmountOfOrderPaymentsAs(String name){
+        return maxAmountOfOrderPaymentsAs(name, Q.orderPayments().unlimited());
+    }
+
+    public VendingOrderRequest<T> maxAmountOfOrderPaymentsAs(String name, OrderPaymentRequest subRequest){
+        return statsFromOrderPaymentsAs(name, subRequest.maxAmount(), true);
+    }
+    public VendingOrderRequest<T> sumAmountOfOrderPayments(){
+        return sumAmountOfOrderPaymentsAs("sumAmountOfOrderPayments");
+    }
+
+    public VendingOrderRequest<T> sumAmountOfOrderPaymentsAs(String name){
+        return sumAmountOfOrderPaymentsAs(name, Q.orderPayments().unlimited());
+    }
+
+    public VendingOrderRequest<T> sumAmountOfOrderPaymentsAs(String name, OrderPaymentRequest subRequest){
+        return statsFromOrderPaymentsAs(name, subRequest.sumAmount(), true);
+    }
+    public VendingOrderRequest<T> avgAmountOfOrderPayments(){
+        return avgAmountOfOrderPaymentsAs("avgAmountOfOrderPayments");
+    }
+
+    public VendingOrderRequest<T> avgAmountOfOrderPaymentsAs(String name){
+        return avgAmountOfOrderPaymentsAs(name, Q.orderPayments().unlimited());
+    }
+
+    public VendingOrderRequest<T> avgAmountOfOrderPaymentsAs(String name, OrderPaymentRequest subRequest){
+        return statsFromOrderPaymentsAs(name, subRequest.avgAmount(), true);
+    }
+    public VendingOrderRequest<T> standardDeviationAmountOfOrderPayments(){
+        return standardDeviationAmountOfOrderPaymentsAs("stdDevAmountOfOrderPayments");
+    }
+
+    public VendingOrderRequest<T> standardDeviationAmountOfOrderPaymentsAs(String name){
+        return standardDeviationAmountOfOrderPaymentsAs(name, Q.orderPayments().unlimited());
+    }
+
+    public VendingOrderRequest<T> standardDeviationAmountOfOrderPaymentsAs(String name, OrderPaymentRequest subRequest){
+        return statsFromOrderPaymentsAs(name, subRequest.standardDeviationAmount(), true);
+    }
+    public VendingOrderRequest<T> squareRootOfPopulationStandardDeviationAmountOfOrderPayments(){
+        return squareRootOfPopulationStandardDeviationAmountOfOrderPaymentsAs("stdDevPopAmountOfOrderPayments");
+    }
+
+    public VendingOrderRequest<T> squareRootOfPopulationStandardDeviationAmountOfOrderPaymentsAs(String name){
+        return squareRootOfPopulationStandardDeviationAmountOfOrderPaymentsAs(name, Q.orderPayments().unlimited());
+    }
+
+    public VendingOrderRequest<T> squareRootOfPopulationStandardDeviationAmountOfOrderPaymentsAs(String name, OrderPaymentRequest subRequest){
+        return statsFromOrderPaymentsAs(name, subRequest.squareRootOfPopulationStandardDeviationAmount(), true);
+    }
+    public VendingOrderRequest<T> sampleVarianceAmountOfOrderPayments(){
+        return sampleVarianceAmountOfOrderPaymentsAs("varSampAmountOfOrderPayments");
+    }
+
+    public VendingOrderRequest<T> sampleVarianceAmountOfOrderPaymentsAs(String name){
+        return sampleVarianceAmountOfOrderPaymentsAs(name, Q.orderPayments().unlimited());
+    }
+
+    public VendingOrderRequest<T> sampleVarianceAmountOfOrderPaymentsAs(String name, OrderPaymentRequest subRequest){
+        return statsFromOrderPaymentsAs(name, subRequest.sampleVarianceAmount(), true);
+    }
+    public VendingOrderRequest<T> samplePopulationVarianceAmountOfOrderPayments(){
+        return samplePopulationVarianceAmountOfOrderPaymentsAs("varPopAmountOfOrderPayments");
+    }
+
+    public VendingOrderRequest<T> samplePopulationVarianceAmountOfOrderPaymentsAs(String name){
+        return samplePopulationVarianceAmountOfOrderPaymentsAs(name, Q.orderPayments().unlimited());
+    }
+
+    public VendingOrderRequest<T> samplePopulationVarianceAmountOfOrderPaymentsAs(String name, OrderPaymentRequest subRequest){
+        return statsFromOrderPaymentsAs(name, subRequest.samplePopulationVarianceAmount(), true);
     }
     public VendingOrderRequest<T> minQuantityOfVendingOrderItems(){
         return minQuantityOfVendingOrderItemsAs("minQuantityOfVendingOrderItems");
@@ -1537,14 +1338,6 @@ public class VendingOrderRequest<T extends VendingOrder> extends BaseRequest<T> 
 
    public VendingOrderRequest<T> facetByStatusAs(String facetName, OrderStatusRequest status, boolean includeAllFacets){
        addFacet(facetName, VendingOrder.STATUS_PROPERTY, status, includeAllFacets);
-       return this;
-   }
-   public VendingOrderRequest<T> facetByPaymentMethodAs(String facetName, PaymentMethodRequest paymentMethod){
-       return facetByPaymentMethodAs(facetName, paymentMethod, true);
-   }
-
-   public VendingOrderRequest<T> facetByPaymentMethodAs(String facetName, PaymentMethodRequest paymentMethod, boolean includeAllFacets){
-       addFacet(facetName, VendingOrder.PAYMENT_METHOD_PROPERTY, paymentMethod, includeAllFacets);
        return this;
    }
 

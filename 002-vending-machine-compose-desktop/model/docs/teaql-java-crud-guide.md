@@ -130,6 +130,32 @@ var list = Q.vendingMachines()
 ```
 
 ```java
+var list = Q.vendingOrders()
+    .selectStatusWith(Q.orderStatuses().selectSelf())
+    .comment("load with status")
+    .purpose("fetch associated status")
+    .executeForList(userContext);
+```
+
+
+
+```java
+var list = Q.vendingOrders()
+    .selectOrderPaymentListWith(Q.orderPayments().selectSelf())
+    .comment("load with orderPaymentList")
+    .purpose("fetch child orderPaymentList")
+    .executeForList(userContext);
+```
+
+```java
+var list = Q.vendingOrders()
+    .selectVendingOrderItemListWith(Q.vendingOrderItems().selectSelf())
+    .comment("load with vendingOrderItemList")
+    .purpose("fetch child vendingOrderItemList")
+    .executeForList(userContext);
+```
+
+```java
 var list = Q.orderStatuses()
     .selectVendingMachineWith(Q.vendingMachines().selectSelf())
     .comment("load with vendingMachine")
@@ -142,25 +168,6 @@ var list = Q.orderStatuses()
 
 ```java
 var list = Q.orderStatuses()
-    .selectVendingOrderListWith(Q.vendingOrders().selectSelf())
-    .comment("load with vendingOrderList")
-    .purpose("fetch child vendingOrderList")
-    .executeForList(userContext);
-```
-
-```java
-var list = Q.paymentMethods()
-    .selectVendingMachineWith(Q.vendingMachines().selectSelf())
-    .comment("load with vendingMachine")
-    .purpose("fetch associated vendingMachine")
-    .executeForList(userContext);
-```
-
-
-
-
-```java
-var list = Q.paymentMethods()
     .selectVendingOrderListWith(Q.vendingOrders().selectSelf())
     .comment("load with vendingOrderList")
     .purpose("fetch child vendingOrderList")
@@ -191,5 +198,5 @@ Do not hard-delete rows. Do not write SQL `DELETE` or `UPDATE` statements. If th
 These entities are selected by reverse relation count, not by model declaration order.
 
 - `VendingMachine`: reverse relations `3`, query `Q.vendingMachines()`, save `new VendingMachine().auditAs("comment").save(userContext)`, request `com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachineRequest`
+- `VendingOrder`: reverse relations `2`, query `Q.vendingOrders()`, save `new VendingOrder().auditAs("comment").save(userContext)`, request `com.doublechaintech.vendingmachineservice.vendingorder.VendingOrderRequest`
 - `OrderStatus`: reverse relations `1`, query `Q.orderStatuses()`, save `new OrderStatus().auditAs("comment").save(userContext)`, request `com.doublechaintech.vendingmachineservice.orderstatus.OrderStatusRequest`
-- `PaymentMethod`: reverse relations `1`, query `Q.paymentMethods()`, save `new PaymentMethod().auditAs("comment").save(userContext)`, request `com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethodRequest`
