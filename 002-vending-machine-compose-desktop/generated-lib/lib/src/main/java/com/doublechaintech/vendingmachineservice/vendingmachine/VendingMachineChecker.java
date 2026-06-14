@@ -6,6 +6,8 @@ import com.doublechaintech.vendingmachineservice.orderstatus.OrderStatus;
 import com.doublechaintech.vendingmachineservice.orderstatus.OrderStatusChecker;
 import com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod;
 import com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethodChecker;
+import com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus;
+import com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatusChecker;
 import com.doublechaintech.vendingmachineservice.product.Product;
 import com.doublechaintech.vendingmachineservice.product.ProductChecker;
 import io.teaql.core.UserContext;
@@ -49,6 +51,10 @@ public class VendingMachineChecker implements Checker<VendingMachine>{
       for(int i = 0; vendingMachine.getPaymentMethodList() != null && i < vendingMachine.getPaymentMethodList().size(); i++){
          PaymentMethod paymentMethod = vendingMachine.getPaymentMethodList().get(i);
          new PaymentMethodChecker().checkAndFix(_ctx, paymentMethod, newLocation(_parentLocation, VendingMachine.PAYMENT_METHOD_LIST_PROPERTY, i));
+      }
+      for(int i = 0; vendingMachine.getPaymentStatusList() != null && i < vendingMachine.getPaymentStatusList().size(); i++){
+         PaymentStatus paymentStatus = vendingMachine.getPaymentStatusList().get(i);
+         new PaymentStatusChecker().checkAndFix(_ctx, paymentStatus, newLocation(_parentLocation, VendingMachine.PAYMENT_STATUS_LIST_PROPERTY, i));
       }
       for(int i = 0; vendingMachine.getProductList() != null && i < vendingMachine.getProductList().size(); i++){
          Product product = vendingMachine.getProductList().get(i);

@@ -2,6 +2,8 @@ package com.doublechaintech.vendingmachineservice.orderpayment;
 
 import com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod;
 import com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethodExpression;
+import com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus;
+import com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatusExpression;
 import com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder;
 import com.doublechaintech.vendingmachineservice.vendingorder.VendingOrderExpression;
 import io.teaql.core.UserContext;
@@ -64,6 +66,20 @@ public class OrderPaymentExpression<T, E, U extends OrderPayment> extends Expres
     }
     public OrderPaymentExpression<T, U, U> updatePaymentMethodToCreditCard(){
        return new OrderPaymentExpression(this, $it ->  ((OrderPayment)$it).updatePaymentMethodToCreditCard());
+    }
+
+    public PaymentStatusExpression<T, U, PaymentStatus> getPaymentStatus(){
+       return new PaymentStatusExpression(this, $it ->  ((OrderPayment)$it).getPaymentStatus());
+    }
+
+    public OrderPaymentExpression<T, U, U> updatePaymentStatusToPending(){
+       return new OrderPaymentExpression(this, $it ->  ((OrderPayment)$it).updatePaymentStatusToPending());
+    }
+    public OrderPaymentExpression<T, U, U> updatePaymentStatusToSuccess(){
+       return new OrderPaymentExpression(this, $it ->  ((OrderPayment)$it).updatePaymentStatusToSuccess());
+    }
+    public OrderPaymentExpression<T, U, U> updatePaymentStatusToFailed(){
+       return new OrderPaymentExpression(this, $it ->  ((OrderPayment)$it).updatePaymentStatusToFailed());
     }
 
     public Expression<T, Integer> getAmount(){

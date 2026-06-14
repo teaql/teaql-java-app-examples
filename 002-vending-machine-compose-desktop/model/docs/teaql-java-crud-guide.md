@@ -123,6 +123,14 @@ var list = Q.vendingMachines()
 
 ```java
 var list = Q.vendingMachines()
+    .selectPaymentStatusListWith(Q.paymentStatuses().selectSelf())
+    .comment("load with paymentStatusList")
+    .purpose("fetch child paymentStatusList")
+    .executeForList(userContext);
+```
+
+```java
+var list = Q.vendingMachines()
     .selectProductListWith(Q.products().selectSelf())
     .comment("load with productList")
     .purpose("fetch child productList")
@@ -197,6 +205,6 @@ Do not hard-delete rows. Do not write SQL `DELETE` or `UPDATE` statements. If th
 
 These entities are selected by reverse relation count, not by model declaration order.
 
-- `VendingMachine`: reverse relations `3`, query `Q.vendingMachines()`, save `new VendingMachine().auditAs("comment").save(userContext)`, request `com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachineRequest`
+- `VendingMachine`: reverse relations `4`, query `Q.vendingMachines()`, save `new VendingMachine().auditAs("comment").save(userContext)`, request `com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachineRequest`
 - `VendingOrder`: reverse relations `2`, query `Q.vendingOrders()`, save `new VendingOrder().auditAs("comment").save(userContext)`, request `com.doublechaintech.vendingmachineservice.vendingorder.VendingOrderRequest`
 - `OrderStatus`: reverse relations `1`, query `Q.orderStatuses()`, save `new OrderStatus().auditAs("comment").save(userContext)`, request `com.doublechaintech.vendingmachineservice.orderstatus.OrderStatusRequest`

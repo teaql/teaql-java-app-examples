@@ -4,6 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.doublechaintech.vendingmachineservice.Constants;
 import com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod;
+import com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus;
 import com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder;
 import io.teaql.core.BaseEntity;
 import io.teaql.core.EntityStatus;
@@ -25,6 +26,7 @@ public class OrderPayment extends BaseEntity implements RemoteInput {
     public static final String NAME_PROPERTY = "name";
     public static final String VENDING_ORDER_PROPERTY = "vendingOrder";
     public static final String PAYMENT_METHOD_PROPERTY = "paymentMethod";
+    public static final String PAYMENT_STATUS_PROPERTY = "paymentStatus";
     public static final String AMOUNT_PROPERTY = "amount";
     public static final String PAYMENT_TIME_PROPERTY = "paymentTime";
     public static final String TRANSACTION_ID_PROPERTY = "transactionId";
@@ -33,6 +35,7 @@ public class OrderPayment extends BaseEntity implements RemoteInput {
     private String name;
     private VendingOrder vendingOrder;
     private PaymentMethod paymentMethod;
+    private PaymentStatus paymentStatus;
     private Integer amount;
     private LocalDateTime paymentTime;
     private String transactionId;
@@ -47,6 +50,9 @@ public class OrderPayment extends BaseEntity implements RemoteInput {
     }
     public PaymentMethod getPaymentMethod(){
         return this.paymentMethod;
+    }
+    public PaymentStatus getPaymentStatus(){
+        return this.paymentStatus;
     }
     public Integer getAmount(){
         return this.amount;
@@ -86,6 +92,14 @@ public class OrderPayment extends BaseEntity implements RemoteInput {
         }
         handleUpdate(PAYMENT_METHOD_PROPERTY, getPaymentMethod(), paymentMethod);
         this.paymentMethod = paymentMethod;
+        return this;
+    }
+    protected OrderPayment updatePaymentStatus(PaymentStatus paymentStatus){
+        if(ObjectUtil.equal(this.paymentStatus, paymentStatus)){
+            return this;
+        }
+        handleUpdate(PAYMENT_STATUS_PROPERTY, getPaymentStatus(), paymentStatus);
+        this.paymentStatus = paymentStatus;
         return this;
     }
     public OrderPayment updateAmount(Integer amount){
@@ -150,6 +164,27 @@ public class OrderPayment extends BaseEntity implements RemoteInput {
     public OrderPayment updatePaymentMethodToCreditCard(){
         return updatePaymentMethod(Constants.PAYMENT_METHOD_CREDIT_CARD);
     }
+    public boolean isPaymentStatusPending(){
+        return ObjectUtil.equals(getPaymentStatus(), Constants.PAYMENT_STATUS_PENDING);
+    }
+
+    public OrderPayment updatePaymentStatusToPending(){
+        return updatePaymentStatus(Constants.PAYMENT_STATUS_PENDING);
+    }
+    public boolean isPaymentStatusSuccess(){
+        return ObjectUtil.equals(getPaymentStatus(), Constants.PAYMENT_STATUS_SUCCESS);
+    }
+
+    public OrderPayment updatePaymentStatusToSuccess(){
+        return updatePaymentStatus(Constants.PAYMENT_STATUS_SUCCESS);
+    }
+    public boolean isPaymentStatusFailed(){
+        return ObjectUtil.equals(getPaymentStatus(), Constants.PAYMENT_STATUS_FAILED);
+    }
+
+    public OrderPayment updatePaymentStatusToFailed(){
+        return updatePaymentStatus(Constants.PAYMENT_STATUS_FAILED);
+    }
 
     public static OrderPayment refer(Long id){
         OrderPayment refer = new OrderPayment();
@@ -178,6 +213,8 @@ public class OrderPayment extends BaseEntity implements RemoteInput {
 
             case "paymentMethod": this.paymentMethod = (PaymentMethod) value; break;
 
+            case "paymentStatus": this.paymentStatus = (PaymentStatus) value; break;
+
             case "amount": this.amount = (Integer) value; break;
 
             case "paymentTime": this.paymentTime = (LocalDateTime) value; break;
@@ -199,6 +236,7 @@ public class OrderPayment extends BaseEntity implements RemoteInput {
             case "name": return this.name;
             case "vendingOrder": return this.vendingOrder;
             case "paymentMethod": return this.paymentMethod;
+            case "paymentStatus": return this.paymentStatus;
             case "amount": return this.amount;
             case "paymentTime": return this.paymentTime;
             case "transactionId": return this.transactionId;

@@ -4,6 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.doublechaintech.vendingmachineservice.orderstatus.OrderStatus;
 import com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod;
+import com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus;
 import com.doublechaintech.vendingmachineservice.product.Product;
 import io.teaql.core.BaseEntity;
 import io.teaql.core.EntityStatus;
@@ -28,12 +29,14 @@ public class VendingMachine extends BaseEntity implements RemoteInput {
     public static final String UPDATE_TIME_PROPERTY = "updateTime";
     public static final String ORDER_STATUS_LIST_PROPERTY = "orderStatusList";
     public static final String PAYMENT_METHOD_LIST_PROPERTY = "paymentMethodList";
+    public static final String PAYMENT_STATUS_LIST_PROPERTY = "paymentStatusList";
     public static final String PRODUCT_LIST_PROPERTY = "productList";
     private String name;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
     private SmartList<OrderStatus> orderStatusList;
     private SmartList<PaymentMethod> paymentMethodList;
+    private SmartList<PaymentStatus> paymentStatusList;
     private SmartList<Product> productList;
 
     public String getName(){
@@ -50,6 +53,9 @@ public class VendingMachine extends BaseEntity implements RemoteInput {
     }
     public SmartList<PaymentMethod> getPaymentMethodList(){
         return this.paymentMethodList;
+    }
+    public SmartList<PaymentStatus> getPaymentStatusList(){
+        return this.paymentStatusList;
     }
     public SmartList<Product> getProductList(){
         return this.productList;
@@ -105,6 +111,19 @@ public class VendingMachine extends BaseEntity implements RemoteInput {
         paymentMethod.cacheRelation(PaymentMethod.VENDING_MACHINE_PROPERTY, this);
         return this;
     }
+    public VendingMachine addPaymentStatus(PaymentStatus paymentStatus){
+        if (paymentStatus == null){
+            return this;
+        }
+
+        if(null == this.paymentStatusList){
+            this.paymentStatusList = new SmartList<>();
+        }
+
+        this.paymentStatusList.add(paymentStatus);
+        paymentStatus.cacheRelation(PaymentStatus.VENDING_MACHINE_PROPERTY, this);
+        return this;
+    }
     public VendingMachine addProduct(Product product){
         if (product == null){
             return this;
@@ -148,6 +167,7 @@ public class VendingMachine extends BaseEntity implements RemoteInput {
 
             case "orderStatusList": this.orderStatusList = (SmartList<OrderStatus>) value; break;
             case "paymentMethodList": this.paymentMethodList = (SmartList<PaymentMethod>) value; break;
+            case "paymentStatusList": this.paymentStatusList = (SmartList<PaymentStatus>) value; break;
             case "productList": this.productList = (SmartList<Product>) value; break;
             default: super.internalSet(property, value);
         }
@@ -162,6 +182,7 @@ public class VendingMachine extends BaseEntity implements RemoteInput {
             case "updateTime": return this.updateTime;
             case "orderStatusList": return this.orderStatusList;
             case "paymentMethodList": return this.paymentMethodList;
+            case "paymentStatusList": return this.paymentStatusList;
             case "productList": return this.productList;
             default: return super.internalGet(property);
         }

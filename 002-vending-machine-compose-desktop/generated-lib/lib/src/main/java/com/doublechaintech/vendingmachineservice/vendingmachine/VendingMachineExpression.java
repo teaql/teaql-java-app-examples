@@ -4,6 +4,8 @@ import com.doublechaintech.vendingmachineservice.orderstatus.OrderStatus;
 import com.doublechaintech.vendingmachineservice.orderstatus.OrderStatusListExpression;
 import com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod;
 import com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethodListExpression;
+import com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus;
+import com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatusListExpression;
 import com.doublechaintech.vendingmachineservice.product.Product;
 import com.doublechaintech.vendingmachineservice.product.ProductListExpression;
 import io.teaql.core.UserContext;
@@ -66,6 +68,9 @@ public class VendingMachineExpression<T, E, U extends VendingMachine> extends Ex
     public PaymentMethodListExpression<T, U, PaymentMethod> getPaymentMethodList(){
         return new PaymentMethodListExpression(this, $it ->  ((VendingMachine)$it).getPaymentMethodList());
     }
+    public PaymentStatusListExpression<T, U, PaymentStatus> getPaymentStatusList(){
+        return new PaymentStatusListExpression(this, $it ->  ((VendingMachine)$it).getPaymentStatusList());
+    }
     public ProductListExpression<T, U, Product> getProductList(){
         return new ProductListExpression(this, $it ->  ((VendingMachine)$it).getProductList());
     }
@@ -74,6 +79,9 @@ public class VendingMachineExpression<T, E, U extends VendingMachine> extends Ex
     }
     public VendingMachineExpression<T, U, U> addPaymentMethod(PaymentMethod paymentMethod){
        return new VendingMachineExpression(this, $it ->  ((VendingMachine)$it).addPaymentMethod(paymentMethod));
+    }
+    public VendingMachineExpression<T, U, U> addPaymentStatus(PaymentStatus paymentStatus){
+       return new VendingMachineExpression(this, $it ->  ((VendingMachine)$it).addPaymentStatus(paymentStatus));
     }
     public VendingMachineExpression<T, U, U> addProduct(Product product){
        return new VendingMachineExpression(this, $it ->  ((VendingMachine)$it).addProduct(product));

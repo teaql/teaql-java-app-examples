@@ -3,6 +3,8 @@ package com.doublechaintech.vendingmachineservice.orderpayment;
 import com.doublechaintech.vendingmachineservice.Q;
 import com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod;
 import com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethodRequest;
+import com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus;
+import com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatusRequest;
 import com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder;
 import com.doublechaintech.vendingmachineservice.vendingorder.VendingOrderRequest;
 import io.teaql.core.AggrFunction;
@@ -86,7 +88,7 @@ public class OrderPaymentRequest<T extends OrderPayment> extends BaseRequest<T> 
 
     public OrderPaymentRequest<T> selectSelf(){
         super.selectSelf();
-        return selectId().selectName().selectVendingOrderIdOnly().selectPaymentMethodIdOnly().selectAmount().selectPaymentTime().selectTransactionId().selectCreateTime().selectUpdateTime().selectVersion();
+        return selectId().selectName().selectVendingOrderIdOnly().selectPaymentMethodIdOnly().selectPaymentStatusIdOnly().selectAmount().selectPaymentTime().selectTransactionId().selectCreateTime().selectUpdateTime().selectVersion();
     }
 
     public OrderPaymentRequest<T> selectSelfFields(){
@@ -95,12 +97,12 @@ public class OrderPaymentRequest<T extends OrderPayment> extends BaseRequest<T> 
 
     public OrderPaymentRequest<T> selectAll(){
         super.selectAll();
-        return selectId().selectName().selectVendingOrder().selectPaymentMethod().selectAmount().selectPaymentTime().selectTransactionId().selectCreateTime().selectUpdateTime().selectVersion();
+        return selectId().selectName().selectVendingOrder().selectPaymentMethod().selectPaymentStatus().selectAmount().selectPaymentTime().selectTransactionId().selectCreateTime().selectUpdateTime().selectVersion();
     }
 
     public OrderPaymentRequest<T> selectChildren(){
         super.selectAny();
-        return selectId().selectName().selectVendingOrder().selectPaymentMethod().selectAmount().selectPaymentTime().selectTransactionId().selectCreateTime().selectUpdateTime().selectVersion();
+        return selectId().selectName().selectVendingOrder().selectPaymentMethod().selectPaymentStatus().selectAmount().selectPaymentTime().selectTransactionId().selectCreateTime().selectUpdateTime().selectVersion();
     }
 
 
@@ -174,6 +176,25 @@ public class OrderPaymentRequest<T extends OrderPayment> extends BaseRequest<T> 
 
     public OrderPaymentRequest<T> unselectPaymentMethod(){
        unselectProperty(OrderPayment.PAYMENT_METHOD_PROPERTY);
+       return this;
+    }
+    public OrderPaymentRequest<T> selectPaymentStatusIdOnly(){
+       selectProperty(OrderPayment.PAYMENT_STATUS_PROPERTY);
+       return this;
+    }
+
+    public OrderPaymentRequest<T> selectPaymentStatus(){
+        return selectPaymentStatusWith(Q.paymentStatuses().unlimited().selectSelf());
+    }
+
+    public OrderPaymentRequest<T> selectPaymentStatusWith(PaymentStatusRequest paymentStatus){
+       selectProperty(OrderPayment.PAYMENT_STATUS_PROPERTY);
+       enhanceRelation(OrderPayment.PAYMENT_STATUS_PROPERTY, paymentStatus);
+       return this;
+    }
+
+    public OrderPaymentRequest<T> unselectPaymentStatus(){
+       unselectProperty(OrderPayment.PAYMENT_STATUS_PROPERTY);
        return this;
     }
     public OrderPaymentRequest<T> selectAmount(){
@@ -431,6 +452,39 @@ public class OrderPaymentRequest<T extends OrderPayment> extends BaseRequest<T> 
     }
     public OrderPaymentRequest<T> withPaymentMethodMatching(PaymentMethodRequest paymentMethod){
        return appendSearchCriteria(new SubQuerySearchCriteria(OrderPayment.PAYMENT_METHOD_PROPERTY, paymentMethod, PaymentMethod.ID_PROPERTY));
+    }
+
+    public OrderPaymentRequest<T> filterByPaymentStatus(PaymentStatus... paymentStatus){
+      if (paymentStatus == null || paymentStatus.length == 0) {
+        throw new IllegalArgumentException("filterByPaymentStatus parameter paymentStatus cannot be empty");
+      }
+      return appendSearchCriteria(createPaymentStatusCriteria(Operator.EQUAL, (Object[])paymentStatus));
+    }
+
+    public OrderPaymentRequest<T> withPaymentStatus(Operator operator, Object... values){
+       return appendSearchCriteria(createPaymentStatusCriteria(operator, values));
+    }
+
+    public OrderPaymentRequest<T> withPaymentStatusIsUnknown(){
+       return withPaymentStatus(Operator.IS_NULL);
+    }
+
+    public OrderPaymentRequest<T> withPaymentStatusIsKnown(){
+       return withPaymentStatus(Operator.IS_NOT_NULL);
+    }
+
+    public SearchCriteria createPaymentStatusCriteria(Operator operator, Object... values) {
+        return createBasicSearchCriteria(OrderPayment.PAYMENT_STATUS_PROPERTY, operator, values);
+    }
+
+    public OrderPaymentRequest<T> filterByPaymentStatus(Long paymentStatus){
+      if(paymentStatus == null){
+         return this;
+      }
+      return withPaymentStatus(Operator.EQUAL, paymentStatus);
+    }
+    public OrderPaymentRequest<T> withPaymentStatusMatching(PaymentStatusRequest paymentStatus){
+       return appendSearchCriteria(new SubQuerySearchCriteria(OrderPayment.PAYMENT_STATUS_PROPERTY, paymentStatus, PaymentStatus.ID_PROPERTY));
     }
 
     public OrderPaymentRequest<T> filterByAmount(Integer... amount){
@@ -870,6 +924,15 @@ public class OrderPaymentRequest<T extends OrderPayment> extends BaseRequest<T> 
        return this;
     }
 
+    public OrderPaymentRequest<T> groupByPaymentStatusWithDetails(){
+       return groupByPaymentStatusWithDetails(Q.paymentStatuses().unlimited());
+    }
+
+    public OrderPaymentRequest<T> groupByPaymentStatusWithDetails(PaymentStatusRequest subRequest){
+       aggregate(OrderPayment.PAYMENT_STATUS_PROPERTY, subRequest);
+       return this;
+    }
+
 
 
 
@@ -940,6 +1003,24 @@ public class OrderPaymentRequest<T extends OrderPayment> extends BaseRequest<T> 
 
     public OrderPaymentRequest<T> groupByPaymentMethodWithFunction(String retName, AggrFunction function){
        groupBy(retName, OrderPayment.PAYMENT_METHOD_PROPERTY, function);
+       return this;
+    }
+    public OrderPaymentRequest<T> groupByPaymentStatusWith(PaymentStatusRequest subRequest){
+       groupBy(OrderPayment.PAYMENT_STATUS_PROPERTY, subRequest);
+       return this;
+    }
+    public OrderPaymentRequest<T> groupByPaymentStatus(){
+       groupBy(OrderPayment.PAYMENT_STATUS_PROPERTY);
+       return this;
+    }
+
+    public OrderPaymentRequest<T> groupByPaymentStatusAs(String retName){
+       groupBy(retName, OrderPayment.PAYMENT_STATUS_PROPERTY);
+       return this;
+    }
+
+    public OrderPaymentRequest<T> groupByPaymentStatusWithFunction(String retName, AggrFunction function){
+       groupBy(retName, OrderPayment.PAYMENT_STATUS_PROPERTY, function);
        return this;
     }
 
@@ -1051,6 +1132,24 @@ public class OrderPaymentRequest<T extends OrderPayment> extends BaseRequest<T> 
     }
 
 
+    public OrderPaymentRequest<T> withPaymentStatusIsPending(){
+       filterByPaymentStatus(com.doublechaintech.vendingmachineservice.Constants.PAYMENT_STATUS_PENDING);
+       return this;
+    }
+
+
+    public OrderPaymentRequest<T> withPaymentStatusIsSuccess(){
+       filterByPaymentStatus(com.doublechaintech.vendingmachineservice.Constants.PAYMENT_STATUS_SUCCESS);
+       return this;
+    }
+
+
+    public OrderPaymentRequest<T> withPaymentStatusIsFailed(){
+       filterByPaymentStatus(com.doublechaintech.vendingmachineservice.Constants.PAYMENT_STATUS_FAILED);
+       return this;
+    }
+
+
 
 
     public OrderPaymentRequest<T> orderByIdAscending(){
@@ -1098,6 +1197,16 @@ public class OrderPaymentRequest<T extends OrderPayment> extends BaseRequest<T> 
 
     public OrderPaymentRequest<T> orderByPaymentMethodDescending(){
        addOrderByDescending(OrderPayment.PAYMENT_METHOD_PROPERTY);
+       return this;
+    }
+
+    public OrderPaymentRequest<T> orderByPaymentStatusAscending(){
+       addOrderByAscending(OrderPayment.PAYMENT_STATUS_PROPERTY);
+       return this;
+    }
+
+    public OrderPaymentRequest<T> orderByPaymentStatusDescending(){
+       addOrderByDescending(OrderPayment.PAYMENT_STATUS_PROPERTY);
        return this;
     }
 
@@ -1184,6 +1293,13 @@ public class OrderPaymentRequest<T extends OrderPayment> extends BaseRequest<T> 
        return paymentMethod;
     }
 
+    public PaymentStatusRequest rollUpToPaymentStatus(){
+       PaymentStatusRequest paymentStatus = Q.paymentStatuses().unlimited();
+       this.withPaymentStatusMatching(paymentStatus)
+           .groupByPaymentStatusWith(paymentStatus);
+       return paymentStatus;
+    }
+
 
 
 
@@ -1205,6 +1321,14 @@ public class OrderPaymentRequest<T extends OrderPayment> extends BaseRequest<T> 
 
    public OrderPaymentRequest<T> facetByPaymentMethodAs(String facetName, PaymentMethodRequest paymentMethod, boolean includeAllFacets){
        addFacet(facetName, OrderPayment.PAYMENT_METHOD_PROPERTY, paymentMethod, includeAllFacets);
+       return this;
+   }
+   public OrderPaymentRequest<T> facetByPaymentStatusAs(String facetName, PaymentStatusRequest paymentStatus){
+       return facetByPaymentStatusAs(facetName, paymentStatus, true);
+   }
+
+   public OrderPaymentRequest<T> facetByPaymentStatusAs(String facetName, PaymentStatusRequest paymentStatus, boolean includeAllFacets){
+       addFacet(facetName, OrderPayment.PAYMENT_STATUS_PROPERTY, paymentStatus, includeAllFacets);
        return this;
    }
 

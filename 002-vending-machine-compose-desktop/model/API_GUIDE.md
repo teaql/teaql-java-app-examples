@@ -243,6 +243,8 @@ Package: `com.doublechaintech.vendingmachineservice`
 
 - `paymentMethodList` → PaymentMethod (select with `selectPaymentMethodList()`)
 
+- `paymentStatusList` → PaymentStatus (select with `selectPaymentStatusList()`)
+
 - `productList` → Product (select with `selectProductList()`)
 
 
@@ -281,6 +283,33 @@ Package: `com.doublechaintech.vendingmachineservice`
 - **Filter prefix**: `with`
 - **Filter suffix**: `ing`
 - **Display name**: Payment Method
+- **Category**: Thing — uses `with`, `Containing`, `whichAre`
+
+| Property | Type | Getter | Updater |
+|----------|------|--------|---------|
+| vendingMachine |  | `getVendingMachine()` | `updateVendingMachine(value)` |
+
+| name |  | `getName()` | `updateName(value)` |
+
+| code |  | `getCode()` | `updateCode(value)` |
+
+
+**Relations (outgoing):**
+- `vendingMachine` → references another entity (select with `selectVendingMachine()`)
+
+
+**Children (incoming):**
+- `orderPaymentList` → OrderPayment (select with `selectOrderPaymentList()`)
+
+
+---
+
+### Entity: PaymentStatus
+
+- **Query**: `Q.paymentStatuses()`
+- **Filter prefix**: `with`
+- **Filter suffix**: `ing`
+- **Display name**: Payment Status
 - **Category**: Thing — uses `with`, `Containing`, `whichAre`
 
 | Property | Type | Getter | Updater |
@@ -386,6 +415,8 @@ Package: `com.doublechaintech.vendingmachineservice`
 
 | paymentMethod |  | `getPaymentMethod()` | `updatePaymentMethod(value)` |
 
+| paymentStatus |  | `getPaymentStatus()` | `updatePaymentStatus(value)` |
+
 | amount |  | `getAmount()` | `updateAmount(value)` |
 
 | paymentTime |  | `getPaymentTime()` | `updatePaymentTime(value)` |
@@ -401,6 +432,8 @@ Package: `com.doublechaintech.vendingmachineservice`
 - `vendingOrder` → references another entity (select with `selectVendingOrder()`)
 
 - `paymentMethod` → references another entity (select with `selectPaymentMethod()`)
+
+- `paymentStatus` → references another entity (select with `selectPaymentStatus()`)
 
 
 ---

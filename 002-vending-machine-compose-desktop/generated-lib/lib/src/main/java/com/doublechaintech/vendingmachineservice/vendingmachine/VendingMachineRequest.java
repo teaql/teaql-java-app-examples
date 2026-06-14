@@ -5,6 +5,8 @@ import com.doublechaintech.vendingmachineservice.orderstatus.OrderStatus;
 import com.doublechaintech.vendingmachineservice.orderstatus.OrderStatusRequest;
 import com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod;
 import com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethodRequest;
+import com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus;
+import com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatusRequest;
 import com.doublechaintech.vendingmachineservice.product.Product;
 import com.doublechaintech.vendingmachineservice.product.ProductRequest;
 import io.teaql.core.AggrFunction;
@@ -102,7 +104,7 @@ public class VendingMachineRequest<T extends VendingMachine> extends BaseRequest
 
     public VendingMachineRequest<T> selectChildren(){
         super.selectAny();
-        selectOrderStatusList().selectPaymentMethodList().selectProductList();
+        selectOrderStatusList().selectPaymentMethodList().selectPaymentStatusList().selectProductList();
         return selectId().selectName().selectCreateTime().selectUpdateTime().selectVersion();
     }
 
@@ -206,6 +208,14 @@ public class VendingMachineRequest<T extends VendingMachine> extends BaseRequest
 
     public VendingMachineRequest<T> selectPaymentMethodListWith(PaymentMethodRequest paymentMethodList){
        enhanceRelation(VendingMachine.PAYMENT_METHOD_LIST_PROPERTY, paymentMethodList);
+       return this;
+    }
+    public VendingMachineRequest<T> selectPaymentStatusList(){
+       return selectPaymentStatusListWith(Q.paymentStatuses().selectSelf());
+    }
+
+    public VendingMachineRequest<T> selectPaymentStatusListWith(PaymentStatusRequest paymentStatusList){
+       enhanceRelation(VendingMachine.PAYMENT_STATUS_LIST_PROPERTY, paymentStatusList);
        return this;
     }
     public VendingMachineRequest<T> selectProductList(){
@@ -500,6 +510,21 @@ public class VendingMachineRequest<T extends VendingMachine> extends BaseRequest
     public VendingMachineRequest<T> haveNoPaymentMethods(){
         return withoutPaymentMethodListMatching(Q.paymentMethods().unlimited());
     }
+    public VendingMachineRequest<T> withPaymentStatusListMatching(PaymentStatusRequest paymentStatusRequest){
+        return appendSearchCriteria(new SubQuerySearchCriteria(VendingMachine.ID_PROPERTY, paymentStatusRequest, PaymentStatus.VENDING_MACHINE_PROPERTY));
+    }
+
+    public VendingMachineRequest<T> withoutPaymentStatusListMatching(PaymentStatusRequest paymentStatusRequest){
+        return appendSearchCriteria(SearchCriteria.not(new SubQuerySearchCriteria(VendingMachine.ID_PROPERTY, paymentStatusRequest, PaymentStatus.VENDING_MACHINE_PROPERTY)));
+    }
+
+    public VendingMachineRequest<T> havePaymentStatuses(){
+        return withPaymentStatusListMatching(Q.paymentStatuses().unlimited());
+    }
+
+    public VendingMachineRequest<T> haveNoPaymentStatuses(){
+        return withoutPaymentStatusListMatching(Q.paymentStatuses().unlimited());
+    }
     public VendingMachineRequest<T> withProductListMatching(ProductRequest productRequest){
         return appendSearchCriteria(new SubQuerySearchCriteria(VendingMachine.ID_PROPERTY, productRequest, Product.VENDING_MACHINE_PROPERTY));
     }
@@ -530,6 +555,10 @@ public class VendingMachineRequest<T extends VendingMachine> extends BaseRequest
     }
     public VendingMachineRequest<T> groupByPaymentMethodsWithDetails(PaymentMethodRequest subRequest){
        aggregate(VendingMachine.PAYMENT_METHOD_LIST_PROPERTY, subRequest);
+       return this;
+    }
+    public VendingMachineRequest<T> groupByPaymentStatusesWithDetails(PaymentStatusRequest subRequest){
+       aggregate(VendingMachine.PAYMENT_STATUS_LIST_PROPERTY, subRequest);
        return this;
     }
     public VendingMachineRequest<T> groupByProductsWithDetails(ProductRequest subRequest){
@@ -699,6 +728,19 @@ public class VendingMachineRequest<T extends VendingMachine> extends BaseRequest
     public VendingMachineRequest<T> statsFromPaymentMethods(PaymentMethodRequest subRequest){
        return statsFromPaymentMethodsAs(REFINEMENTS, subRequest);
     }
+    public VendingMachineRequest<T> statsFromPaymentStatusesAs(String name, PaymentStatusRequest subRequest){
+       return statsFromPaymentStatusesAs(name, subRequest, false);
+    }
+
+    public VendingMachineRequest<T> statsFromPaymentStatusesAs(String name, PaymentStatusRequest subRequest, boolean singleResult){
+       subRequest.setPartitionProperty(PaymentStatus.VENDING_MACHINE_PROPERTY);
+       addAggregateDynamicProperty(name, subRequest, singleResult);
+       return this;
+    }
+
+    public VendingMachineRequest<T> statsFromPaymentStatuses(PaymentStatusRequest subRequest){
+       return statsFromPaymentStatusesAs(REFINEMENTS, subRequest);
+    }
     public VendingMachineRequest<T> statsFromProductsAs(String name, ProductRequest subRequest){
        return statsFromProductsAs(name, subRequest, false);
     }
@@ -733,6 +775,17 @@ public class VendingMachineRequest<T extends VendingMachine> extends BaseRequest
 
     public VendingMachineRequest<T> countPaymentMethodsWith(String name, PaymentMethodRequest subRequest){
         return statsFromPaymentMethodsAs(name, subRequest.count(), true);
+    }
+    public VendingMachineRequest<T> countPaymentStatuses(){
+        return countPaymentStatusesAs("Count");
+    }
+
+    public VendingMachineRequest<T> countPaymentStatusesAs(String name){
+        return countPaymentStatusesWith(name, Q.paymentStatuses().unlimited());
+    }
+
+    public VendingMachineRequest<T> countPaymentStatusesWith(String name, PaymentStatusRequest subRequest){
+        return statsFromPaymentStatusesAs(name, subRequest.count(), true);
     }
     public VendingMachineRequest<T> countProducts(){
         return countProductsAs("Count");

@@ -16,6 +16,7 @@ public class EntityMetaRegistry implements EntityMetaAssembler {
     registerVendingMachine();
     registerOrderStatus();
     registerPaymentMethod();
+    registerPaymentStatus();
     registerProduct();
     registerVendingOrder();
     registerOrderPayment();
@@ -337,6 +338,112 @@ public class EntityMetaRegistry implements EntityMetaAssembler {
       .with("isText", "false");
 
       entityDescriptor.findProperty(com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod.VERSION_PROPERTY).with("isPassword", "false")
+      .with("isVersion", "true")
+      .with("oracle_sqlType", "number(11)")
+      .with("javaType", "java.lang.Long")
+      .with("sqlType", "BIGINT")
+      .with("isId", "false")
+      .with("isBaseEntityField", "true")
+      .with("isBool", "false")
+      .with("isNumber", "false")
+      .with("isString", "false")
+      .with("isDate", "false")
+      .with("snowflake_sqlType", "number")
+      .with("graphqlType", "Long")
+      .with("isTime", "false")
+      .with("isText", "false");
+
+      $factory.register(entityDescriptor);
+  }
+  private void registerPaymentStatus() {
+      EntityDescriptor entityDescriptor = new EntityDescriptor();
+      entityDescriptor.setType(com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus.INTERNAL_TYPE);
+      entityDescriptor.setTargetType(com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus.class);
+      entityDescriptor.with("name", "Payment Status")
+      .with("module", "Core")
+      .with("module_key", "core")
+      .with("constant", "true")
+      .with("identifier", "code")
+      .with("audit_mask_fields", "name");
+
+      PropertyDescriptor vendingMachine = 
+      entityDescriptor.addObjectProperty($factory, com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus.VENDING_MACHINE_PROPERTY, com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine.INTERNAL_TYPE, com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine.PAYMENT_STATUS_LIST_PROPERTY, com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine.class)
+      ;
+          ReflectUtil.invoke(entityDescriptor, "prepareSQLMeta", vendingMachine, "payment_status_data", "vending_machine", "BIGINT");
+
+      PropertyDescriptor id = 
+      entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus.ID_PROPERTY, Long.class)
+      ;
+          ReflectUtil.invoke(entityDescriptor, "prepareSQLMeta", id, "payment_status_data", "id", "BIGINT");
+
+      PropertyDescriptor name = 
+      entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus.NAME_PROPERTY, String.class)
+      ;
+          ReflectUtil.invoke(entityDescriptor, "prepareSQLMeta", name, "payment_status_data", "name", "VARCHAR(100)");
+
+      PropertyDescriptor code = 
+      entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus.CODE_PROPERTY, String.class)
+      ;
+          ReflectUtil.invoke(entityDescriptor, "prepareSQLMeta", code, "payment_status_data", "code", "VARCHAR(100)");
+
+      PropertyDescriptor version = 
+      entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus.VERSION_PROPERTY, Long.class)
+      ;
+          ReflectUtil.invoke(entityDescriptor, "prepareSQLMeta", version, "payment_status_data", "version", "BIGINT");
+
+      entityDescriptor.findProperty(com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus.VENDING_MACHINE_PROPERTY).with("candidates", "vending_machine()");
+
+      entityDescriptor.findProperty(com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus.ID_PROPERTY).with("isPassword", "false")
+      .with("isVersion", "false")
+      .with("oracle_sqlType", "number(11)")
+      .with("javaType", "java.lang.Long")
+      .with("candidates", "3001,3002,3003")
+      .with("sqlType", "BIGINT")
+      .with("isId", "true")
+      .with("isBaseEntityField", "true")
+      .with("isBool", "false")
+      .with("isNumber", "false")
+      .with("isString", "false")
+      .with("isDate", "false")
+      .with("snowflake_sqlType", "number")
+      .with("graphqlType", "Long")
+      .with("isTime", "false")
+      .with("isText", "false");
+
+      entityDescriptor.findProperty(com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus.NAME_PROPERTY).with("isPassword", "false")
+      .with("max", "100")
+      .with("isVersion", "false")
+      .with("javaType", "java.lang.String")
+      .with("candidates", "Pending,Success,Failed")
+      .with("sqlType", "VARCHAR(<max>)")
+      .with("isId", "false")
+      .with("isBool", "false")
+      .with("isBaseEntityField", "false")
+      .with("isNumber", "false")
+      .with("isString", "true")
+      .with("isDate", "false")
+      .with("graphqlType", "String")
+      .with("isTime", "false")
+      .with("isText", "false");
+
+      entityDescriptor.findProperty(com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus.CODE_PROPERTY).with("identifier", "true")
+      .with("isPassword", "false")
+      .with("max", "100")
+      .with("isVersion", "false")
+      .with("javaType", "java.lang.String")
+      .with("candidates", "PENDING,SUCCESS,FAILED")
+      .with("sqlType", "VARCHAR(<max>)")
+      .with("isId", "false")
+      .with("isBool", "false")
+      .with("isBaseEntityField", "false")
+      .with("isNumber", "false")
+      .with("isString", "true")
+      .with("isDate", "false")
+      .with("graphqlType", "String")
+      .with("isTime", "false")
+      .with("isText", "false");
+
+      entityDescriptor.findProperty(com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus.VERSION_PROPERTY).with("isPassword", "false")
       .with("isVersion", "true")
       .with("oracle_sqlType", "number(11)")
       .with("javaType", "java.lang.Long")
@@ -717,6 +824,11 @@ public class EntityMetaRegistry implements EntityMetaAssembler {
       ;
           ReflectUtil.invoke(entityDescriptor, "prepareSQLMeta", paymentMethod, "order_payment_data", "payment_method", "BIGINT");
 
+      PropertyDescriptor paymentStatus = 
+      entityDescriptor.addObjectProperty($factory, com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment.PAYMENT_STATUS_PROPERTY, com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus.INTERNAL_TYPE, com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus.ORDER_PAYMENT_LIST_PROPERTY, com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus.class)
+      ;
+          ReflectUtil.invoke(entityDescriptor, "prepareSQLMeta", paymentStatus, "order_payment_data", "payment_status", "BIGINT");
+
       PropertyDescriptor amount = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment.AMOUNT_PROPERTY, Integer.class)
       ;
@@ -777,6 +889,7 @@ public class EntityMetaRegistry implements EntityMetaAssembler {
       .with("graphqlType", "String")
       .with("isTime", "false")
       .with("isText", "false");
+
 
 
 

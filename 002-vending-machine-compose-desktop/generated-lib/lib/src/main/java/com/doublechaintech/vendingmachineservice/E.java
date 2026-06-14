@@ -6,6 +6,8 @@ import com.doublechaintech.vendingmachineservice.orderstatus.OrderStatus;
 import com.doublechaintech.vendingmachineservice.orderstatus.OrderStatusExpression;
 import com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod;
 import com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethodExpression;
+import com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus;
+import com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatusExpression;
 import com.doublechaintech.vendingmachineservice.product.Product;
 import com.doublechaintech.vendingmachineservice.product.ProductExpression;
 import com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine;
@@ -25,6 +27,9 @@ public class E  {
   }
   public static PaymentMethodExpression<PaymentMethod, PaymentMethod, PaymentMethod> paymentMethod(PaymentMethod paymentMethod){
       return new PaymentMethodExpression(new ValueExpression(paymentMethod));
+  }
+  public static PaymentStatusExpression<PaymentStatus, PaymentStatus, PaymentStatus> paymentStatus(PaymentStatus paymentStatus){
+      return new PaymentStatusExpression(new ValueExpression(paymentStatus));
   }
   public static ProductExpression<Product, Product, Product> product(Product product){
       return new ProductExpression(new ValueExpression(product));

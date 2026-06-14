@@ -2,6 +2,7 @@ package com.doublechaintech.vendingmachineservice;
 
 import com.doublechaintech.vendingmachineservice.orderstatus.OrderStatus;
 import com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod;
+import com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus;
 import com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine;
 
 public interface Constants  {
@@ -16,4 +17,8 @@ public interface Constants  {
   public static final PaymentMethod PAYMENT_METHOD_WECHAT = PaymentMethod.refer(PAYMENT_METHOD_WECHAT_ID);public static final long PAYMENT_METHOD_ALIPAY_ID = 2002l ;
   public static final PaymentMethod PAYMENT_METHOD_ALIPAY = PaymentMethod.refer(PAYMENT_METHOD_ALIPAY_ID);public static final long PAYMENT_METHOD_CREDIT_CARD_ID = 2003l ;
   public static final PaymentMethod PAYMENT_METHOD_CREDIT_CARD = PaymentMethod.refer(PAYMENT_METHOD_CREDIT_CARD_ID);
+  public static final long PAYMENT_STATUS_PENDING_ID = 3001l ;
+  public static final PaymentStatus PAYMENT_STATUS_PENDING = PaymentStatus.refer(PAYMENT_STATUS_PENDING_ID);public static final long PAYMENT_STATUS_SUCCESS_ID = 3002l ;
+  public static final PaymentStatus PAYMENT_STATUS_SUCCESS = PaymentStatus.refer(PAYMENT_STATUS_SUCCESS_ID);public static final long PAYMENT_STATUS_FAILED_ID = 3003l ;
+  public static final PaymentStatus PAYMENT_STATUS_FAILED = PaymentStatus.refer(PAYMENT_STATUS_FAILED_ID);
 }

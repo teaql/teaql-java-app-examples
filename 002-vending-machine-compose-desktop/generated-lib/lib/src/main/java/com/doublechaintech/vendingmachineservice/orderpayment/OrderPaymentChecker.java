@@ -4,6 +4,8 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.ReflectUtil;
 import com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod;
 import com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethodChecker;
+import com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus;
+import com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatusChecker;
 import com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder;
 import com.doublechaintech.vendingmachineservice.vendingorder.VendingOrderChecker;
 import io.teaql.core.UserContext;
@@ -42,6 +44,7 @@ public class OrderPaymentChecker implements Checker<OrderPayment>{
       checkName(_ctx, orderPayment.getProperty(OrderPayment.NAME_PROPERTY), newLocation(_parentLocation, OrderPayment.NAME_PROPERTY));
       checkVendingOrder(_ctx, orderPayment.getProperty(OrderPayment.VENDING_ORDER_PROPERTY), newLocation(_parentLocation, OrderPayment.VENDING_ORDER_PROPERTY));
       checkPaymentMethod(_ctx, orderPayment.getProperty(OrderPayment.PAYMENT_METHOD_PROPERTY), newLocation(_parentLocation, OrderPayment.PAYMENT_METHOD_PROPERTY));
+      checkPaymentStatus(_ctx, orderPayment.getProperty(OrderPayment.PAYMENT_STATUS_PROPERTY), newLocation(_parentLocation, OrderPayment.PAYMENT_STATUS_PROPERTY));
       checkAmount(_ctx, orderPayment.getProperty(OrderPayment.AMOUNT_PROPERTY), newLocation(_parentLocation, OrderPayment.AMOUNT_PROPERTY));
       checkPaymentTime(_ctx, orderPayment.getProperty(OrderPayment.PAYMENT_TIME_PROPERTY), newLocation(_parentLocation, OrderPayment.PAYMENT_TIME_PROPERTY));
       checkTransactionId(_ctx, orderPayment.getProperty(OrderPayment.TRANSACTION_ID_PROPERTY), newLocation(_parentLocation, OrderPayment.TRANSACTION_ID_PROPERTY));
@@ -70,6 +73,13 @@ public class OrderPaymentChecker implements Checker<OrderPayment>{
         return;
     }
     new PaymentMethodChecker().checkAndFix(_ctx, paymentMethod, _parentLocation);
+    }
+    public void checkPaymentStatus(UserContext _ctx, PaymentStatus paymentStatus, ObjectLocation _parentLocation){
+    requiredCheck(_ctx, _parentLocation, paymentStatus);
+    if(ObjectUtil.isNull(paymentStatus)){
+        return;
+    }
+    new PaymentStatusChecker().checkAndFix(_ctx, paymentStatus, _parentLocation);
     }
     public void checkAmount(UserContext _ctx, Integer amount, ObjectLocation _parentLocation){
     requiredCheck(_ctx, _parentLocation, amount);

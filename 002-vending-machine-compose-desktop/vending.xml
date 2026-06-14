@@ -40,6 +40,18 @@
     <_value id="2003" name="Credit Card" code="CREDIT_CARD" color="gray" display_order="3"/>
   </payment_method>
 
+  <payment_status _name="Payment Status"
+                  _module="Core"
+                  _module_key="core"
+                  vending_machine="vending_machine()"
+                  id="id()" name="string()" code="string()"
+                  _constant="true" _identifier="code"
+                  _audit_mask_fields="name">
+    <_value id="3001" name="Pending" code="PENDING" color="gray" display_order="1"/>
+    <_value id="3002" name="Success" code="SUCCESS" color="green" display_order="2"/>
+    <_value id="3003" name="Failed" code="FAILED" color="red" display_order="3"/>
+  </payment_status>
+
   <product _name="Product"
            _module="Core"
            _module_key="core"
@@ -67,6 +79,7 @@
                  name="Payment for Order-001"
                  vending_order="vending_order()"
                  payment_method="payment_method()"
+                 payment_status="payment_status()"
                  amount="300"
                  payment_time="updateTime()"
                  transaction_id="TX-12345678"
