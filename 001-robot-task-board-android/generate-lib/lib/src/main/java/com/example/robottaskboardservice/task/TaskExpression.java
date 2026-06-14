@@ -30,6 +30,14 @@ public class TaskExpression<T, E, U extends Task> extends ExpressionAdaptor<T, E
         return new TaskExpression(this, $it -> ((Task)$it).auditAs("Saved by Expression").save(userContext));
      }
 
+     public TaskExpression<T, U, U> save(String intent, UserContext userContext){
+        return new TaskExpression(this, $it -> ((Task)$it).auditAs(intent).save(userContext));
+     }
+
+     public boolean isNull() {
+        return resolve() == null;
+     }
+
 
     public Expression<T, String> getName(){
        return apply(Task::getName);

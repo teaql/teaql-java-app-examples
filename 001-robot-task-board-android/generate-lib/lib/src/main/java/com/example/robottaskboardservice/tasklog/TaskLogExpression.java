@@ -26,6 +26,14 @@ public class TaskLogExpression<T, E, U extends TaskLog> extends ExpressionAdapto
         return new TaskLogExpression(this, $it -> ((TaskLog)$it).auditAs("Saved by Expression").save(userContext));
      }
 
+     public TaskLogExpression<T, U, U> save(String intent, UserContext userContext){
+        return new TaskLogExpression(this, $it -> ((TaskLog)$it).auditAs(intent).save(userContext));
+     }
+
+     public boolean isNull() {
+        return resolve() == null;
+     }
+
 
     public Expression<T, String> getQuery(){
        return apply(TaskLog::getQuery);

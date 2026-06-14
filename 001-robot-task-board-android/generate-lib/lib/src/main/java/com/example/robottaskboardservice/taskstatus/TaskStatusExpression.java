@@ -27,6 +27,14 @@ public class TaskStatusExpression<T, E, U extends TaskStatus> extends Expression
         return new TaskStatusExpression(this, $it -> ((TaskStatus)$it).auditAs("Saved by Expression").save(userContext));
      }
 
+     public TaskStatusExpression<T, U, U> save(String intent, UserContext userContext){
+        return new TaskStatusExpression(this, $it -> ((TaskStatus)$it).auditAs(intent).save(userContext));
+     }
+
+     public boolean isNull() {
+        return resolve() == null;
+     }
+
 
     public PlatformExpression<T, U, Platform> getPlatform(){
        return new PlatformExpression(this, $it ->  ((TaskStatus)$it).getPlatform());

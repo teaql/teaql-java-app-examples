@@ -6,7 +6,7 @@
 
   <groupId>com.example</groupId>
   <artifactId>robot-task-board-service-core</artifactId>
-  <version></version>
+  <version>1.0</version>
   <packaging>jar</packaging>
 
   <properties>

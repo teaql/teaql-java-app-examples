@@ -28,6 +28,14 @@ public class PlatformExpression<T, E, U extends Platform> extends ExpressionAdap
         return new PlatformExpression(this, $it -> ((Platform)$it).auditAs("Saved by Expression").save(userContext));
      }
 
+     public PlatformExpression<T, U, U> save(String intent, UserContext userContext){
+        return new PlatformExpression(this, $it -> ((Platform)$it).auditAs(intent).save(userContext));
+     }
+
+     public boolean isNull() {
+        return resolve() == null;
+     }
+
 
     public Expression<T, String> getName(){
        return apply(Platform::getName);

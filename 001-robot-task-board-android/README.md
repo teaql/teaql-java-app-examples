@@ -61,8 +61,9 @@ The framework exposes DSL-style strongly-typed query capabilities through `Q.xxx
 
 ```java
 // TaskLogic.java
-public static SmartList<Task> getAllTasks(UserContext ctx) {
-    return Q.tasks()
+public static SmartList<BusinessTask> getAllTasks(UserContext ctx) {
+    return (SmartList<BusinessTask>)(SmartList<?>) Q.tasks()
+            .returnType(BusinessTask.class)
             .selectStatus()  // Only query the associated Status field to reduce payload
             .comment("Load board").purpose("Display tasks") // Attach audit identifiers
             .executeForList(ctx);
@@ -75,19 +76,27 @@ Instead of executing an invalid "query-then-update" sequence when a task status 
 ```java
 // TaskLogic.java
 public static void updateTaskStatus(UserContext ctx, String taskIdStr, String newStatusCode) {
-    Long taskId = Long.valueOf(taskIdStr);
-    Task task = Q.tasks().withIdIs(taskId)
-                 .comment("Update status").purpose("Drag and drop")
-                 .executeForOne(ctx);
-                 
-    if (task != null) {
-        // Invoke safe generated methods based on status code
-        switch (newStatusCode) {
-            case "TODO": task.updateStatusToTodo(); break;
-            case "IN_PROGRESS": task.updateStatusToInProgress(); break;
-            case "DONE": task.updateStatusToDone(); break;
+    try {
+        Long taskId = Long.valueOf(taskIdStr);
+        BusinessTask task = (BusinessTask) Q.tasks()
+                .returnType(BusinessTask.class)
+                .withIdIs(taskId)
+                .comment("Update status").purpose("Drag and drop")
+                .executeForOne(ctx);
+        if (!E.task(task).isNull()) {
+            switch (newStatusCode) {
+                case "TODO":
+                    E.task(task).updateStatusToTodo().save("Moved task status from drag-and-drop", ctx).eval();
+                    break;
+                case "IN_PROGRESS":
+                    E.task(task).updateStatusToInProgress().save("Moved task status from drag-and-drop", ctx).eval();
+                    break;
+                case "DONE":
+                    E.task(task).updateStatusToDone().save("Moved task status from drag-and-drop", ctx).eval();
+                    break;
+            }
         }
-        task.auditAs("Moved task status from drag-and-drop").save(ctx);
+    } catch (NumberFormatException ignored) {
     }
 }
 ```
@@ -122,4 +131,18 @@ Simply register it to the runtime `UserContext` to make it globally effective:
 // Initialize UserContext (Snippet from TeaQLManager)
 AndroidUserContextImpl ctx = new AndroidUserContextImpl(AndroidEnvironment.getInstance());
 ctx.setCustomLogSink(TeaQLLogSinkImpl.getInstance());
+```
+
+### 5. Executed Query and Update Logs
+Behind the scenes, TeaQL translates our high-level intent-based API calls into precise SQL statements, while attaching the `comment` and `purpose` as execution metadata.
+For instance, the SQL logs generated when calling `getAllTasks()`:
+```sql
+[DEBUG]-ExecutionLog - [Load board] - [Fetched 0 rows]
+SELECT id, name, platform, create_time AS "createTime", update_time AS "updateTime", version, status FROM task_data WHERE version > 0 LIMIT 1000 OFFSET 0
+```
+
+And when updating a task status via drag-and-drop:
+```sql
+[DEBUG]-ExecutionLog - [Moved task status from drag-and-drop] - [Batch affected 1 rows]
+INSERT INTO task_data (id,name,platform,status,create_time,update_time,version) VALUES (1,NULL,NULL,1003,NULL,NULL,1)
 ```
