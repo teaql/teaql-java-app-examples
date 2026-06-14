@@ -81,6 +81,7 @@ object SystemLogger {
     val logs: List<String> get() = _logs
 
     fun log(message: String) {
+        println(message)
         val timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"))
         val finalMessage = "[$timestamp] $message"
         _logs.add(0, finalMessage)
@@ -328,14 +329,39 @@ fun ProductCard(product: Product, onAddToCart: () -> Unit) {
     }
 }
 
-fun fetchOrders(): List<VendingOrder> {
+data class AdminDashboardData(
+    val orders: List<VendingOrder>,
+    val statusCounts: Map<String, Int>
+)
+
+fun fetchOrders(): AdminDashboardData {
     val ctx = TeaQLManager.userContext
     return try {
-        Q.vendingOrders().comment("fetch").purpose("admin dashboard").executeForList(ctx).toList()
+        val ordersSmartList = Q.vendingOrders()
+            .facetByStatusAs("order_status", null, true)
+            .comment("fetch").purpose("admin dashboard").executeForList(ctx)
+            
+        val counts = mutableMapOf<String, Int>()
+        val facets = ordersSmartList.facets
+        if (facets != null) {
+            val statusFacetList = facets["order_status"] as? io.teaql.core.SmartList<*>
+            if (statusFacetList != null) {
+                for (item in statusFacetList) {
+                    if (item != null) {
+                        try {
+                            val name = item.javaClass.getMethod("getName").invoke(item) as String
+                            val count = (item.javaClass.getMethod("getCount").invoke(item) as Number).toInt()
+                            counts[name] = count
+                        } catch (e: Exception) {}
+                    }
+                }
+            }
+        }
+        AdminDashboardData(ordersSmartList.toList(), counts)
     } catch (e: Exception) {
         SystemLogger.log("Failed to fetch orders: ${e.message}")
         e.printStackTrace()
-        emptyList()
+        AdminDashboardData(emptyList(), emptyMap())
     }
 }
 
@@ -359,24 +385,43 @@ fun updateOrderStatus(order: VendingOrder, action: String) {
 
 @Composable
 fun AdminBackstageScreen() {
-    var orders by remember { mutableStateOf(emptyList<VendingOrder>()) }
+    var dashboardData by remember { mutableStateOf(AdminDashboardData(emptyList(), emptyMap())) }
     val coroutineScope = rememberCoroutineScope()
     
     LaunchedEffect(Unit) {
         withContext(Dispatchers.IO) {
-            orders = fetchOrders()
+            dashboardData = fetchOrders()
         }
     }
     
     Card(modifier = Modifier.fillMaxSize(), elevation = 2.dp) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text("Admin Dashboard - Order History", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            Text("Admin Dashboard", fontSize = 20.sp, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(16.dp))
-            if (orders.isEmpty()) {
+            
+            // Facet Dashboard Stats
+            if (dashboardData.statusCounts.isNotEmpty()) {
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+                    dashboardData.statusCounts.forEach { (status, count) ->
+                        Card(elevation = 2.dp, backgroundColor = Color(0xFFF0F0F0)) {
+                            Column(modifier = Modifier.padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                                Text(status, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                                Text(count.toString(), fontSize = 24.sp, color = MaterialTheme.colors.primary)
+                            }
+                        }
+                    }
+                }
+                Spacer(modifier = Modifier.height(24.dp))
+            }
+            
+            Text("Order History", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+            Spacer(modifier = Modifier.height(8.dp))
+            
+            if (dashboardData.orders.isEmpty()) {
                 Text("No orders found.", color = Color.Gray)
             } else {
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
-                    items(orders) { order ->
+                    items(dashboardData.orders) { order ->
                         Card(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp), elevation = 4.dp) {
                             Column(modifier = Modifier.padding(12.dp)) {
                                 Text("Order ID: ${order.id}", fontWeight = FontWeight.Bold, fontSize = 16.sp)
@@ -395,7 +440,7 @@ fun AdminBackstageScreen() {
                                                 updateOrderStatus(order, "Dispense")
                                                 coroutineScope.launch {
                                                     withContext(Dispatchers.IO) {
-                                                        orders = fetchOrders()
+                                                        dashboardData = fetchOrders()
                                                     }
                                                 }
                                             }) {
@@ -407,7 +452,7 @@ fun AdminBackstageScreen() {
                                                     updateOrderStatus(order, "Complete")
                                                     coroutineScope.launch {
                                                         withContext(Dispatchers.IO) {
-                                                            orders = fetchOrders()
+                                                            dashboardData = fetchOrders()
                                                         }
                                                     }
                                                 },
