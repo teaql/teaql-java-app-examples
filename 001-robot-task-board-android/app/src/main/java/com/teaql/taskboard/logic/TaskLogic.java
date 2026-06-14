@@ -4,6 +4,7 @@ import com.example.robottaskboardservice.task.Task;
 import com.example.robottaskboardservice.taskstatus.TaskStatus;
 import com.example.robottaskboardservice.platform.Platform;
 import com.example.robottaskboardservice.Q;
+import com.example.robottaskboardservice.E;
 import io.teaql.core.UserContext;
 import io.teaql.core.SmartList;
 
@@ -37,9 +38,18 @@ public class TaskLogic {
                     .withIdIs(taskId)
                     .comment("Update status").purpose("Drag and drop")
                     .executeForOne(ctx);
-            if (task != null) {
-                task.transitStatus(newStatusCode);
-                task.auditAs("Moved task status from drag-and-drop").save(ctx);
+            if (!E.task(task).isNull()) {
+                switch (newStatusCode) {
+                    case "TODO":
+                        E.task(task).updateStatusToTodo().save("Moved task status from drag-and-drop", ctx).eval();
+                        break;
+                    case "IN_PROGRESS":
+                        E.task(task).updateStatusToInProgress().save("Moved task status from drag-and-drop", ctx).eval();
+                        break;
+                    case "DONE":
+                        E.task(task).updateStatusToDone().save("Moved task status from drag-and-drop", ctx).eval();
+                        break;
+                }
             }
         } catch (NumberFormatException ignored) {
         }
