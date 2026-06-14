@@ -340,20 +340,28 @@ fun fetchOrders(): AdminDashboardData {
     val ctx = TeaQLManager.userContext
     return try {
         val ordersSmartList = Q.vendingOrders()
+            .facetByStatusAs("order_status", Q.orderStatuses().selectSelf(), true)
             .selectStatus()
             .comment("fetch").purpose("admin dashboard").executeForList(ctx)
             
         val counts = mutableMapOf<String, Int>()
-        // Since the underlying engine hasn't implemented facet aggregation yet,
-        // we manually aggregate the stats in memory.
-        for (order in ordersSmartList) {
-            if (order != null) {
-                val statusName = order.status?.name ?: "UNKNOWN"
-                counts[statusName] = counts.getOrDefault(statusName, 0) + 1
+        val facets = ordersSmartList.getFacets()
+        if (facets != null) {
+            val statusFacetList = facets.get("order_status")
+            if (statusFacetList != null) {
+                for (item in statusFacetList) {
+                    try {
+                        val count = (item as io.teaql.core.BaseEntity).getDynamicProperty<Int>("count") ?: 0
+                        val name = item.javaClass.getMethod("getName").invoke(item) as String
+                        counts[name] = count
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
             }
         }
         
-        SystemLogger.log("DEBUG: Manually aggregated ${counts.size} status types.")
+        SystemLogger.log("DEBUG: Facet aggregated ${counts.size} status types.")
         AdminDashboardData(ordersSmartList.toList(), counts)
     } catch (e: Throwable) {
         SystemLogger.log("FATAL ERROR in fetchOrders: ${e.javaClass.name} - ${e.message}")
