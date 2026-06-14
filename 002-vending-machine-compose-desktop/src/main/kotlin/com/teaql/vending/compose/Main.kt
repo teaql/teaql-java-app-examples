@@ -76,16 +76,18 @@ object TeaQLManager {
     }
 }
 
+data class LogEntry(val id: Int, val text: String)
+
 object SystemLogger {
-    private val _logs = mutableStateListOf<String>()
-    val logs: List<String> get() = _logs
+    private val _logs = mutableStateListOf<LogEntry>()
+    val logs: List<LogEntry> get() = _logs
+    private var nextId = 0
 
     fun log(message: String) {
         println(message)
         val timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"))
         val finalMessage = "[$timestamp] $message"
-        _logs.add(0, finalMessage)
-        println(finalMessage)
+        _logs.add(0, LogEntry(nextId++, finalMessage))
     }
 }
 
@@ -198,7 +200,7 @@ fun PurchaseHallScreen() {
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     modifier = Modifier.weight(2f)
                 ) {
-                    items(products) { product ->
+                    items(products, key = { it.id }) { product ->
                         ProductCard(product, onAddToCart = {
                             SystemLogger.log("Added to cart: ${product.name}")
                             cart.add(product)
@@ -421,7 +423,7 @@ fun AdminBackstageScreen() {
                 Text("No orders found.", color = Color.Gray)
             } else {
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
-                    items(dashboardData.orders) { order ->
+                    items(dashboardData.orders, key = { it.id }) { order ->
                         Card(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp), elevation = 4.dp) {
                             Column(modifier = Modifier.padding(12.dp)) {
                                 Text("Order ID: ${order.id}", fontWeight = FontWeight.Bold, fontSize = 16.sp)
@@ -486,7 +488,7 @@ fun SystemLogsScreen() {
             ) {
                 Text("System Operation Logs", fontSize = 20.sp, fontWeight = FontWeight.Bold)
                 Button(onClick = {
-                    val allLogs = SystemLogger.logs.joinToString("\n")
+                    val allLogs = SystemLogger.logs.joinToString("\n") { it.text }
                     clipboardManager.setText(AnnotatedString(allLogs))
                     showSnackbar = true
                 }) {
@@ -496,10 +498,10 @@ fun SystemLogsScreen() {
             if (showSnackbar) {
                 Text("Logs copied to clipboard!", color = Color(0xFF4CAF50), modifier = Modifier.padding(bottom = 8.dp))
             }
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
-                items(SystemLogger.logs) { log ->
-                    Text(log, modifier = Modifier.padding(vertical = 4.dp), fontFamily = FontFamily.Monospace, fontSize = 14.sp)
-                    Divider(color = Color.LightGray, thickness = 0.5.dp)
+            LazyColumn(modifier = Modifier.weight(1f).fillMaxWidth()) {
+                items(SystemLogger.logs, key = { it.id }) { log ->
+                    Text(log.text, fontSize = 12.sp, color = Color.Green, fontFamily = FontFamily.Monospace)
+                    Divider(color = Color.DarkGray, thickness = 1.dp)
                 }
             }
         }
