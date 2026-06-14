@@ -20,10 +20,10 @@ dependencies {
     implementation(compose.desktop.currentOs)
     
     // Depend on our generated TeaQL core and local app logic!
-    implementation("io.teaql:teaql-core:1.505-RELEASE")
-    implementation("io.teaql:teaql-sqlite:1.505-RELEASE")
+    implementation("io.teaql:teaql-core:1.506-RELEASE")
+    implementation("io.teaql:teaql-sqlite:1.506-RELEASE")
     implementation("org.xerial:sqlite-jdbc:3.45.2.0")
-    implementation("io.teaql:teaql-provider-jdbc:1.505-RELEASE")
+    implementation("io.teaql:teaql-provider-jdbc:1.506-RELEASE")
 
 
 }
