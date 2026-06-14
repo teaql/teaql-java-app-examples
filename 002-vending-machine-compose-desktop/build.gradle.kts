@@ -23,6 +23,8 @@ dependencies {
     implementation("io.teaql:teaql-core:1.500-RELEASE")
     implementation("io.teaql:teaql-sqlite:1.500-RELEASE")
     implementation("org.xerial:sqlite-jdbc:3.41.2.1")
+    implementation("io.teaql:teaql-provider-jdbc:1.500-RELEASE")
+
     implementation("cn.hutool:hutool-all:5.8.20")
 }
 

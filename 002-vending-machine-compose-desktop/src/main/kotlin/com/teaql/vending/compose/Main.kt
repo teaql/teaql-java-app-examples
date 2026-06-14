@@ -1,7 +1,20 @@
 package com.teaql.vending.compose
 
+import com.doublechaintech.vendingmachineservice.Q
 import com.doublechaintech.vendingmachineservice.product.Product
 import com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine
+import com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder
+import com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem
+import com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment
+import com.doublechaintech.vendingmachineservice.EntityMetaRegistry
+import io.teaql.core.meta.SimpleEntityMetaFactory
+import io.teaql.core.sqlite.SqliteDataServiceExecutor
+import io.teaql.provider.jdbc.JdbcSqlExecutor
+import io.teaql.runtime.TeaQLRuntime
+import io.teaql.runtime.DefaultUserContext
+import io.teaql.core.UserContext
+import io.teaql.core.log.CustomLogSink
+
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.launch
@@ -34,7 +47,30 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import io.teaql.core.log.CustomLogSink
+
+object TeaQLManager {
+    lateinit var userContext: UserContext
+
+    fun init(customLogSink: CustomLogSink) {
+        val metaFactory = SimpleEntityMetaFactory()
+        EntityMetaRegistry().assemble(metaFactory)
+        
+        val dataSource = cn.hutool.db.ds.simple.SimpleDataSource("jdbc:sqlite:vending_world_cup.db", "", "")
+        val adapter = JdbcSqlExecutor(dataSource)
+        val dataService = SqliteDataServiceExecutor("default", adapter, dataSource)
+        
+        val runtime = TeaQLRuntime.Builder()
+            .metadata(metaFactory)
+            .dataService("default", dataService)
+            .build()
+            
+        val ctx = DefaultUserContext(runtime)
+        ctx.registerCustomSink(customLogSink)
+        userContext = ctx
+        
+        dataService.ensureSchema(ctx)
+    }
+}
 
 object SystemLogger {
     private val _logs = mutableStateListOf<String>()
@@ -69,7 +105,6 @@ fun App() {
         )
     ) {
         Row(modifier = Modifier.fillMaxSize().background(Color(0xFFF5F5F5))) {
-            // Sidebar Navigation
             Column(
                 modifier = Modifier
                     .width(200.dp)
@@ -92,7 +127,6 @@ fun App() {
                 NavItem("Logs", Icons.Default.List, selectedTab == 2) { selectedTab = 2 }
             }
 
-            // Main Content Area
             Box(
                 modifier = Modifier
                     .weight(1f)
@@ -149,7 +183,6 @@ fun PurchaseHallScreen() {
             }
         } else {
             Row(modifier = Modifier.fillMaxSize().padding(padding)) {
-                // Products Grid (Left)
                 LazyVerticalGrid(
                     columns = GridCells.Adaptive(minSize = 200.dp),
                     contentPadding = PaddingValues(16.dp),
@@ -165,7 +198,6 @@ fun PurchaseHallScreen() {
                     }
                 }
 
-                // Shopping Cart (Right)
                 Column(
                     modifier = Modifier
                         .weight(1f)
@@ -262,75 +294,15 @@ fun SystemLogsScreen() {
 }
 
 fun initDatabase() {
-    val connection = java.sql.DriverManager.getConnection("jdbc:sqlite:vending_world_cup.db")
-    connection.createStatement().use { stmt ->
-        stmt.execute("""
-            CREATE TABLE IF NOT EXISTS vending_machine_data (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name VARCHAR(100),
-                create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                version INTEGER DEFAULT 1
-            )
-        """)
-        stmt.execute("""
-            CREATE TABLE IF NOT EXISTS product_data (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name VARCHAR(100),
-                price INTEGER,
-                stock INTEGER,
-                image_url VARCHAR(100),
-                vending_machine INTEGER,
-                create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                version INTEGER DEFAULT 1
-            )
-        """)
-        stmt.execute("""
-            CREATE TABLE IF NOT EXISTS vending_order_data (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name VARCHAR(100),
-                vending_machine INTEGER,
-                create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                version INTEGER DEFAULT 1
-            )
-        """)
-        stmt.execute("""
-            CREATE TABLE IF NOT EXISTS vending_order_item_data (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name VARCHAR(100),
-                vending_order INTEGER,
-                product INTEGER,
-                quantity INTEGER,
-                amount INTEGER,
-                create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                version INTEGER DEFAULT 1
-            )
-        """)
-        stmt.execute("""
-            CREATE TABLE IF NOT EXISTS order_payment_data (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name VARCHAR(100),
-                vending_order INTEGER,
-                payment_method VARCHAR(50),
-                amount INTEGER,
-                payment_status VARCHAR(50),
-                create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                version INTEGER DEFAULT 1
-            )
-        """)
-        
-        val rs = stmt.executeQuery("SELECT count(*) FROM product_data")
-        rs.next()
-        if (rs.getInt(1) == 0) {
-            stmt.execute("INSERT INTO vending_machine_data (name, version) VALUES ('World Cup Vending Machine', 1)")
-            val insertProduct = "INSERT INTO product_data (name, price, stock, image_url, vending_machine, version) VALUES (?, ?, ?, ?, 1, 1)"
-            val pstmt = connection.prepareStatement(insertProduct)
-            
-            val products = listOf(
+    val ctx = TeaQLManager.userContext
+    try {
+        val count = Q.products().comment("init").purpose("check db").executeForList(ctx).size()
+        if (count == 0) {
+            val machine = VendingMachine()
+            machine.updateName("World Cup Vending Machine")
+            ctx.saveGraph(machine)
+
+            val seedData = listOf(
                 arrayOf("Budweiser Beer", 15, 50, "https://example.com/bud.jpg"),
                 arrayOf("Heineken", 18, 40, "https://example.com/hei.jpg"),
                 arrayOf("Lays Chips", 8, 100, "https://example.com/lays.jpg"),
@@ -339,112 +311,88 @@ fun initDatabase() {
                 arrayOf("Face Paint", 25, 30, "https://example.com/paint.jpg"),
                 arrayOf("Mini Flag", 10, 200, "https://example.com/flag.jpg")
             )
-            for (p in products) {
-                pstmt.setString(1, p[0] as String)
-                pstmt.setInt(2, p[1] as Int)
-                pstmt.setInt(3, p[2] as Int)
-                pstmt.setString(4, p[3] as String)
-                pstmt.addBatch()
+            for (pData in seedData) {
+                val p = Product()
+                p.updateName(pData[0] as String)
+                p.updatePrice(pData[1] as Int)
+                p.updateStock(pData[2] as Int)
+                p.updateImageUrl(pData[3] as String)
+                p.updateVendingMachine(machine)
+                ctx.saveGraph(p)
             }
-            pstmt.executeBatch()
-            println("Initialized World Cup Products in Database!")
+            SystemLogger.log("Seed data initialized via TeaQL.")
         }
+    } catch (e: Exception) {
+        SystemLogger.log("Database initialization failed: ${e.message}")
+        e.printStackTrace()
     }
-    connection.close()
 }
 
 fun fetchProducts(): List<Product> {
-    val list = mutableListOf<Product>()
-    val connection = java.sql.DriverManager.getConnection("jdbc:sqlite:vending_world_cup.db")
-    connection.createStatement().use { stmt ->
-        val rs = stmt.executeQuery("SELECT * FROM product_data")
-        while (rs.next()) {
-            val p = Product()
-            p.internalSet("id", rs.getLong("id"))
-            p.updateName(rs.getString("name"))
-            p.updatePrice(rs.getInt("price"))
-            p.updateStock(rs.getInt("stock"))
-            p.updateImageUrl(rs.getString("image_url"))
-            list.add(p)
-        }
+    val ctx = TeaQLManager.userContext
+    return try {
+        Q.products().comment("fetch").purpose("display products").executeForList(ctx).toList()
+    } catch (e: Exception) {
+        SystemLogger.log("Failed to fetch products: ${e.message}")
+        emptyList()
     }
-    connection.close()
-    return list
 }
 
 fun checkoutCart(cart: List<Product>) {
-    var connection: java.sql.Connection? = null
+    val ctx = TeaQLManager.userContext
     try {
-        connection = java.sql.DriverManager.getConnection("jdbc:sqlite:vending_world_cup.db")
-        connection.autoCommit = false
+        SystemLogger.log("Initiating TeaQL Checkout Transaction...")
         
-        SystemLogger.log("[TeaQL Core] Executing Query: INSERT INTO vending_order_data")
-        val insertOrder = connection.prepareStatement("INSERT INTO vending_order_data (name, vending_machine, version) VALUES (?, 1, 1)", java.sql.Statement.RETURN_GENERATED_KEYS)
-        val orderName = "Order-" + System.currentTimeMillis()
-        insertOrder.setString(1, orderName)
-        insertOrder.executeUpdate()
-        val orderKeys = insertOrder.generatedKeys
-        orderKeys.next()
-        val orderId = orderKeys.getLong(1)
-        SystemLogger.log("Created Vending Order ID=$orderId ($orderName)")
-
-        // 2. Insert Order Items & Update Stock
-        val insertItem = connection.prepareStatement("INSERT INTO vending_order_item_data (name, vending_order, product, quantity, amount, version) VALUES (?, ?, ?, 1, ?, 1)")
-        val updateStock = connection.prepareStatement("UPDATE product_data SET stock = stock - 1 WHERE id = ? AND stock > 0")
+        val order = VendingOrder()
+        order.updateTitle("Order-" + System.currentTimeMillis())
+        order.updateStatusToPaid()
+        ctx.saveGraph(order)
         
         var totalAmount = 0
         for (product in cart) {
-            insertItem.setString(1, "Item-${product.name}")
-            insertItem.setLong(2, orderId)
-            insertItem.setLong(3, product.id ?: 0L)
-            insertItem.setInt(4, product.price)
-            insertItem.executeUpdate()
+            val item = VendingOrderItem()
+            item.updateName("Item-${product.name}")
+            item.updateProduct(Product.refer(product.id.toLong()))
+            item.updateQuantity(1)
+            item.updatePrice(product.price)
+            item.updateAmount(product.price)
+            item.updateVendingOrder(order)
+            ctx.saveGraph(item)
             
-            updateStock.setLong(1, product.id ?: 0L)
-            val rows = updateStock.executeUpdate()
-            if (rows == 0) {
-                throw Exception("Out of stock for ${product.name}!")
+            val pDb = Q.products().withIdIs(product.id.toLong()).comment("fetch").purpose("stock check").executeForOne(ctx)
+            if (pDb != null) {
+                pDb.updateStock(pDb.stock - 1)
+                if (pDb.stock < 0) throw Exception("Out of stock for ${pDb.name}!")
+                ctx.saveGraph(pDb)
+            } else {
+                throw Exception("Product not found: ${product.name}")
             }
             
             totalAmount += product.price
             SystemLogger.log("Added Order Item: ${product.name} (Amount: $${product.price})")
         }
-
-        // 3. Create Order Payment
-        val paymentMethods = listOf("Google Pay", "Apple Pay", "Credit Card")
-        val chosenMethod = paymentMethods.random()
-        val insertPayment = connection.prepareStatement("INSERT INTO order_payment_data (name, vending_order, payment_method, amount, payment_status, version) VALUES (?, ?, ?, ?, 'PAID', 1)")
-        insertPayment.setString(1, "Payment-$orderName")
-        insertPayment.setLong(2, orderId)
-        insertPayment.setString(3, chosenMethod)
-        insertPayment.setInt(4, totalAmount)
-        insertPayment.executeUpdate()
-        SystemLogger.log("Processed Payment of $$totalAmount via $chosenMethod [Status: PAID]")
-
-        connection.commit()
-        SystemLogger.log("Transaction committed successfully.")
+        
+        val payment = OrderPayment()
+        payment.updateName("Payment-${order.title}")
+        payment.updatePaymentMethodToCreditCard()
+        payment.updateAmount(totalAmount)
+        payment.updatePaymentStatusToSuccess()
+        payment.updateVendingOrder(order)
+        
+        ctx.saveGraph(payment)
+        SystemLogger.log("Transaction committed successfully via TeaQL.")
     } catch (e: Exception) {
         SystemLogger.log("Transaction failed: ${e.message}")
         e.printStackTrace()
-        try {
-            connection?.rollback()
-        } catch (re: Exception) {
-            SystemLogger.log("Rollback failed: ${re.message}")
-        }
-    } finally {
-        try {
-            connection?.close()
-        } catch (ce: Exception) {
-            // Ignore close errors
-        }
     }
 }
 
 fun main() = application {
-    initDatabase()
-
     val customLogSink = GlobalLiveLogsSink()
+    TeaQLManager.init(customLogSink)
     SystemLogger.log("Registered Global Live Logs Engine (CustomLogSink)")
+
+    initDatabase()
 
     Window(onCloseRequest = ::exitApplication, title = "TeaQL Vending Machine Desktop",
         state = androidx.compose.ui.window.rememberWindowState(width = 1000.dp, height = 700.dp)) {
