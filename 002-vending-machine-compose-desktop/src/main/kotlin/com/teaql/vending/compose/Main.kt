@@ -345,14 +345,6 @@ fun fetchOrders(): AdminDashboardData {
             .comment("fetch").purpose("admin dashboard").executeForList(ctx)
             
         val counts = mutableMapOf<String, Int>()
-        try {
-            val allStatuses = Q.orderStatuses().selectName().executeForList(ctx)
-            for (status in allStatuses) {
-                counts[status.name] = 0
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
         val facets = ordersSmartList.getFacets()
         if (facets != null) {
             val statusFacetList = facets.get("order_status")
