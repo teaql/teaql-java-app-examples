@@ -340,7 +340,7 @@ fun fetchOrders(): AdminDashboardData {
     val ctx = TeaQLManager.userContext
     return try {
         val ordersSmartList = Q.vendingOrders()
-            .facetByStatusAs("order_status", null, true)
+            .facetByStatusAs("order_status", Q.orderStatuses(), true)
             .count()
             .comment("fetch").purpose("admin dashboard").executeForList(ctx)
             
