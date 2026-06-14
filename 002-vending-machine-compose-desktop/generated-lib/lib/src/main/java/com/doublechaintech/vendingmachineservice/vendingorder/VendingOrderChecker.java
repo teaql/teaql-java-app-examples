@@ -1,7 +1,5 @@
 package com.doublechaintech.vendingmachineservice.vendingorder;
 
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.ReflectUtil;
 import com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment;
 import com.doublechaintech.vendingmachineservice.orderpayment.OrderPaymentChecker;
 import com.doublechaintech.vendingmachineservice.orderstatus.OrderStatus;
@@ -27,17 +25,17 @@ public class VendingOrderChecker implements Checker<VendingOrder>{
     }
 
     public void doCheck(UserContext _ctx, VendingOrder vendingOrder, ObjectLocation _parentLocation){
-      if(ObjectUtil.isNull(vendingOrder)){
+      if((vendingOrder == null)){
          return;
       }
       if(vendingOrder.newItem()){
         if(vendingOrder.getCreateTime() == null){
-           vendingOrder.updateCreateTime(ReflectUtil.invoke(_ctx, "now"));
+           vendingOrder.updateCreateTime(java.time.LocalDateTime.now());
         }if(vendingOrder.getUpdateTime() == null){
-           vendingOrder.updateUpdateTime(ReflectUtil.invoke(_ctx, "now"));
+           vendingOrder.updateUpdateTime(java.time.LocalDateTime.now());
         }
       }else if(vendingOrder.updateItem()){
-        vendingOrder.updateUpdateTime(ReflectUtil.invoke(_ctx, "now"));
+        vendingOrder.updateUpdateTime(java.time.LocalDateTime.now());
       }
       checkTitle(_ctx, vendingOrder.getProperty(VendingOrder.TITLE_PROPERTY), newLocation(_parentLocation, VendingOrder.TITLE_PROPERTY));
       checkTotalAmount(_ctx, vendingOrder.getProperty(VendingOrder.TOTAL_AMOUNT_PROPERTY), newLocation(_parentLocation, VendingOrder.TOTAL_AMOUNT_PROPERTY));
@@ -56,7 +54,7 @@ public class VendingOrderChecker implements Checker<VendingOrder>{
 
     public void checkTitle(UserContext _ctx, String title, ObjectLocation _parentLocation){
     requiredCheck(_ctx, _parentLocation, title);
-    if(ObjectUtil.isNull(title)){
+    if((title == null)){
         return;
     }
     maxStringCheck(_ctx, _parentLocation, 100, title);
@@ -64,26 +62,26 @@ public class VendingOrderChecker implements Checker<VendingOrder>{
     }
     public void checkTotalAmount(UserContext _ctx, Integer totalAmount, ObjectLocation _parentLocation){
     requiredCheck(_ctx, _parentLocation, totalAmount);
-    if(ObjectUtil.isNull(totalAmount)){
+    if((totalAmount == null)){
         return;
     }
     }
     public void checkStatus(UserContext _ctx, OrderStatus status, ObjectLocation _parentLocation){
     requiredCheck(_ctx, _parentLocation, status);
-    if(ObjectUtil.isNull(status)){
+    if((status == null)){
         return;
     }
     new OrderStatusChecker().checkAndFix(_ctx, status, _parentLocation);
     }
     public void checkCreateTime(UserContext _ctx, LocalDateTime createTime, ObjectLocation _parentLocation){
     requiredCheck(_ctx, _parentLocation, createTime);
-    if(ObjectUtil.isNull(createTime)){
+    if((createTime == null)){
         return;
     }
     }
     public void checkUpdateTime(UserContext _ctx, LocalDateTime updateTime, ObjectLocation _parentLocation){
     requiredCheck(_ctx, _parentLocation, updateTime);
-    if(ObjectUtil.isNull(updateTime)){
+    if((updateTime == null)){
         return;
     }
     }

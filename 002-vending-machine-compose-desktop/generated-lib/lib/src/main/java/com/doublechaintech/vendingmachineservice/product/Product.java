@@ -1,7 +1,5 @@
 package com.doublechaintech.vendingmachineservice.product;
 
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
 import com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine;
 import com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem;
 import io.teaql.core.BaseEntity;
@@ -64,8 +62,8 @@ public class Product extends BaseEntity implements RemoteInput {
         return this.vendingOrderItemList;
     }
     public Product updateName(String name){
-        name = StrUtil.trim(name);
-        if(ObjectUtil.equal(this.name, name)){
+        name = (name == null ? null : name.trim());
+        if(java.util.Objects.equals(this.name, name)){
             return this;
         }
         handleUpdate(NAME_PROPERTY, getName(), name);
@@ -73,7 +71,7 @@ public class Product extends BaseEntity implements RemoteInput {
         return this;
     }
     public Product updatePrice(Integer price){
-        if(ObjectUtil.equal(this.price, price)){
+        if(java.util.Objects.equals(this.price, price)){
             return this;
         }
         handleUpdate(PRICE_PROPERTY, getPrice(), price);
@@ -81,7 +79,7 @@ public class Product extends BaseEntity implements RemoteInput {
         return this;
     }
     public Product updateStock(Integer stock){
-        if(ObjectUtil.equal(this.stock, stock)){
+        if(java.util.Objects.equals(this.stock, stock)){
             return this;
         }
         handleUpdate(STOCK_PROPERTY, getStock(), stock);
@@ -89,8 +87,8 @@ public class Product extends BaseEntity implements RemoteInput {
         return this;
     }
     public Product updateImageUrl(String imageUrl){
-        imageUrl = StrUtil.trim(imageUrl);
-        if(ObjectUtil.equal(this.imageUrl, imageUrl)){
+        imageUrl = (imageUrl == null ? null : imageUrl.trim());
+        if(java.util.Objects.equals(this.imageUrl, imageUrl)){
             return this;
         }
         handleUpdate(IMAGE_URL_PROPERTY, getImageUrl(), imageUrl);
@@ -98,7 +96,7 @@ public class Product extends BaseEntity implements RemoteInput {
         return this;
     }
     public Product updateVendingMachine(VendingMachine vendingMachine){
-        if(ObjectUtil.equal(this.vendingMachine, vendingMachine)){
+        if(java.util.Objects.equals(this.vendingMachine, vendingMachine)){
             return this;
         }
         handleUpdate(VENDING_MACHINE_PROPERTY, getVendingMachine(), vendingMachine);
@@ -106,7 +104,7 @@ public class Product extends BaseEntity implements RemoteInput {
         return this;
     }
     public Product updateCreateTime(LocalDateTime createTime){
-        if(ObjectUtil.equal(this.createTime, createTime)){
+        if(java.util.Objects.equals(this.createTime, createTime)){
             return this;
         }
         handleUpdate(CREATE_TIME_PROPERTY, getCreateTime(), createTime);
@@ -114,7 +112,7 @@ public class Product extends BaseEntity implements RemoteInput {
         return this;
     }
     public Product updateUpdateTime(LocalDateTime updateTime){
-        if(ObjectUtil.equal(this.updateTime, updateTime)){
+        if(java.util.Objects.equals(this.updateTime, updateTime)){
             return this;
         }
         handleUpdate(UPDATE_TIME_PROPERTY, getUpdateTime(), updateTime);
@@ -156,13 +154,13 @@ public class Product extends BaseEntity implements RemoteInput {
     @FrameworkInternal
     public void internalSet(String property, Object value) {
         switch (property) {
-            case "name": this.name = StrUtil.trim((String) value); break;
+            case "name": this.name = (value == null ? null : ((String)value).trim()); break;
 
             case "price": this.price = (Integer) value; break;
 
             case "stock": this.stock = (Integer) value; break;
 
-            case "imageUrl": this.imageUrl = StrUtil.trim((String) value); break;
+            case "imageUrl": this.imageUrl = (value == null ? null : ((String)value).trim()); break;
 
             case "vendingMachine": this.vendingMachine = (VendingMachine) value; break;
 

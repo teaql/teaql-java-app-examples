@@ -1,7 +1,5 @@
 package com.doublechaintech.vendingmachineservice.vendingmachine;
 
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.ReflectUtil;
 import com.doublechaintech.vendingmachineservice.orderstatus.OrderStatus;
 import com.doublechaintech.vendingmachineservice.orderstatus.OrderStatusChecker;
 import com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod;
@@ -29,17 +27,17 @@ public class VendingMachineChecker implements Checker<VendingMachine>{
     }
 
     public void doCheck(UserContext _ctx, VendingMachine vendingMachine, ObjectLocation _parentLocation){
-      if(ObjectUtil.isNull(vendingMachine)){
+      if((vendingMachine == null)){
          return;
       }
       if(vendingMachine.newItem()){
         if(vendingMachine.getCreateTime() == null){
-           vendingMachine.updateCreateTime(ReflectUtil.invoke(_ctx, "now"));
+           vendingMachine.updateCreateTime(java.time.LocalDateTime.now());
         }if(vendingMachine.getUpdateTime() == null){
-           vendingMachine.updateUpdateTime(ReflectUtil.invoke(_ctx, "now"));
+           vendingMachine.updateUpdateTime(java.time.LocalDateTime.now());
         }
       }else if(vendingMachine.updateItem()){
-        vendingMachine.updateUpdateTime(ReflectUtil.invoke(_ctx, "now"));
+        vendingMachine.updateUpdateTime(java.time.LocalDateTime.now());
       }
       checkName(_ctx, vendingMachine.getProperty(VendingMachine.NAME_PROPERTY), newLocation(_parentLocation, VendingMachine.NAME_PROPERTY));
       checkCreateTime(_ctx, vendingMachine.getProperty(VendingMachine.CREATE_TIME_PROPERTY), newLocation(_parentLocation, VendingMachine.CREATE_TIME_PROPERTY));
@@ -64,7 +62,7 @@ public class VendingMachineChecker implements Checker<VendingMachine>{
 
     public void checkName(UserContext _ctx, String name, ObjectLocation _parentLocation){
     requiredCheck(_ctx, _parentLocation, name);
-    if(ObjectUtil.isNull(name)){
+    if((name == null)){
         return;
     }
     maxStringCheck(_ctx, _parentLocation, 100, name);
@@ -72,13 +70,13 @@ public class VendingMachineChecker implements Checker<VendingMachine>{
     }
     public void checkCreateTime(UserContext _ctx, LocalDateTime createTime, ObjectLocation _parentLocation){
     requiredCheck(_ctx, _parentLocation, createTime);
-    if(ObjectUtil.isNull(createTime)){
+    if((createTime == null)){
         return;
     }
     }
     public void checkUpdateTime(UserContext _ctx, LocalDateTime updateTime, ObjectLocation _parentLocation){
     requiredCheck(_ctx, _parentLocation, updateTime);
-    if(ObjectUtil.isNull(updateTime)){
+    if((updateTime == null)){
         return;
     }
     }

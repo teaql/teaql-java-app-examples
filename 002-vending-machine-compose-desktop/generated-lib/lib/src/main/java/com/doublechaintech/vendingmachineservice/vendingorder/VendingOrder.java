@@ -1,7 +1,5 @@
 package com.doublechaintech.vendingmachineservice.vendingorder;
 
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
 import com.doublechaintech.vendingmachineservice.Constants;
 import com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment;
 import com.doublechaintech.vendingmachineservice.orderstatus.OrderStatus;
@@ -61,8 +59,8 @@ public class VendingOrder extends BaseEntity implements RemoteInput {
         return this.vendingOrderItemList;
     }
     public VendingOrder updateTitle(String title){
-        title = StrUtil.trim(title);
-        if(ObjectUtil.equal(this.title, title)){
+        title = (title == null ? null : title.trim());
+        if(java.util.Objects.equals(this.title, title)){
             return this;
         }
         handleUpdate(TITLE_PROPERTY, getTitle(), title);
@@ -70,7 +68,7 @@ public class VendingOrder extends BaseEntity implements RemoteInput {
         return this;
     }
     public VendingOrder updateTotalAmount(Integer totalAmount){
-        if(ObjectUtil.equal(this.totalAmount, totalAmount)){
+        if(java.util.Objects.equals(this.totalAmount, totalAmount)){
             return this;
         }
         handleUpdate(TOTAL_AMOUNT_PROPERTY, getTotalAmount(), totalAmount);
@@ -78,7 +76,7 @@ public class VendingOrder extends BaseEntity implements RemoteInput {
         return this;
     }
     protected VendingOrder updateStatus(OrderStatus status){
-        if(ObjectUtil.equal(this.status, status)){
+        if(java.util.Objects.equals(this.status, status)){
             return this;
         }
         handleUpdate(STATUS_PROPERTY, getStatus(), status);
@@ -86,7 +84,7 @@ public class VendingOrder extends BaseEntity implements RemoteInput {
         return this;
     }
     public VendingOrder updateCreateTime(LocalDateTime createTime){
-        if(ObjectUtil.equal(this.createTime, createTime)){
+        if(java.util.Objects.equals(this.createTime, createTime)){
             return this;
         }
         handleUpdate(CREATE_TIME_PROPERTY, getCreateTime(), createTime);
@@ -94,7 +92,7 @@ public class VendingOrder extends BaseEntity implements RemoteInput {
         return this;
     }
     public VendingOrder updateUpdateTime(LocalDateTime updateTime){
-        if(ObjectUtil.equal(this.updateTime, updateTime)){
+        if(java.util.Objects.equals(this.updateTime, updateTime)){
             return this;
         }
         handleUpdate(UPDATE_TIME_PROPERTY, getUpdateTime(), updateTime);
@@ -128,28 +126,28 @@ public class VendingOrder extends BaseEntity implements RemoteInput {
         return this;
     }
     public boolean isStatusPending(){
-        return ObjectUtil.equals(getStatus(), Constants.ORDER_STATUS_PENDING);
+        return java.util.Objects.equals(getStatus(), Constants.ORDER_STATUS_PENDING);
     }
 
     public VendingOrder updateStatusToPending(){
         return updateStatus(Constants.ORDER_STATUS_PENDING);
     }
     public boolean isStatusPaid(){
-        return ObjectUtil.equals(getStatus(), Constants.ORDER_STATUS_PAID);
+        return java.util.Objects.equals(getStatus(), Constants.ORDER_STATUS_PAID);
     }
 
     public VendingOrder updateStatusToPaid(){
         return updateStatus(Constants.ORDER_STATUS_PAID);
     }
     public boolean isStatusDispensing(){
-        return ObjectUtil.equals(getStatus(), Constants.ORDER_STATUS_DISPENSING);
+        return java.util.Objects.equals(getStatus(), Constants.ORDER_STATUS_DISPENSING);
     }
 
     public VendingOrder updateStatusToDispensing(){
         return updateStatus(Constants.ORDER_STATUS_DISPENSING);
     }
     public boolean isStatusCompleted(){
-        return ObjectUtil.equals(getStatus(), Constants.ORDER_STATUS_COMPLETED);
+        return java.util.Objects.equals(getStatus(), Constants.ORDER_STATUS_COMPLETED);
     }
 
     public VendingOrder updateStatusToCompleted(){
@@ -177,7 +175,7 @@ public class VendingOrder extends BaseEntity implements RemoteInput {
     @FrameworkInternal
     public void internalSet(String property, Object value) {
         switch (property) {
-            case "title": this.title = StrUtil.trim((String) value); break;
+            case "title": this.title = (value == null ? null : ((String)value).trim()); break;
 
             case "totalAmount": this.totalAmount = (Integer) value; break;
 

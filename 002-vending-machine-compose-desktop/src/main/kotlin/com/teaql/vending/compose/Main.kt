@@ -55,8 +55,9 @@ object TeaQLManager {
         val metaFactory = SimpleEntityMetaFactory()
         EntityMetaRegistry().assemble(metaFactory)
         
-        val dataSource = cn.hutool.db.ds.simple.SimpleDataSource("jdbc:sqlite:vending_world_cup.db", "", "")
-        val adapter = JdbcSqlExecutor(dataSource)
+        val dataSource = org.sqlite.SQLiteDataSource()
+        dataSource.url = "jdbc:sqlite:vending_world_cup.db"
+        val adapter = io.teaql.provider.jdbc.JdbcSqlExecutor(dataSource)
         val dataService = SqliteDataServiceExecutor("default", adapter, dataSource)
         
         val runtime = TeaQLRuntime.Builder()

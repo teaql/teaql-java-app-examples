@@ -1,6 +1,5 @@
 package com.doublechaintech.vendingmachineservice.orderstatus;
 
-import cn.hutool.core.util.ObjectUtil;
 import com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine;
 import com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachineChecker;
 import com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder;
@@ -23,7 +22,7 @@ public class OrderStatusChecker implements Checker<OrderStatus>{
     }
 
     public void doCheck(UserContext _ctx, OrderStatus orderStatus, ObjectLocation _parentLocation){
-      if(ObjectUtil.isNull(orderStatus)){
+      if((orderStatus == null)){
          return;
       }
       if(orderStatus.newItem()){
@@ -40,14 +39,14 @@ public class OrderStatusChecker implements Checker<OrderStatus>{
 
     public void checkVendingMachine(UserContext _ctx, VendingMachine vendingMachine, ObjectLocation _parentLocation){
     requiredCheck(_ctx, _parentLocation, vendingMachine);
-    if(ObjectUtil.isNull(vendingMachine)){
+    if((vendingMachine == null)){
         return;
     }
     new VendingMachineChecker().checkAndFix(_ctx, vendingMachine, _parentLocation);
     }
     public void checkName(UserContext _ctx, String name, ObjectLocation _parentLocation){
     requiredCheck(_ctx, _parentLocation, name);
-    if(ObjectUtil.isNull(name)){
+    if((name == null)){
         return;
     }
     maxStringCheck(_ctx, _parentLocation, 100, name);
@@ -55,7 +54,7 @@ public class OrderStatusChecker implements Checker<OrderStatus>{
     }
     public void checkCode(UserContext _ctx, String code, ObjectLocation _parentLocation){
     requiredCheck(_ctx, _parentLocation, code);
-    if(ObjectUtil.isNull(code)){
+    if((code == null)){
         return;
     }
     maxStringCheck(_ctx, _parentLocation, 100, code);

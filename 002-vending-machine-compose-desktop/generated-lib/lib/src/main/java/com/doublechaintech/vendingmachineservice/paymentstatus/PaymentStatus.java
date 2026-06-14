@@ -1,7 +1,5 @@
 package com.doublechaintech.vendingmachineservice.paymentstatus;
 
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
 import com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment;
 import com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine;
 import io.teaql.core.BaseEntity;
@@ -43,7 +41,7 @@ public class PaymentStatus extends BaseEntity implements RemoteInput {
         return this.orderPaymentList;
     }
     public PaymentStatus updateVendingMachine(VendingMachine vendingMachine){
-        if(ObjectUtil.equal(this.vendingMachine, vendingMachine)){
+        if(java.util.Objects.equals(this.vendingMachine, vendingMachine)){
             return this;
         }
         handleUpdate(VENDING_MACHINE_PROPERTY, getVendingMachine(), vendingMachine);
@@ -51,8 +49,8 @@ public class PaymentStatus extends BaseEntity implements RemoteInput {
         return this;
     }
     public PaymentStatus updateName(String name){
-        name = StrUtil.trim(name);
-        if(ObjectUtil.equal(this.name, name)){
+        name = (name == null ? null : name.trim());
+        if(java.util.Objects.equals(this.name, name)){
             return this;
         }
         handleUpdate(NAME_PROPERTY, getName(), name);
@@ -60,8 +58,8 @@ public class PaymentStatus extends BaseEntity implements RemoteInput {
         return this;
     }
     public PaymentStatus updateCode(String code){
-        code = StrUtil.trim(code);
-        if(ObjectUtil.equal(this.code, code)){
+        code = (code == null ? null : code.trim());
+        if(java.util.Objects.equals(this.code, code)){
             return this;
         }
         handleUpdate(CODE_PROPERTY, getCode(), code);
@@ -105,9 +103,9 @@ public class PaymentStatus extends BaseEntity implements RemoteInput {
         switch (property) {
             case "vendingMachine": this.vendingMachine = (VendingMachine) value; break;
 
-            case "name": this.name = StrUtil.trim((String) value); break;
+            case "name": this.name = (value == null ? null : ((String)value).trim()); break;
 
-            case "code": this.code = StrUtil.trim((String) value); break;
+            case "code": this.code = (value == null ? null : ((String)value).trim()); break;
 
             case "orderPaymentList": this.orderPaymentList = (SmartList<OrderPayment>) value; break;
             default: super.internalSet(property, value);

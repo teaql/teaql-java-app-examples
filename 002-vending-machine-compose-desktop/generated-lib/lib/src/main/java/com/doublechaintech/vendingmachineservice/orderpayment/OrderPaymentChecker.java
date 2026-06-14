@@ -1,7 +1,5 @@
 package com.doublechaintech.vendingmachineservice.orderpayment;
 
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.ReflectUtil;
 import com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod;
 import com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethodChecker;
 import com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus;
@@ -27,19 +25,19 @@ public class OrderPaymentChecker implements Checker<OrderPayment>{
     }
 
     public void doCheck(UserContext _ctx, OrderPayment orderPayment, ObjectLocation _parentLocation){
-      if(ObjectUtil.isNull(orderPayment)){
+      if((orderPayment == null)){
          return;
       }
       if(orderPayment.newItem()){
         if(orderPayment.getPaymentTime() == null){
-           orderPayment.updatePaymentTime(ReflectUtil.invoke(_ctx, "now"));
+           orderPayment.updatePaymentTime(java.time.LocalDateTime.now());
         }if(orderPayment.getCreateTime() == null){
-           orderPayment.updateCreateTime(ReflectUtil.invoke(_ctx, "now"));
+           orderPayment.updateCreateTime(java.time.LocalDateTime.now());
         }if(orderPayment.getUpdateTime() == null){
-           orderPayment.updateUpdateTime(ReflectUtil.invoke(_ctx, "now"));
+           orderPayment.updateUpdateTime(java.time.LocalDateTime.now());
         }
       }else if(orderPayment.updateItem()){
-        orderPayment.updatePaymentTime(ReflectUtil.invoke(_ctx, "now"));orderPayment.updateUpdateTime(ReflectUtil.invoke(_ctx, "now"));
+        orderPayment.updatePaymentTime(java.time.LocalDateTime.now());orderPayment.updateUpdateTime(java.time.LocalDateTime.now());
       }
       checkName(_ctx, orderPayment.getProperty(OrderPayment.NAME_PROPERTY), newLocation(_parentLocation, OrderPayment.NAME_PROPERTY));
       checkVendingOrder(_ctx, orderPayment.getProperty(OrderPayment.VENDING_ORDER_PROPERTY), newLocation(_parentLocation, OrderPayment.VENDING_ORDER_PROPERTY));
@@ -54,7 +52,7 @@ public class OrderPaymentChecker implements Checker<OrderPayment>{
 
     public void checkName(UserContext _ctx, String name, ObjectLocation _parentLocation){
     requiredCheck(_ctx, _parentLocation, name);
-    if(ObjectUtil.isNull(name)){
+    if((name == null)){
         return;
     }
     maxStringCheck(_ctx, _parentLocation, 100, name);
@@ -62,40 +60,40 @@ public class OrderPaymentChecker implements Checker<OrderPayment>{
     }
     public void checkVendingOrder(UserContext _ctx, VendingOrder vendingOrder, ObjectLocation _parentLocation){
     requiredCheck(_ctx, _parentLocation, vendingOrder);
-    if(ObjectUtil.isNull(vendingOrder)){
+    if((vendingOrder == null)){
         return;
     }
     new VendingOrderChecker().checkAndFix(_ctx, vendingOrder, _parentLocation);
     }
     public void checkPaymentMethod(UserContext _ctx, PaymentMethod paymentMethod, ObjectLocation _parentLocation){
     requiredCheck(_ctx, _parentLocation, paymentMethod);
-    if(ObjectUtil.isNull(paymentMethod)){
+    if((paymentMethod == null)){
         return;
     }
     new PaymentMethodChecker().checkAndFix(_ctx, paymentMethod, _parentLocation);
     }
     public void checkPaymentStatus(UserContext _ctx, PaymentStatus paymentStatus, ObjectLocation _parentLocation){
     requiredCheck(_ctx, _parentLocation, paymentStatus);
-    if(ObjectUtil.isNull(paymentStatus)){
+    if((paymentStatus == null)){
         return;
     }
     new PaymentStatusChecker().checkAndFix(_ctx, paymentStatus, _parentLocation);
     }
     public void checkAmount(UserContext _ctx, Integer amount, ObjectLocation _parentLocation){
     requiredCheck(_ctx, _parentLocation, amount);
-    if(ObjectUtil.isNull(amount)){
+    if((amount == null)){
         return;
     }
     }
     public void checkPaymentTime(UserContext _ctx, LocalDateTime paymentTime, ObjectLocation _parentLocation){
     requiredCheck(_ctx, _parentLocation, paymentTime);
-    if(ObjectUtil.isNull(paymentTime)){
+    if((paymentTime == null)){
         return;
     }
     }
     public void checkTransactionId(UserContext _ctx, String transactionId, ObjectLocation _parentLocation){
     requiredCheck(_ctx, _parentLocation, transactionId);
-    if(ObjectUtil.isNull(transactionId)){
+    if((transactionId == null)){
         return;
     }
     maxStringCheck(_ctx, _parentLocation, 100, transactionId);
@@ -103,13 +101,13 @@ public class OrderPaymentChecker implements Checker<OrderPayment>{
     }
     public void checkCreateTime(UserContext _ctx, LocalDateTime createTime, ObjectLocation _parentLocation){
     requiredCheck(_ctx, _parentLocation, createTime);
-    if(ObjectUtil.isNull(createTime)){
+    if((createTime == null)){
         return;
     }
     }
     public void checkUpdateTime(UserContext _ctx, LocalDateTime updateTime, ObjectLocation _parentLocation){
     requiredCheck(_ctx, _parentLocation, updateTime);
-    if(ObjectUtil.isNull(updateTime)){
+    if((updateTime == null)){
         return;
     }
     }

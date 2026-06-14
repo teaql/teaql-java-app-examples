@@ -1,7 +1,5 @@
 package com.doublechaintech.vendingmachineservice.product;
 
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.ReflectUtil;
 import com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine;
 import com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachineChecker;
 import com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem;
@@ -25,17 +23,17 @@ public class ProductChecker implements Checker<Product>{
     }
 
     public void doCheck(UserContext _ctx, Product product, ObjectLocation _parentLocation){
-      if(ObjectUtil.isNull(product)){
+      if((product == null)){
          return;
       }
       if(product.newItem()){
         if(product.getCreateTime() == null){
-           product.updateCreateTime(ReflectUtil.invoke(_ctx, "now"));
+           product.updateCreateTime(java.time.LocalDateTime.now());
         }if(product.getUpdateTime() == null){
-           product.updateUpdateTime(ReflectUtil.invoke(_ctx, "now"));
+           product.updateUpdateTime(java.time.LocalDateTime.now());
         }
       }else if(product.updateItem()){
-        product.updateUpdateTime(ReflectUtil.invoke(_ctx, "now"));
+        product.updateUpdateTime(java.time.LocalDateTime.now());
       }
       checkName(_ctx, product.getProperty(Product.NAME_PROPERTY), newLocation(_parentLocation, Product.NAME_PROPERTY));
       checkPrice(_ctx, product.getProperty(Product.PRICE_PROPERTY), newLocation(_parentLocation, Product.PRICE_PROPERTY));
@@ -52,7 +50,7 @@ public class ProductChecker implements Checker<Product>{
 
     public void checkName(UserContext _ctx, String name, ObjectLocation _parentLocation){
     requiredCheck(_ctx, _parentLocation, name);
-    if(ObjectUtil.isNull(name)){
+    if((name == null)){
         return;
     }
     maxStringCheck(_ctx, _parentLocation, 100, name);
@@ -60,19 +58,19 @@ public class ProductChecker implements Checker<Product>{
     }
     public void checkPrice(UserContext _ctx, Integer price, ObjectLocation _parentLocation){
     requiredCheck(_ctx, _parentLocation, price);
-    if(ObjectUtil.isNull(price)){
+    if((price == null)){
         return;
     }
     }
     public void checkStock(UserContext _ctx, Integer stock, ObjectLocation _parentLocation){
     requiredCheck(_ctx, _parentLocation, stock);
-    if(ObjectUtil.isNull(stock)){
+    if((stock == null)){
         return;
     }
     }
     public void checkImageUrl(UserContext _ctx, String imageUrl, ObjectLocation _parentLocation){
     requiredCheck(_ctx, _parentLocation, imageUrl);
-    if(ObjectUtil.isNull(imageUrl)){
+    if((imageUrl == null)){
         return;
     }
     maxStringCheck(_ctx, _parentLocation, 100, imageUrl);
@@ -80,20 +78,20 @@ public class ProductChecker implements Checker<Product>{
     }
     public void checkVendingMachine(UserContext _ctx, VendingMachine vendingMachine, ObjectLocation _parentLocation){
     requiredCheck(_ctx, _parentLocation, vendingMachine);
-    if(ObjectUtil.isNull(vendingMachine)){
+    if((vendingMachine == null)){
         return;
     }
     new VendingMachineChecker().checkAndFix(_ctx, vendingMachine, _parentLocation);
     }
     public void checkCreateTime(UserContext _ctx, LocalDateTime createTime, ObjectLocation _parentLocation){
     requiredCheck(_ctx, _parentLocation, createTime);
-    if(ObjectUtil.isNull(createTime)){
+    if((createTime == null)){
         return;
     }
     }
     public void checkUpdateTime(UserContext _ctx, LocalDateTime updateTime, ObjectLocation _parentLocation){
     requiredCheck(_ctx, _parentLocation, updateTime);
-    if(ObjectUtil.isNull(updateTime)){
+    if((updateTime == null)){
         return;
     }
     }

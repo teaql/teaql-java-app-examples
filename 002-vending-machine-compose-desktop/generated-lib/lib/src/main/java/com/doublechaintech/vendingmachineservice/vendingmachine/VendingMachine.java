@@ -1,7 +1,5 @@
 package com.doublechaintech.vendingmachineservice.vendingmachine;
 
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
 import com.doublechaintech.vendingmachineservice.orderstatus.OrderStatus;
 import com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod;
 import com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus;
@@ -61,8 +59,8 @@ public class VendingMachine extends BaseEntity implements RemoteInput {
         return this.productList;
     }
     public VendingMachine updateName(String name){
-        name = StrUtil.trim(name);
-        if(ObjectUtil.equal(this.name, name)){
+        name = (name == null ? null : name.trim());
+        if(java.util.Objects.equals(this.name, name)){
             return this;
         }
         handleUpdate(NAME_PROPERTY, getName(), name);
@@ -70,7 +68,7 @@ public class VendingMachine extends BaseEntity implements RemoteInput {
         return this;
     }
     public VendingMachine updateCreateTime(LocalDateTime createTime){
-        if(ObjectUtil.equal(this.createTime, createTime)){
+        if(java.util.Objects.equals(this.createTime, createTime)){
             return this;
         }
         handleUpdate(CREATE_TIME_PROPERTY, getCreateTime(), createTime);
@@ -78,7 +76,7 @@ public class VendingMachine extends BaseEntity implements RemoteInput {
         return this;
     }
     public VendingMachine updateUpdateTime(LocalDateTime updateTime){
-        if(ObjectUtil.equal(this.updateTime, updateTime)){
+        if(java.util.Objects.equals(this.updateTime, updateTime)){
             return this;
         }
         handleUpdate(UPDATE_TIME_PROPERTY, getUpdateTime(), updateTime);
@@ -159,7 +157,7 @@ public class VendingMachine extends BaseEntity implements RemoteInput {
     @FrameworkInternal
     public void internalSet(String property, Object value) {
         switch (property) {
-            case "name": this.name = StrUtil.trim((String) value); break;
+            case "name": this.name = (value == null ? null : ((String)value).trim()); break;
 
             case "createTime": this.createTime = (LocalDateTime) value; break;
 
