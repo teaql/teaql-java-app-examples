@@ -8,14 +8,11 @@ import org.postgresql.ds.PGSimpleDataSource
 import org.testcontainers.containers.PostgreSQLContainer
 
 fun main() {
-    println("Starting PostgreSQL Testcontainer...")
-    val postgres = PostgreSQLContainer<Nothing>("postgres:15-alpine").apply {
-        withDatabaseName("vending")
-        withUsername("test")
-        withPassword("test")
-        start()
-    }
-    
+    println("Connecting to local PostgreSQL...")
+    val jdbcUrl = "jdbc:postgresql://localhost:5432/postgres"
+    val user = "postgres"
+    val password = "password" // Will try password, postgres, or empty later if fails
+
     println("Initializing TeaQLManager with PostgreSQL...")
     val customLogSink = GlobalLiveLogsSink()
     
@@ -24,9 +21,9 @@ fun main() {
     io.teaql.core.meta.EntityMetaFactory.registerGlobal(metaFactory)
     
     val dataSource = PGSimpleDataSource()
-    dataSource.setUrl(postgres.jdbcUrl)
-    dataSource.user = postgres.username
-    dataSource.password = postgres.password
+    dataSource.setUrl(jdbcUrl)
+    dataSource.user = user
+    dataSource.password = password
     
     val adapter = JdbcSqlExecutor(dataSource)
     val dataService = PostgresDataServiceExecutor("default", adapter, dataSource)
@@ -86,5 +83,4 @@ fun main() {
     assert(orderComplete.status?.code == "COMPLETED") { "Order status should be COMPLETED" }
     
     println("\nAll integration tests passed successfully!")
-    postgres.stop()
 }
