@@ -3,6 +3,7 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 plugins {
     kotlin("jvm") version "1.9.22"
     id("org.jetbrains.compose") version "1.6.0"
+    jacoco
 }
 
 group = "com.teaql.vending.compose"
@@ -29,8 +30,10 @@ dependencies {
     
     // For Integration Tests with PostgreSQL
     implementation("org.postgresql:postgresql:42.6.0")
-    implementation("org.testcontainers:postgresql:1.19.3")
-    implementation("org.testcontainers:testcontainers:1.19.3")
+    
+    // Test framework
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 sourceSets {
@@ -39,9 +42,18 @@ sourceSets {
     }
 }
 
-tasks.register<JavaExec>("executeIntegrationTest") {
-    mainClass.set("com.teaql.vending.compose.IntegrationTestKt")
-    classpath = sourceSets["main"].runtimeClasspath
+tasks.test {
+    useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport) // report is always generated after tests run
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+    reports {
+        xml.required.set(false)
+        csv.required.set(false)
+        html.required.set(true)
+    }
 }
 
 compose.desktop {
