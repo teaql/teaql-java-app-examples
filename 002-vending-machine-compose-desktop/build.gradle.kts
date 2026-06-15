@@ -34,6 +34,8 @@ dependencies {
     implementation("io.teaql:teaql-postgres:1.513-RELEASE")
     implementation("io.teaql:teaql-mysql:1.513-RELEASE")
     implementation("io.teaql:teaql-dm8:1.513-RELEASE")
+    implementation("io.teaql:teaql-duck:1.513-RELEASE")
+    implementation("org.duckdb:duckdb_jdbc:1.0.0")
     implementation("io.teaql:teaql-oracle:1.513-RELEASE")
     
     // For Integration Tests with PostgreSQL, MySQL, DM8 & Oracle
