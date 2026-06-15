@@ -25,18 +25,18 @@ dependencies {
     implementation(compose.desktop.currentOs)
     
     // Depend on our generated TeaQL core and local app logic!
-    implementation("io.teaql:teaql-core:1.513-RELEASE")
-    implementation("io.teaql:teaql-sqlite:1.513-RELEASE")
-    implementation("io.teaql:teaql-sql-portable:1.513-RELEASE")
-    implementation("io.teaql:teaql-provider-jdbc:1.513-RELEASE")
+    implementation("io.teaql:teaql-core:1.514-RELEASE")
+    implementation("io.teaql:teaql-sqlite:1.514-RELEASE")
+    implementation("io.teaql:teaql-sql-portable:1.514-RELEASE")
+    implementation("io.teaql:teaql-provider-jdbc:1.514-RELEASE")
     implementation("org.xerial:sqlite-jdbc:3.45.2.0")
-    implementation("io.teaql:teaql-data-service-sql:1.513-RELEASE")
-    implementation("io.teaql:teaql-postgres:1.513-RELEASE")
-    implementation("io.teaql:teaql-mysql:1.513-RELEASE")
-    implementation("io.teaql:teaql-dm8:1.513-RELEASE")
-    implementation("io.teaql:teaql-duckdb:1.513-RELEASE")
+    implementation("io.teaql:teaql-data-service-sql:1.514-RELEASE")
+    implementation("io.teaql:teaql-postgres:1.514-RELEASE")
+    implementation("io.teaql:teaql-mysql:1.514-RELEASE")
+    implementation("io.teaql:teaql-dm8:1.514-RELEASE")
+    implementation("io.teaql:teaql-duckdb:1.514-RELEASE")
     implementation("org.duckdb:duckdb_jdbc:1.0.0")
-    implementation("io.teaql:teaql-oracle:1.513-RELEASE")
+    implementation("io.teaql:teaql-oracle:1.514-RELEASE")
     
     // For Integration Tests with PostgreSQL, MySQL, DM8 & Oracle
     implementation("org.postgresql:postgresql:42.6.0")
