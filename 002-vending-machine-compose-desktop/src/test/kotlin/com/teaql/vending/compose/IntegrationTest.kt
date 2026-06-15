@@ -97,14 +97,14 @@ class IntegrationTest {
         updateOrderStatus(order, "Dispense")
         
         val dashboardDataDispensing = fetchOrders()
-        val orderDispensing = dashboardDataDispensing.orders.first()
+        val orderDispensing = dashboardDataDispensing.orders.find { it.id == order.id }!!
         println("Order Status after dispense: ${orderDispensing.status?.name}")
         assertEquals("DISPENSING", orderDispensing.status?.code, "Order status should be DISPENSING")
         
         updateOrderStatus(orderDispensing, "Complete")
         
         val dashboardDataComplete = fetchOrders()
-        val orderComplete = dashboardDataComplete.orders.first()
+        val orderComplete = dashboardDataComplete.orders.find { it.id == order.id }!!
         println("Order Status after complete: ${orderComplete.status?.name}")
         assertEquals("COMPLETED", orderComplete.status?.code, "Order status should be COMPLETED")
         
