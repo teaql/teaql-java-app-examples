@@ -32,9 +32,11 @@ dependencies {
     implementation("org.xerial:sqlite-jdbc:3.45.2.0")
     implementation("io.teaql:teaql-data-service-sql:1.513-RELEASE")
     implementation("io.teaql:teaql-postgres:1.513-RELEASE")
+    implementation("io.teaql:teaql-mysql:1.513-RELEASE")
     
-    // For Integration Tests with PostgreSQL
+    // For Integration Tests with PostgreSQL & MySQL
     implementation("org.postgresql:postgresql:42.6.0")
+    implementation("com.mysql:mysql-connector-j:8.3.0")
     
     // Test framework
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
