@@ -49,7 +49,7 @@ class IntegrationTest {
             dataSource.password = workingPassword
             
             val adapter = JdbcSqlExecutor(dataSource)
-            val dataService = PostgresDataServiceExecutor("default", adapter, dataSource)
+            val dataService = PostgresDataServiceExecutor("default", adapter)
             
             TeaQLManager.runtime = TeaQLRuntime.Builder()
                 .metadata(metaFactory)

@@ -31,6 +31,7 @@ dependencies {
     implementation("io.teaql:teaql-provider-jdbc:1.513-RELEASE")
     implementation("org.xerial:sqlite-jdbc:3.45.2.0")
     implementation("io.teaql:teaql-data-service-sql:1.513-RELEASE")
+    implementation("io.teaql:teaql-postgres:1.513-RELEASE")
     
     // For Integration Tests with PostgreSQL
     implementation("org.postgresql:postgresql:42.6.0")
