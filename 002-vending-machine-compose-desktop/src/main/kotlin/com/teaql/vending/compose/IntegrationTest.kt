@@ -11,7 +11,7 @@ fun main() {
     println("Connecting to local PostgreSQL...")
     val jdbcUrl = "jdbc:postgresql://localhost:5432/postgres"
     val user = "postgres"
-    val password = "password" // Will try password, postgres, or empty later if fails
+    val passwordsToTry = listOf("postgres", "password", "", "root", "123456", "admin")
 
     println("Initializing TeaQLManager with PostgreSQL...")
     val customLogSink = GlobalLiveLogsSink()
@@ -20,10 +20,25 @@ fun main() {
     com.doublechaintech.vendingmachineservice.EntityMetaRegistry().assemble(metaFactory)
     io.teaql.core.meta.EntityMetaFactory.registerGlobal(metaFactory)
     
+    var connected = false
+    var workingPassword = ""
+    for (pwd in passwordsToTry) {
+        try {
+            java.sql.DriverManager.getConnection(jdbcUrl, user, pwd).use { conn ->
+                connected = true
+                workingPassword = pwd
+            }
+            break
+        } catch (e: Exception) {
+            // ignore
+        }
+    }
+    if (!connected) throw RuntimeException("Could not connect to PostgreSQL with any common password")
+    
     val dataSource = PGSimpleDataSource()
     dataSource.setUrl(jdbcUrl)
     dataSource.user = user
-    dataSource.password = password
+    dataSource.password = workingPassword
     
     val adapter = JdbcSqlExecutor(dataSource)
     val dataService = PostgresDataServiceExecutor("default", adapter, dataSource)
