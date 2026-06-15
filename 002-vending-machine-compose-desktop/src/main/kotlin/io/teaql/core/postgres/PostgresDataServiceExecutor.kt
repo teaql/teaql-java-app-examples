@@ -1,4 +1,4 @@
-package com.teaql.vending.compose
+package io.teaql.core.postgres
 
 import io.teaql.core.UserContext
 import io.teaql.core.meta.EntityDescriptor

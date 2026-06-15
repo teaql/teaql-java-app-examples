@@ -8,6 +8,7 @@ import org.postgresql.ds.PGSimpleDataSource
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeAll
+import io.teaql.core.postgres.PostgresDataServiceExecutor
 
 class IntegrationTest {
 
