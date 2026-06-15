@@ -85,7 +85,7 @@ class IntegrationTest {
         println("Total Orders: ${dashboardData.orders.size}")
         assertTrue(dashboardData.orders.isNotEmpty(), "Order list should not be empty")
         
-        val order = dashboardData.orders.first()
+        val order = dashboardData.orders.sortedByDescending { it.id }.first()
         println("Order ID: ${order.id}")
         println("Order Title: ${order.title}")
         println("Order Status: ${order.status?.name}")

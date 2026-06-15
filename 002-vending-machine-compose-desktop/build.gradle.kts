@@ -6,6 +6,10 @@ plugins {
     jacoco
 }
 
+jacoco {
+    toolVersion = "0.8.11"
+}
+
 group = "com.teaql.vending.compose"
 version = "1.0-SNAPSHOT"
 
