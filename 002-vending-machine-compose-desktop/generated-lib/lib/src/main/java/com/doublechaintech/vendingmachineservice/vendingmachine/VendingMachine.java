@@ -4,12 +4,14 @@ import com.doublechaintech.vendingmachineservice.orderstatus.OrderStatus;
 import com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod;
 import com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus;
 import com.doublechaintech.vendingmachineservice.product.Product;
+import io.teaql.core.Audited;
 import io.teaql.core.BaseEntity;
 import io.teaql.core.EntityStatus;
 import io.teaql.core.FrameworkInternal;
 import io.teaql.core.RemoteInput;
 import io.teaql.core.SmartList;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * [TEAQL AI WARNING]
@@ -60,7 +62,7 @@ public class VendingMachine extends BaseEntity implements RemoteInput {
     }
     public VendingMachine updateName(String name){
         name = (name == null ? null : name.trim());
-        if(java.util.Objects.equals(this.name, name)){
+        if(Objects.equals(this.name, name)){
             return this;
         }
         handleUpdate(NAME_PROPERTY, getName(), name);
@@ -68,7 +70,7 @@ public class VendingMachine extends BaseEntity implements RemoteInput {
         return this;
     }
     public VendingMachine updateCreateTime(LocalDateTime createTime){
-        if(java.util.Objects.equals(this.createTime, createTime)){
+        if(Objects.equals(this.createTime, createTime)){
             return this;
         }
         handleUpdate(CREATE_TIME_PROPERTY, getCreateTime(), createTime);
@@ -76,7 +78,7 @@ public class VendingMachine extends BaseEntity implements RemoteInput {
         return this;
     }
     public VendingMachine updateUpdateTime(LocalDateTime updateTime){
-        if(java.util.Objects.equals(this.updateTime, updateTime)){
+        if(Objects.equals(this.updateTime, updateTime)){
             return this;
         }
         handleUpdate(UPDATE_TIME_PROPERTY, getUpdateTime(), updateTime);
@@ -150,6 +152,12 @@ public class VendingMachine extends BaseEntity implements RemoteInput {
     public VendingMachine comment(String comment){
         this.setComment(comment);
         return this;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public Audited<VendingMachine> auditAs(String action) {
+        return super.auditAs(action);
     }
 
     // ===== Framework Internal: generated switch dispatch =====

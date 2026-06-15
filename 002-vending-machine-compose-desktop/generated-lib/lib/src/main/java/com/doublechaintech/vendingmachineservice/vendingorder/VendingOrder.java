@@ -4,12 +4,14 @@ import com.doublechaintech.vendingmachineservice.Constants;
 import com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment;
 import com.doublechaintech.vendingmachineservice.orderstatus.OrderStatus;
 import com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem;
+import io.teaql.core.Audited;
 import io.teaql.core.BaseEntity;
 import io.teaql.core.EntityStatus;
 import io.teaql.core.FrameworkInternal;
 import io.teaql.core.RemoteInput;
 import io.teaql.core.SmartList;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * [TEAQL AI WARNING]
@@ -60,7 +62,7 @@ public class VendingOrder extends BaseEntity implements RemoteInput {
     }
     public VendingOrder updateTitle(String title){
         title = (title == null ? null : title.trim());
-        if(java.util.Objects.equals(this.title, title)){
+        if(Objects.equals(this.title, title)){
             return this;
         }
         handleUpdate(TITLE_PROPERTY, getTitle(), title);
@@ -68,7 +70,7 @@ public class VendingOrder extends BaseEntity implements RemoteInput {
         return this;
     }
     public VendingOrder updateTotalAmount(Integer totalAmount){
-        if(java.util.Objects.equals(this.totalAmount, totalAmount)){
+        if(Objects.equals(this.totalAmount, totalAmount)){
             return this;
         }
         handleUpdate(TOTAL_AMOUNT_PROPERTY, getTotalAmount(), totalAmount);
@@ -76,7 +78,7 @@ public class VendingOrder extends BaseEntity implements RemoteInput {
         return this;
     }
     protected VendingOrder updateStatus(OrderStatus status){
-        if(java.util.Objects.equals(this.status, status)){
+        if(Objects.equals(this.status, status)){
             return this;
         }
         handleUpdate(STATUS_PROPERTY, getStatus(), status);
@@ -84,7 +86,7 @@ public class VendingOrder extends BaseEntity implements RemoteInput {
         return this;
     }
     public VendingOrder updateCreateTime(LocalDateTime createTime){
-        if(java.util.Objects.equals(this.createTime, createTime)){
+        if(Objects.equals(this.createTime, createTime)){
             return this;
         }
         handleUpdate(CREATE_TIME_PROPERTY, getCreateTime(), createTime);
@@ -92,7 +94,7 @@ public class VendingOrder extends BaseEntity implements RemoteInput {
         return this;
     }
     public VendingOrder updateUpdateTime(LocalDateTime updateTime){
-        if(java.util.Objects.equals(this.updateTime, updateTime)){
+        if(Objects.equals(this.updateTime, updateTime)){
             return this;
         }
         handleUpdate(UPDATE_TIME_PROPERTY, getUpdateTime(), updateTime);
@@ -126,28 +128,28 @@ public class VendingOrder extends BaseEntity implements RemoteInput {
         return this;
     }
     public boolean isStatusPending(){
-        return java.util.Objects.equals(getStatus(), Constants.ORDER_STATUS_PENDING);
+        return Objects.equals(getStatus(), Constants.ORDER_STATUS_PENDING);
     }
 
     public VendingOrder updateStatusToPending(){
         return updateStatus(Constants.ORDER_STATUS_PENDING);
     }
     public boolean isStatusPaid(){
-        return java.util.Objects.equals(getStatus(), Constants.ORDER_STATUS_PAID);
+        return Objects.equals(getStatus(), Constants.ORDER_STATUS_PAID);
     }
 
     public VendingOrder updateStatusToPaid(){
         return updateStatus(Constants.ORDER_STATUS_PAID);
     }
     public boolean isStatusDispensing(){
-        return java.util.Objects.equals(getStatus(), Constants.ORDER_STATUS_DISPENSING);
+        return Objects.equals(getStatus(), Constants.ORDER_STATUS_DISPENSING);
     }
 
     public VendingOrder updateStatusToDispensing(){
         return updateStatus(Constants.ORDER_STATUS_DISPENSING);
     }
     public boolean isStatusCompleted(){
-        return java.util.Objects.equals(getStatus(), Constants.ORDER_STATUS_COMPLETED);
+        return Objects.equals(getStatus(), Constants.ORDER_STATUS_COMPLETED);
     }
 
     public VendingOrder updateStatusToCompleted(){
@@ -168,6 +170,12 @@ public class VendingOrder extends BaseEntity implements RemoteInput {
     public VendingOrder comment(String comment){
         this.setComment(comment);
         return this;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public Audited<VendingOrder> auditAs(String action) {
+        return super.auditAs(action);
     }
 
     // ===== Framework Internal: generated switch dispatch =====

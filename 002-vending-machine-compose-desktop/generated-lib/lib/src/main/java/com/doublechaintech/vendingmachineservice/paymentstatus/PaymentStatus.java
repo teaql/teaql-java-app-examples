@@ -2,11 +2,13 @@ package com.doublechaintech.vendingmachineservice.paymentstatus;
 
 import com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment;
 import com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine;
+import io.teaql.core.Audited;
 import io.teaql.core.BaseEntity;
 import io.teaql.core.EntityStatus;
 import io.teaql.core.FrameworkInternal;
 import io.teaql.core.RemoteInput;
 import io.teaql.core.SmartList;
+import java.util.Objects;
 
 /**
  * [TEAQL AI WARNING]
@@ -41,7 +43,7 @@ public class PaymentStatus extends BaseEntity implements RemoteInput {
         return this.orderPaymentList;
     }
     public PaymentStatus updateVendingMachine(VendingMachine vendingMachine){
-        if(java.util.Objects.equals(this.vendingMachine, vendingMachine)){
+        if(Objects.equals(this.vendingMachine, vendingMachine)){
             return this;
         }
         handleUpdate(VENDING_MACHINE_PROPERTY, getVendingMachine(), vendingMachine);
@@ -50,7 +52,7 @@ public class PaymentStatus extends BaseEntity implements RemoteInput {
     }
     public PaymentStatus updateName(String name){
         name = (name == null ? null : name.trim());
-        if(java.util.Objects.equals(this.name, name)){
+        if(Objects.equals(this.name, name)){
             return this;
         }
         handleUpdate(NAME_PROPERTY, getName(), name);
@@ -59,7 +61,7 @@ public class PaymentStatus extends BaseEntity implements RemoteInput {
     }
     public PaymentStatus updateCode(String code){
         code = (code == null ? null : code.trim());
-        if(java.util.Objects.equals(this.code, code)){
+        if(Objects.equals(this.code, code)){
             return this;
         }
         handleUpdate(CODE_PROPERTY, getCode(), code);
@@ -94,6 +96,12 @@ public class PaymentStatus extends BaseEntity implements RemoteInput {
     public PaymentStatus comment(String comment){
         this.setComment(comment);
         return this;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public Audited<PaymentStatus> auditAs(String action) {
+        return super.auditAs(action);
     }
 
     // ===== Framework Internal: generated switch dispatch =====

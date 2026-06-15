@@ -2,11 +2,13 @@ package com.doublechaintech.vendingmachineservice.vendingorderitem;
 
 import com.doublechaintech.vendingmachineservice.product.Product;
 import com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder;
+import io.teaql.core.Audited;
 import io.teaql.core.BaseEntity;
 import io.teaql.core.EntityStatus;
 import io.teaql.core.FrameworkInternal;
 import io.teaql.core.RemoteInput;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * [TEAQL AI WARNING]
@@ -62,7 +64,7 @@ public class VendingOrderItem extends BaseEntity implements RemoteInput {
     }
     public VendingOrderItem updateName(String name){
         name = (name == null ? null : name.trim());
-        if(java.util.Objects.equals(this.name, name)){
+        if(Objects.equals(this.name, name)){
             return this;
         }
         handleUpdate(NAME_PROPERTY, getName(), name);
@@ -70,7 +72,7 @@ public class VendingOrderItem extends BaseEntity implements RemoteInput {
         return this;
     }
     public VendingOrderItem updateVendingOrder(VendingOrder vendingOrder){
-        if(java.util.Objects.equals(this.vendingOrder, vendingOrder)){
+        if(Objects.equals(this.vendingOrder, vendingOrder)){
             return this;
         }
         handleUpdate(VENDING_ORDER_PROPERTY, getVendingOrder(), vendingOrder);
@@ -78,7 +80,7 @@ public class VendingOrderItem extends BaseEntity implements RemoteInput {
         return this;
     }
     public VendingOrderItem updateProduct(Product product){
-        if(java.util.Objects.equals(this.product, product)){
+        if(Objects.equals(this.product, product)){
             return this;
         }
         handleUpdate(PRODUCT_PROPERTY, getProduct(), product);
@@ -86,7 +88,7 @@ public class VendingOrderItem extends BaseEntity implements RemoteInput {
         return this;
     }
     public VendingOrderItem updateQuantity(Integer quantity){
-        if(java.util.Objects.equals(this.quantity, quantity)){
+        if(Objects.equals(this.quantity, quantity)){
             return this;
         }
         handleUpdate(QUANTITY_PROPERTY, getQuantity(), quantity);
@@ -94,7 +96,7 @@ public class VendingOrderItem extends BaseEntity implements RemoteInput {
         return this;
     }
     public VendingOrderItem updatePrice(Integer price){
-        if(java.util.Objects.equals(this.price, price)){
+        if(Objects.equals(this.price, price)){
             return this;
         }
         handleUpdate(PRICE_PROPERTY, getPrice(), price);
@@ -102,7 +104,7 @@ public class VendingOrderItem extends BaseEntity implements RemoteInput {
         return this;
     }
     public VendingOrderItem updateAmount(Integer amount){
-        if(java.util.Objects.equals(this.amount, amount)){
+        if(Objects.equals(this.amount, amount)){
             return this;
         }
         handleUpdate(AMOUNT_PROPERTY, getAmount(), amount);
@@ -110,7 +112,7 @@ public class VendingOrderItem extends BaseEntity implements RemoteInput {
         return this;
     }
     public VendingOrderItem updateCreateTime(LocalDateTime createTime){
-        if(java.util.Objects.equals(this.createTime, createTime)){
+        if(Objects.equals(this.createTime, createTime)){
             return this;
         }
         handleUpdate(CREATE_TIME_PROPERTY, getCreateTime(), createTime);
@@ -118,7 +120,7 @@ public class VendingOrderItem extends BaseEntity implements RemoteInput {
         return this;
     }
     public VendingOrderItem updateUpdateTime(LocalDateTime updateTime){
-        if(java.util.Objects.equals(this.updateTime, updateTime)){
+        if(Objects.equals(this.updateTime, updateTime)){
             return this;
         }
         handleUpdate(UPDATE_TIME_PROPERTY, getUpdateTime(), updateTime);
@@ -140,6 +142,12 @@ public class VendingOrderItem extends BaseEntity implements RemoteInput {
     public VendingOrderItem comment(String comment){
         this.setComment(comment);
         return this;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public Audited<VendingOrderItem> auditAs(String action) {
+        return super.auditAs(action);
     }
 
     // ===== Framework Internal: generated switch dispatch =====

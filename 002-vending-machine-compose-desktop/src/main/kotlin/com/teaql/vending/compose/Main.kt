@@ -439,11 +439,11 @@ fun updateOrderStatus(order: VendingOrder, action: String) {
     try {
         if (action == "Dispense") {
             order.updateStatusToDispensing()
-            order.auditAs<VendingOrder>("dispense order").save(ctx)
+            order.auditAs("dispense order").save(ctx)
             SystemLogger.log("Order ${order.id} marked as Dispensing.")
         } else if (action == "Complete") {
             order.updateStatusToCompleted()
-            order.auditAs<VendingOrder>("complete order").save(ctx)
+            order.auditAs("complete order").save(ctx)
             SystemLogger.log("Order ${order.id} marked as Completed.")
         }
     } catch (e: Exception) {
@@ -654,7 +654,7 @@ fun initDatabase() {
                 p.updateStock(pData[2] as Int)
                 p.updateImageUrl(pData[3] as String)
                 p.updateVendingMachine(machine)
-                p.auditAs<Product>("init product").save(ctx)
+                p.auditAs("init product").save(ctx)
             }
             SystemLogger.log("Seed data initialized via TeaQL.")
         }
@@ -685,7 +685,7 @@ fun checkoutCart(cart: List<Product>, paymentMethodName: String) {
         val order = VendingOrder()
         order.updateTitle("Order-" + System.currentTimeMillis())
         order.updateStatusToPaid()
-        order.auditAs<VendingOrder>("create order").save(ctx)
+        order.auditAs("create order").save(ctx)
         
         var totalAmount = 0
         for (product in cart) {
@@ -696,13 +696,13 @@ fun checkoutCart(cart: List<Product>, paymentMethodName: String) {
             item.updatePrice(product.price)
             item.updateAmount(product.price)
             item.updateVendingOrder(order)
-            item.auditAs<VendingOrderItem>("add item").save(ctx)
+            item.auditAs("add item").save(ctx)
             
             val pDb = Q.products().withIdIs(product.id.toLong()).comment("fetch").purpose("stock check").executeForOne(ctx)
             if (pDb != null) {
                 pDb.updateStock(pDb.stock - 1)
                 if (pDb.stock < 0) throw Exception("Out of stock for ${pDb.name}!")
-                pDb.auditAs<Product>("update stock").save(ctx)
+                pDb.auditAs("update stock").save(ctx)
             } else {
                 throw Exception("Product not found: ${product.name}")
             }
@@ -712,7 +712,7 @@ fun checkoutCart(cart: List<Product>, paymentMethodName: String) {
         }
         
         order.updateTotalAmount(totalAmount)
-        order.auditAs<VendingOrder>("update order amount").save(ctx)
+        order.auditAs("update order amount").save(ctx)
         
         val payment = OrderPayment()
         payment.updateName("Payment-${order.title}")
@@ -726,7 +726,7 @@ fun checkoutCart(cart: List<Product>, paymentMethodName: String) {
         payment.updatePaymentStatusToSuccess()
         payment.updateVendingOrder(order)
         
-        payment.auditAs<OrderPayment>("process payment").save(ctx)
+        payment.auditAs("process payment").save(ctx)
         SystemLogger.log("Transaction committed successfully via TeaQL.")
     } catch (e: Exception) {
         SystemLogger.log("Transaction failed: ${e.message}")

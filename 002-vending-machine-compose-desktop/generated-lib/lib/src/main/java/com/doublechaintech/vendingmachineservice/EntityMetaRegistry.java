@@ -33,23 +33,18 @@ public class EntityMetaRegistry implements EntityMetaAssembler {
       PropertyDescriptor id = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine.ID_PROPERTY, Long.class)
       ;
-
       PropertyDescriptor name = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine.NAME_PROPERTY, String.class)
       ;
-
       PropertyDescriptor createTime = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine.CREATE_TIME_PROPERTY, LocalDateTime.class)
       ;
-
       PropertyDescriptor updateTime = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine.UPDATE_TIME_PROPERTY, LocalDateTime.class)
       ;
-
       PropertyDescriptor version = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine.VERSION_PROPERTY, Long.class)
       ;
-
       entityDescriptor.findProperty(com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine.ID_PROPERTY).with("isPassword", "false")
       .with("isVersion", "false")
       .with("oracle_sqlType", "number(11)")
@@ -151,23 +146,18 @@ public class EntityMetaRegistry implements EntityMetaAssembler {
       PropertyDescriptor vendingMachine = 
       entityDescriptor.addObjectProperty($factory, com.doublechaintech.vendingmachineservice.orderstatus.OrderStatus.VENDING_MACHINE_PROPERTY, com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine.INTERNAL_TYPE, com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine.ORDER_STATUS_LIST_PROPERTY, com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine.class)
       ;
-
       PropertyDescriptor id = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.orderstatus.OrderStatus.ID_PROPERTY, Long.class)
       ;
-
       PropertyDescriptor name = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.orderstatus.OrderStatus.NAME_PROPERTY, String.class)
       ;
-
       PropertyDescriptor code = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.orderstatus.OrderStatus.CODE_PROPERTY, String.class)
       ;
-
       PropertyDescriptor version = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.orderstatus.OrderStatus.VERSION_PROPERTY, Long.class)
       ;
-
       entityDescriptor.findProperty(com.doublechaintech.vendingmachineservice.orderstatus.OrderStatus.VENDING_MACHINE_PROPERTY).with("candidates", "vending_machine()");
 
       entityDescriptor.findProperty(com.doublechaintech.vendingmachineservice.orderstatus.OrderStatus.ID_PROPERTY).with("isPassword", "false")
@@ -252,23 +242,18 @@ public class EntityMetaRegistry implements EntityMetaAssembler {
       PropertyDescriptor vendingMachine = 
       entityDescriptor.addObjectProperty($factory, com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod.VENDING_MACHINE_PROPERTY, com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine.INTERNAL_TYPE, com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine.PAYMENT_METHOD_LIST_PROPERTY, com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine.class)
       ;
-
       PropertyDescriptor id = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod.ID_PROPERTY, Long.class)
       ;
-
       PropertyDescriptor name = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod.NAME_PROPERTY, String.class)
       ;
-
       PropertyDescriptor code = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod.CODE_PROPERTY, String.class)
       ;
-
       PropertyDescriptor version = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod.VERSION_PROPERTY, Long.class)
       ;
-
       entityDescriptor.findProperty(com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod.VENDING_MACHINE_PROPERTY).with("candidates", "vending_machine()");
 
       entityDescriptor.findProperty(com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod.ID_PROPERTY).with("isPassword", "false")
@@ -353,23 +338,18 @@ public class EntityMetaRegistry implements EntityMetaAssembler {
       PropertyDescriptor vendingMachine = 
       entityDescriptor.addObjectProperty($factory, com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus.VENDING_MACHINE_PROPERTY, com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine.INTERNAL_TYPE, com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine.PAYMENT_STATUS_LIST_PROPERTY, com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine.class)
       ;
-
       PropertyDescriptor id = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus.ID_PROPERTY, Long.class)
       ;
-
       PropertyDescriptor name = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus.NAME_PROPERTY, String.class)
       ;
-
       PropertyDescriptor code = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus.CODE_PROPERTY, String.class)
       ;
-
       PropertyDescriptor version = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus.VERSION_PROPERTY, Long.class)
       ;
-
       entityDescriptor.findProperty(com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus.VENDING_MACHINE_PROPERTY).with("candidates", "vending_machine()");
 
       entityDescriptor.findProperty(com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus.ID_PROPERTY).with("isPassword", "false")
@@ -452,39 +432,30 @@ public class EntityMetaRegistry implements EntityMetaAssembler {
       PropertyDescriptor id = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.product.Product.ID_PROPERTY, Long.class)
       ;
-
       PropertyDescriptor name = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.product.Product.NAME_PROPERTY, String.class)
       ;
-
       PropertyDescriptor price = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.product.Product.PRICE_PROPERTY, Integer.class)
       ;
-
       PropertyDescriptor stock = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.product.Product.STOCK_PROPERTY, Integer.class)
       ;
-
       PropertyDescriptor imageUrl = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.product.Product.IMAGE_URL_PROPERTY, String.class)
       ;
-
       PropertyDescriptor vendingMachine = 
       entityDescriptor.addObjectProperty($factory, com.doublechaintech.vendingmachineservice.product.Product.VENDING_MACHINE_PROPERTY, com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine.INTERNAL_TYPE, com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine.PRODUCT_LIST_PROPERTY, com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine.class)
       ;
-
       PropertyDescriptor createTime = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.product.Product.CREATE_TIME_PROPERTY, LocalDateTime.class)
       ;
-
       PropertyDescriptor updateTime = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.product.Product.UPDATE_TIME_PROPERTY, LocalDateTime.class)
       ;
-
       PropertyDescriptor version = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.product.Product.VERSION_PROPERTY, Long.class)
       ;
-
       entityDescriptor.findProperty(com.doublechaintech.vendingmachineservice.product.Product.ID_PROPERTY).with("isPassword", "false")
       .with("isVersion", "false")
       .with("oracle_sqlType", "number(11)")
@@ -631,31 +602,24 @@ public class EntityMetaRegistry implements EntityMetaAssembler {
       PropertyDescriptor id = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder.ID_PROPERTY, Long.class)
       ;
-
       PropertyDescriptor title = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder.TITLE_PROPERTY, String.class)
       ;
-
       PropertyDescriptor totalAmount = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder.TOTAL_AMOUNT_PROPERTY, Integer.class)
       ;
-
       PropertyDescriptor status = 
       entityDescriptor.addObjectProperty($factory, com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder.STATUS_PROPERTY, com.doublechaintech.vendingmachineservice.orderstatus.OrderStatus.INTERNAL_TYPE, com.doublechaintech.vendingmachineservice.orderstatus.OrderStatus.VENDING_ORDER_LIST_PROPERTY, com.doublechaintech.vendingmachineservice.orderstatus.OrderStatus.class)
       ;
-
       PropertyDescriptor createTime = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder.CREATE_TIME_PROPERTY, LocalDateTime.class)
       ;
-
       PropertyDescriptor updateTime = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder.UPDATE_TIME_PROPERTY, LocalDateTime.class)
       ;
-
       PropertyDescriptor version = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder.VERSION_PROPERTY, Long.class)
       ;
-
       entityDescriptor.findProperty(com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder.ID_PROPERTY).with("isPassword", "false")
       .with("isVersion", "false")
       .with("oracle_sqlType", "number(11)")
@@ -770,47 +734,36 @@ public class EntityMetaRegistry implements EntityMetaAssembler {
       PropertyDescriptor id = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment.ID_PROPERTY, Long.class)
       ;
-
       PropertyDescriptor name = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment.NAME_PROPERTY, String.class)
       ;
-
       PropertyDescriptor vendingOrder = 
       entityDescriptor.addObjectProperty($factory, com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment.VENDING_ORDER_PROPERTY, com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder.INTERNAL_TYPE, com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder.ORDER_PAYMENT_LIST_PROPERTY, com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder.class)
       ;
-
       PropertyDescriptor paymentMethod = 
       entityDescriptor.addObjectProperty($factory, com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment.PAYMENT_METHOD_PROPERTY, com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod.INTERNAL_TYPE, com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod.ORDER_PAYMENT_LIST_PROPERTY, com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod.class)
       ;
-
       PropertyDescriptor paymentStatus = 
       entityDescriptor.addObjectProperty($factory, com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment.PAYMENT_STATUS_PROPERTY, com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus.INTERNAL_TYPE, com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus.ORDER_PAYMENT_LIST_PROPERTY, com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus.class)
       ;
-
       PropertyDescriptor amount = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment.AMOUNT_PROPERTY, Integer.class)
       ;
-
       PropertyDescriptor paymentTime = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment.PAYMENT_TIME_PROPERTY, LocalDateTime.class)
       ;
-
       PropertyDescriptor transactionId = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment.TRANSACTION_ID_PROPERTY, String.class)
       ;
-
       PropertyDescriptor createTime = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment.CREATE_TIME_PROPERTY, LocalDateTime.class)
       ;
-
       PropertyDescriptor updateTime = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment.UPDATE_TIME_PROPERTY, LocalDateTime.class)
       ;
-
       PropertyDescriptor version = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment.VERSION_PROPERTY, Long.class)
       ;
-
       entityDescriptor.findProperty(com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment.ID_PROPERTY).with("isPassword", "false")
       .with("isVersion", "false")
       .with("oracle_sqlType", "number(11)")
@@ -960,43 +913,33 @@ public class EntityMetaRegistry implements EntityMetaAssembler {
       PropertyDescriptor id = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem.ID_PROPERTY, Long.class)
       ;
-
       PropertyDescriptor name = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem.NAME_PROPERTY, String.class)
       ;
-
       PropertyDescriptor vendingOrder = 
       entityDescriptor.addObjectProperty($factory, com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem.VENDING_ORDER_PROPERTY, com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder.INTERNAL_TYPE, com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder.VENDING_ORDER_ITEM_LIST_PROPERTY, com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder.class)
       ;
-
       PropertyDescriptor product = 
       entityDescriptor.addObjectProperty($factory, com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem.PRODUCT_PROPERTY, com.doublechaintech.vendingmachineservice.product.Product.INTERNAL_TYPE, com.doublechaintech.vendingmachineservice.product.Product.VENDING_ORDER_ITEM_LIST_PROPERTY, com.doublechaintech.vendingmachineservice.product.Product.class)
       ;
-
       PropertyDescriptor quantity = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem.QUANTITY_PROPERTY, Integer.class)
       ;
-
       PropertyDescriptor price = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem.PRICE_PROPERTY, Integer.class)
       ;
-
       PropertyDescriptor amount = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem.AMOUNT_PROPERTY, Integer.class)
       ;
-
       PropertyDescriptor createTime = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem.CREATE_TIME_PROPERTY, LocalDateTime.class)
       ;
-
       PropertyDescriptor updateTime = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem.UPDATE_TIME_PROPERTY, LocalDateTime.class)
       ;
-
       PropertyDescriptor version = 
       entityDescriptor.addSimpleProperty(com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem.VERSION_PROPERTY, Long.class)
       ;
-
       entityDescriptor.findProperty(com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem.ID_PROPERTY).with("isPassword", "false")
       .with("isVersion", "false")
       .with("oracle_sqlType", "number(11)")

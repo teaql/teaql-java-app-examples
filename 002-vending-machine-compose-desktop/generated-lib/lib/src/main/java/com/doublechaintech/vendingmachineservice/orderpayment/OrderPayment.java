@@ -4,11 +4,13 @@ import com.doublechaintech.vendingmachineservice.Constants;
 import com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod;
 import com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus;
 import com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder;
+import io.teaql.core.Audited;
 import io.teaql.core.BaseEntity;
 import io.teaql.core.EntityStatus;
 import io.teaql.core.FrameworkInternal;
 import io.teaql.core.RemoteInput;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * [TEAQL AI WARNING]
@@ -69,7 +71,7 @@ public class OrderPayment extends BaseEntity implements RemoteInput {
     }
     public OrderPayment updateName(String name){
         name = (name == null ? null : name.trim());
-        if(java.util.Objects.equals(this.name, name)){
+        if(Objects.equals(this.name, name)){
             return this;
         }
         handleUpdate(NAME_PROPERTY, getName(), name);
@@ -77,7 +79,7 @@ public class OrderPayment extends BaseEntity implements RemoteInput {
         return this;
     }
     public OrderPayment updateVendingOrder(VendingOrder vendingOrder){
-        if(java.util.Objects.equals(this.vendingOrder, vendingOrder)){
+        if(Objects.equals(this.vendingOrder, vendingOrder)){
             return this;
         }
         handleUpdate(VENDING_ORDER_PROPERTY, getVendingOrder(), vendingOrder);
@@ -85,7 +87,7 @@ public class OrderPayment extends BaseEntity implements RemoteInput {
         return this;
     }
     protected OrderPayment updatePaymentMethod(PaymentMethod paymentMethod){
-        if(java.util.Objects.equals(this.paymentMethod, paymentMethod)){
+        if(Objects.equals(this.paymentMethod, paymentMethod)){
             return this;
         }
         handleUpdate(PAYMENT_METHOD_PROPERTY, getPaymentMethod(), paymentMethod);
@@ -93,7 +95,7 @@ public class OrderPayment extends BaseEntity implements RemoteInput {
         return this;
     }
     protected OrderPayment updatePaymentStatus(PaymentStatus paymentStatus){
-        if(java.util.Objects.equals(this.paymentStatus, paymentStatus)){
+        if(Objects.equals(this.paymentStatus, paymentStatus)){
             return this;
         }
         handleUpdate(PAYMENT_STATUS_PROPERTY, getPaymentStatus(), paymentStatus);
@@ -101,7 +103,7 @@ public class OrderPayment extends BaseEntity implements RemoteInput {
         return this;
     }
     public OrderPayment updateAmount(Integer amount){
-        if(java.util.Objects.equals(this.amount, amount)){
+        if(Objects.equals(this.amount, amount)){
             return this;
         }
         handleUpdate(AMOUNT_PROPERTY, getAmount(), amount);
@@ -109,7 +111,7 @@ public class OrderPayment extends BaseEntity implements RemoteInput {
         return this;
     }
     public OrderPayment updatePaymentTime(LocalDateTime paymentTime){
-        if(java.util.Objects.equals(this.paymentTime, paymentTime)){
+        if(Objects.equals(this.paymentTime, paymentTime)){
             return this;
         }
         handleUpdate(PAYMENT_TIME_PROPERTY, getPaymentTime(), paymentTime);
@@ -118,7 +120,7 @@ public class OrderPayment extends BaseEntity implements RemoteInput {
     }
     public OrderPayment updateTransactionId(String transactionId){
         transactionId = (transactionId == null ? null : transactionId.trim());
-        if(java.util.Objects.equals(this.transactionId, transactionId)){
+        if(Objects.equals(this.transactionId, transactionId)){
             return this;
         }
         handleUpdate(TRANSACTION_ID_PROPERTY, getTransactionId(), transactionId);
@@ -126,7 +128,7 @@ public class OrderPayment extends BaseEntity implements RemoteInput {
         return this;
     }
     public OrderPayment updateCreateTime(LocalDateTime createTime){
-        if(java.util.Objects.equals(this.createTime, createTime)){
+        if(Objects.equals(this.createTime, createTime)){
             return this;
         }
         handleUpdate(CREATE_TIME_PROPERTY, getCreateTime(), createTime);
@@ -134,7 +136,7 @@ public class OrderPayment extends BaseEntity implements RemoteInput {
         return this;
     }
     public OrderPayment updateUpdateTime(LocalDateTime updateTime){
-        if(java.util.Objects.equals(this.updateTime, updateTime)){
+        if(Objects.equals(this.updateTime, updateTime)){
             return this;
         }
         handleUpdate(UPDATE_TIME_PROPERTY, getUpdateTime(), updateTime);
@@ -142,49 +144,49 @@ public class OrderPayment extends BaseEntity implements RemoteInput {
         return this;
     }
     public boolean isPaymentMethodGooglePay(){
-        return java.util.Objects.equals(getPaymentMethod(), Constants.PAYMENT_METHOD_GOOGLE_PAY);
+        return Objects.equals(getPaymentMethod(), Constants.PAYMENT_METHOD_GOOGLE_PAY);
     }
 
     public OrderPayment updatePaymentMethodToGooglePay(){
         return updatePaymentMethod(Constants.PAYMENT_METHOD_GOOGLE_PAY);
     }
     public boolean isPaymentMethodApplePay(){
-        return java.util.Objects.equals(getPaymentMethod(), Constants.PAYMENT_METHOD_APPLE_PAY);
+        return Objects.equals(getPaymentMethod(), Constants.PAYMENT_METHOD_APPLE_PAY);
     }
 
     public OrderPayment updatePaymentMethodToApplePay(){
         return updatePaymentMethod(Constants.PAYMENT_METHOD_APPLE_PAY);
     }
     public boolean isPaymentMethodPaypal(){
-        return java.util.Objects.equals(getPaymentMethod(), Constants.PAYMENT_METHOD_PAYPAL);
+        return Objects.equals(getPaymentMethod(), Constants.PAYMENT_METHOD_PAYPAL);
     }
 
     public OrderPayment updatePaymentMethodToPaypal(){
         return updatePaymentMethod(Constants.PAYMENT_METHOD_PAYPAL);
     }
     public boolean isPaymentMethodCreditCard(){
-        return java.util.Objects.equals(getPaymentMethod(), Constants.PAYMENT_METHOD_CREDIT_CARD);
+        return Objects.equals(getPaymentMethod(), Constants.PAYMENT_METHOD_CREDIT_CARD);
     }
 
     public OrderPayment updatePaymentMethodToCreditCard(){
         return updatePaymentMethod(Constants.PAYMENT_METHOD_CREDIT_CARD);
     }
     public boolean isPaymentStatusPending(){
-        return java.util.Objects.equals(getPaymentStatus(), Constants.PAYMENT_STATUS_PENDING);
+        return Objects.equals(getPaymentStatus(), Constants.PAYMENT_STATUS_PENDING);
     }
 
     public OrderPayment updatePaymentStatusToPending(){
         return updatePaymentStatus(Constants.PAYMENT_STATUS_PENDING);
     }
     public boolean isPaymentStatusSuccess(){
-        return java.util.Objects.equals(getPaymentStatus(), Constants.PAYMENT_STATUS_SUCCESS);
+        return Objects.equals(getPaymentStatus(), Constants.PAYMENT_STATUS_SUCCESS);
     }
 
     public OrderPayment updatePaymentStatusToSuccess(){
         return updatePaymentStatus(Constants.PAYMENT_STATUS_SUCCESS);
     }
     public boolean isPaymentStatusFailed(){
-        return java.util.Objects.equals(getPaymentStatus(), Constants.PAYMENT_STATUS_FAILED);
+        return Objects.equals(getPaymentStatus(), Constants.PAYMENT_STATUS_FAILED);
     }
 
     public OrderPayment updatePaymentStatusToFailed(){
@@ -205,6 +207,12 @@ public class OrderPayment extends BaseEntity implements RemoteInput {
     public OrderPayment comment(String comment){
         this.setComment(comment);
         return this;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public Audited<OrderPayment> auditAs(String action) {
+        return super.auditAs(action);
     }
 
     // ===== Framework Internal: generated switch dispatch =====

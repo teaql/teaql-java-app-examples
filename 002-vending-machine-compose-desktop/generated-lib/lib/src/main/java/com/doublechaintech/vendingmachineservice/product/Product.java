@@ -2,12 +2,14 @@ package com.doublechaintech.vendingmachineservice.product;
 
 import com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine;
 import com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem;
+import io.teaql.core.Audited;
 import io.teaql.core.BaseEntity;
 import io.teaql.core.EntityStatus;
 import io.teaql.core.FrameworkInternal;
 import io.teaql.core.RemoteInput;
 import io.teaql.core.SmartList;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * [TEAQL AI WARNING]
@@ -63,7 +65,7 @@ public class Product extends BaseEntity implements RemoteInput {
     }
     public Product updateName(String name){
         name = (name == null ? null : name.trim());
-        if(java.util.Objects.equals(this.name, name)){
+        if(Objects.equals(this.name, name)){
             return this;
         }
         handleUpdate(NAME_PROPERTY, getName(), name);
@@ -71,7 +73,7 @@ public class Product extends BaseEntity implements RemoteInput {
         return this;
     }
     public Product updatePrice(Integer price){
-        if(java.util.Objects.equals(this.price, price)){
+        if(Objects.equals(this.price, price)){
             return this;
         }
         handleUpdate(PRICE_PROPERTY, getPrice(), price);
@@ -79,7 +81,7 @@ public class Product extends BaseEntity implements RemoteInput {
         return this;
     }
     public Product updateStock(Integer stock){
-        if(java.util.Objects.equals(this.stock, stock)){
+        if(Objects.equals(this.stock, stock)){
             return this;
         }
         handleUpdate(STOCK_PROPERTY, getStock(), stock);
@@ -88,7 +90,7 @@ public class Product extends BaseEntity implements RemoteInput {
     }
     public Product updateImageUrl(String imageUrl){
         imageUrl = (imageUrl == null ? null : imageUrl.trim());
-        if(java.util.Objects.equals(this.imageUrl, imageUrl)){
+        if(Objects.equals(this.imageUrl, imageUrl)){
             return this;
         }
         handleUpdate(IMAGE_URL_PROPERTY, getImageUrl(), imageUrl);
@@ -96,7 +98,7 @@ public class Product extends BaseEntity implements RemoteInput {
         return this;
     }
     public Product updateVendingMachine(VendingMachine vendingMachine){
-        if(java.util.Objects.equals(this.vendingMachine, vendingMachine)){
+        if(Objects.equals(this.vendingMachine, vendingMachine)){
             return this;
         }
         handleUpdate(VENDING_MACHINE_PROPERTY, getVendingMachine(), vendingMachine);
@@ -104,7 +106,7 @@ public class Product extends BaseEntity implements RemoteInput {
         return this;
     }
     public Product updateCreateTime(LocalDateTime createTime){
-        if(java.util.Objects.equals(this.createTime, createTime)){
+        if(Objects.equals(this.createTime, createTime)){
             return this;
         }
         handleUpdate(CREATE_TIME_PROPERTY, getCreateTime(), createTime);
@@ -112,7 +114,7 @@ public class Product extends BaseEntity implements RemoteInput {
         return this;
     }
     public Product updateUpdateTime(LocalDateTime updateTime){
-        if(java.util.Objects.equals(this.updateTime, updateTime)){
+        if(Objects.equals(this.updateTime, updateTime)){
             return this;
         }
         handleUpdate(UPDATE_TIME_PROPERTY, getUpdateTime(), updateTime);
@@ -147,6 +149,12 @@ public class Product extends BaseEntity implements RemoteInput {
     public Product comment(String comment){
         this.setComment(comment);
         return this;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public Audited<Product> auditAs(String action) {
+        return super.auditAs(action);
     }
 
     // ===== Framework Internal: generated switch dispatch =====
