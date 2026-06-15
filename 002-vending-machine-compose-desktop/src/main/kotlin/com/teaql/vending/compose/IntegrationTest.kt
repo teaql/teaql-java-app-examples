@@ -1,58 +1,90 @@
 package com.teaql.vending.compose
 
 import com.doublechaintech.vendingmachineservice.Q
-import com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder
+import io.teaql.core.meta.SimpleEntityMetaFactory
+import io.teaql.provider.jdbc.JdbcSqlExecutor
+import io.teaql.runtime.TeaQLRuntime
+import org.postgresql.ds.PGSimpleDataSource
+import org.testcontainers.containers.PostgreSQLContainer
 
 fun main() {
-    println("Initializing TeaQLManager...")
+    println("Starting PostgreSQL Testcontainer...")
+    val postgres = PostgreSQLContainer<Nothing>("postgres:15-alpine").apply {
+        withDatabaseName("vending")
+        withUsername("test")
+        withPassword("test")
+        start()
+    }
+    
+    println("Initializing TeaQLManager with PostgreSQL...")
     val customLogSink = GlobalLiveLogsSink()
-    TeaQLManager.init(customLogSink)
+    
+    val metaFactory = SimpleEntityMetaFactory()
+    com.doublechaintech.vendingmachineservice.EntityMetaRegistry().assemble(metaFactory)
+    io.teaql.core.meta.EntityMetaFactory.registerGlobal(metaFactory)
+    
+    val dataSource = PGSimpleDataSource()
+    dataSource.setUrl(postgres.jdbcUrl)
+    dataSource.user = postgres.username
+    dataSource.password = postgres.password
+    
+    val adapter = JdbcSqlExecutor(dataSource)
+    val dataService = PostgresDataServiceExecutor("default", adapter, dataSource)
+    
+    TeaQLManager.runtime = TeaQLRuntime.Builder()
+        .metadata(metaFactory)
+        .dataService("default", dataService)
+        .build()
+        
+    TeaQLManager.customSink = customLogSink
+    TeaQLManager.userContext = TeaQLManager.newContext()
+    
+    dataService.ensureSchema(TeaQLManager.userContext)
+    
+    // Seed basic data
     initDatabase()
     
-    // Add a dummy order to test relation mapping
-    val dummyOrder = VendingOrder()
-    dummyOrder.updateTitle("Test Order 1")
-    dummyOrder.updateStatusToPaid()
-    dummyOrder.auditAs<VendingOrder>("create order").save(TeaQLManager.userContext)
+    // Test Scenario 1: Fetch Products (Adding to cart depends on fetched products)
+    println("\n--- SCENARIO 1: Fetch Products ---")
+    val products = fetchProducts()
+    println("Fetched ${products.size} products from DB.")
+    assert(products.isNotEmpty()) { "Products should not be empty after initDatabase()" }
     
-    val ctx = TeaQLManager.userContext
+    // Test Scenario 2: Add to Cart & Checkout (creates order, transitions to PAID, creates items)
+    println("\n--- SCENARIO 2: Add to Cart & Checkout ---")
+    val cart = listOf(products[0], products[1])
+    println("Simulating Add to Cart with: ${cart.map { it.name }}")
+    checkoutCart(cart, "Credit Card")
     
-    val p = com.doublechaintech.vendingmachineservice.product.Product()
-    p.updateName("Sample Product")
-    p.updateImageUrl("https://example.com/img.png")
-    p.auditAs<com.doublechaintech.vendingmachineservice.product.Product>("create product").save(ctx)
-
-    for (i in 0 until 4) {
-        val item = com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem()
-        item.updateName("Test Item $i")
-        item.updateVendingOrder(dummyOrder)
-        item.updateProduct(p)
-        item.auditAs<com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem>("add item").save(ctx)
-    }
-    
-    println("Running fetchOrders()...")
+    // Test Scenario 3: Order List
+    println("\n--- SCENARIO 3: Order List ---")
     val dashboardData = fetchOrders()
+    println("Total Orders: ${dashboardData.orders.size}")
+    assert(dashboardData.orders.isNotEmpty()) { "Order list should not be empty" }
     
-    println("Orders count: ${dashboardData.orders.size}")
-    for (order in dashboardData.orders) {
-        println("Order ID: ${order.id}")
-        println("Order Title: ${order.title}")
-        println("Order Status Name: ${order.status?.name ?: "NULL"}")
-        println("Order Status Code: ${order.status?.code ?: "NULL"}")
-        
-        val items = order.vendingOrderItemList
-        println("Items count: ${items?.size() ?: 0}")
-        println("Total items count from SmartList: ${items?.totalCount ?: 0}")
-        if (items != null) {
-            for (item in items) {
-                println(" - Item: ${item.name}, Product: ${item.product?.name}, Image: ${item.product?.imageUrl}")
-            }
-        }
-        println("---")
-    }
+    val order = dashboardData.orders.first()
+    println("Order ID: ${order.id}")
+    println("Order Title: ${order.title}")
+    println("Order Status: ${order.status?.name}")
+    println("Order Total Amount: ${order.totalAmount}")
+    assert(order.status?.code == "PAID") { "Order status should be PAID initially" }
     
-    println("Facets:")
-    for ((name, count) in dashboardData.statusCounts) {
-        println("$name: $count")
-    }
+    // Test Scenario 4: Order Status Transition
+    println("\n--- SCENARIO 4: Order Status Transition (Dispensing -> Complete) ---")
+    updateOrderStatus(order, "Dispense")
+    
+    val dashboardDataDispensing = fetchOrders()
+    val orderDispensing = dashboardDataDispensing.orders.first()
+    println("Order Status after dispense: ${orderDispensing.status?.name}")
+    assert(orderDispensing.status?.code == "DISPENSING") { "Order status should be DISPENSING" }
+    
+    updateOrderStatus(orderDispensing, "Complete")
+    
+    val dashboardDataComplete = fetchOrders()
+    val orderComplete = dashboardDataComplete.orders.first()
+    println("Order Status after complete: ${orderComplete.status?.name}")
+    assert(orderComplete.status?.code == "COMPLETED") { "Order status should be COMPLETED" }
+    
+    println("\nAll integration tests passed successfully!")
+    postgres.stop()
 }

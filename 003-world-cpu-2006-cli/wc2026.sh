@@ -13,7 +13,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 JAR_NAME="wc2026-cli-1.0.0-SNAPSHOT-jar-with-dependencies.jar"
-JAR_PATH="${SCRIPT_DIR}/target/${JAR_NAME}"
+JAR_PATH="${SCRIPT_DIR}/cli/target/${JAR_NAME}"
 
 # ── Pre-flight checks ────────────────────────────────────────
 
