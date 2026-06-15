@@ -33,10 +33,13 @@ dependencies {
     implementation("io.teaql:teaql-data-service-sql:1.513-RELEASE")
     implementation("io.teaql:teaql-postgres:1.513-RELEASE")
     implementation("io.teaql:teaql-mysql:1.513-RELEASE")
+    implementation("io.teaql:teaql-dm8:1.513-RELEASE")
     
-    // For Integration Tests with PostgreSQL & MySQL
+    // For Integration Tests with PostgreSQL, MySQL & DM8
     implementation("org.postgresql:postgresql:42.6.0")
     implementation("com.mysql:mysql-connector-j:8.3.0")
+    // Dameng JDBC driver (assuming it's available in standard repositories or local maven)
+    implementation("com.dameng:DmJdbcDriver18:8.1.3.140")
     
     // Test framework
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
