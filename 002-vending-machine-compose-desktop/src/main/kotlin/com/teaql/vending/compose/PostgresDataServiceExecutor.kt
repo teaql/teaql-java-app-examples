@@ -59,7 +59,7 @@ class PostgresDataServiceExecutor(
         }
 
         for (descriptor in descriptors) {
-            val repository = PortableSQLRepository(descriptor, dbAdapter, null)
+            val repository = PortableSQLRepository<Any>(descriptor, dbAdapter, null)
             repository.ensureSchema(ctx)
         }
     }
