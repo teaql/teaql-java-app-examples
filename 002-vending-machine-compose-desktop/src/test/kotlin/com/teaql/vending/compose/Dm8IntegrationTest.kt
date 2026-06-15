@@ -15,12 +15,13 @@ class Dm8IntegrationTest {
         @JvmStatic
         @BeforeAll
         fun setupDatabase() {
-            println("Connecting to local DM8...")
+            println("Connecting to local Dm8...")
             val baseUrl = "jdbc:dm://localhost:5236"
+            val baseUrlAlt = "jdbc:dm://localhost:5236?schema=SYSDBA"
             val user = "SYSDBA"
-            val passwordsToTry = listOf("123abc!@#", "SYSDBA", "SYSDBA123", "SYSDBA888", "SYSDBA123456", "admin", "root", "password")
+            val passwordsToTry = listOf("SYSDBA", "SYSDBA001", "dm8", "123abc!@#", "password", "SYS", "admin")
 
-            println("Initializing TeaQLManager with DM8...")
+            println("Initializing TeaQLManager with Dm8...")
             val customLogSink = GlobalLiveLogsSink()
             
             val metaFactory = SimpleEntityMetaFactory()
@@ -29,21 +30,25 @@ class Dm8IntegrationTest {
             
             var connected = false
             var workingPassword = ""
+            var workingUrl = baseUrl
             for (pwd in passwordsToTry) {
-                try {
-                    java.sql.DriverManager.getConnection(baseUrl, user, pwd).use { conn ->
-                        // DM8 usually connects directly to the default schema for SYSDBA
-                        connected = true
-                        workingPassword = pwd
+                for (url in listOf(baseUrl, baseUrlAlt)) {
+                    try {
+                        java.sql.DriverManager.getConnection(url, user, pwd).use { conn ->
+                            connected = true
+                            workingPassword = pwd
+                            workingUrl = url
+                        }
+                        if (connected) break
+                    } catch (e: Exception) {
+                        println("Failed with url '$url' and password '$pwd': ${e.message}")
                     }
-                    break
-                } catch (e: Exception) {
-                    println("Failed with password '$pwd': ${e.message}")
                 }
+                if (connected) break
             }
-            if (!connected) throw RuntimeException("Could not connect to DM8 with any common password")
+            if (!connected) throw RuntimeException("Could not connect to Dm8 with any common password")
             
-            val jdbcUrl = baseUrl
+            val jdbcUrl = workingUrl
             val dataSource = object : javax.sql.DataSource {
                 override fun getConnection() = java.sql.DriverManager.getConnection(jdbcUrl, user, workingPassword)
                 override fun getConnection(username: String, password: String) = java.sql.DriverManager.getConnection(jdbcUrl, username, password)
