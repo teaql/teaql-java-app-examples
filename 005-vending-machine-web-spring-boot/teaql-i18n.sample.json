@@ -1,0 +1,81 @@
+{
+    "_instructions": "This is a translation dictionary sample for the TeaQL domain package 'vending-machine-service'. To translate this file, you can copy its content and paste it into any modern AI tool (like ChatGPT, Claude, Gemini, etc.) with the following prompt: 'Translate this JSON file containing TeaQL domain vocabulary keys into 15 languages: Arabic (ar), Simplified Chinese (zh_CN), Traditional Chinese (zh_TW), Spanish (es), French (fr), German (de), Japanese (ja), Korean (ko), Portuguese (pt), Thai (th), Ukrainian (uk), Filipino (fil), Indonesian (id), English (en) under each key. Return only the valid JSON result.' Save the translated JSON externally, and configure the JVM parameter -Dteaql.i18n.path pointing to the translated JSON file path at runtime.",
+    "code": {
+        "en": "Code"
+    },
+    "orderStatus": {
+        "en": "Order Status"
+    },
+    "vendingMachine": {
+        "en": "Vending Machine"
+    },
+    "title": {
+        "en": "Title"
+    },
+    "dataService": {
+        "en": "Data Service"
+    },
+    "price": {
+        "en": "Price"
+    },
+    "imageUrl": {
+        "en": "Image Url"
+    },
+    "id": {
+        "en": "Id"
+    },
+    "paymentTime": {
+        "en": "Payment Time"
+    },
+    "stock": {
+        "en": "Stock"
+    },
+    "paymentStatus": {
+        "en": "Payment Status"
+    },
+    "amount": {
+        "en": "Amount"
+    },
+    "product": {
+        "en": "Product"
+    },
+    "quantity": {
+        "en": "Quantity"
+    },
+    "vendingOrderItem": {
+        "en": "Vending Order Item"
+    },
+    "updateTime": {
+        "en": "Update Time"
+    },
+    "version": {
+        "en": "Version"
+    },
+    "transactionId": {
+        "en": "Transaction Id"
+    },
+    "vendingOrder": {
+        "en": "Vending Order"
+    },
+    "orderPayment": {
+        "en": "Order Payment"
+    },
+    "totalAmount": {
+        "en": "Total Amount"
+    },
+    "createTime": {
+        "en": "Create Time"
+    },
+    "jdbcInfo": {
+        "en": "Jdbc Info"
+    },
+    "name": {
+        "en": "Name"
+    },
+    "paymentMethod": {
+        "en": "Payment Method"
+    },
+    "status": {
+        "en": "Status"
+    }
+}
