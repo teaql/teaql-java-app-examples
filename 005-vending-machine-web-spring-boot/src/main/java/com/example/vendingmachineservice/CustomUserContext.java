@@ -3,6 +3,11 @@ package com.example.vendingmachineservice;
 import org.slf4j.MDC;
 import io.teaql.runtime.DefaultUserContext;
 
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.annotation.RequestScope;
+
+@Component
+@RequestScope
 public class CustomUserContext extends DefaultUserContext implements VendingMachineServiceUserContext {
   public CustomUserContext(io.teaql.runtime.TeaQLRuntime runtime) {
     super(runtime);
