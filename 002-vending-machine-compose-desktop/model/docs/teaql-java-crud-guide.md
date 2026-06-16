@@ -1,12 +1,12 @@
 # TeaQL Java CRUD Guide
 
-Generated for `com.doublechaintech.vendingmachineservice`. Use this guide when adding controllers, services, jobs, or integration code in this workspace.
+Generated for `com.example.vendingmachineservice`. Use this guide when adding controllers, services, jobs, or integration code in this workspace.
 
 ## Setup
 
 ```java
-import com.doublechaintech.vendingmachineservice.Q;
-import com.doublechaintech.vendingmachineservice.VendingMachineServiceUserContext;
+import com.example.vendingmachineservice.Q;
+import com.example.vendingmachineservice.VendingMachineServiceUserContext;
 import io.teaql.core.web.WebResponse;
 ```
 
@@ -205,6 +205,6 @@ Do not hard-delete rows. Do not write SQL `DELETE` or `UPDATE` statements. If th
 
 These entities are selected by reverse relation count, not by model declaration order.
 
-- `VendingMachine`: reverse relations `4`, query `Q.vendingMachines()`, save `new VendingMachine().auditAs("comment").save(userContext)`, request `com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachineRequest`
-- `VendingOrder`: reverse relations `2`, query `Q.vendingOrders()`, save `new VendingOrder().auditAs("comment").save(userContext)`, request `com.doublechaintech.vendingmachineservice.vendingorder.VendingOrderRequest`
-- `OrderStatus`: reverse relations `1`, query `Q.orderStatuses()`, save `new OrderStatus().auditAs("comment").save(userContext)`, request `com.doublechaintech.vendingmachineservice.orderstatus.OrderStatusRequest`
+- `VendingMachine`: reverse relations `4`, query `Q.vendingMachines()`, save `new VendingMachine().auditAs("comment").save(userContext)`, request `com.example.vendingmachineservice.vendingmachine.VendingMachineRequest`
+- `VendingOrder`: reverse relations `2`, query `Q.vendingOrders()`, save `new VendingOrder().auditAs("comment").save(userContext)`, request `com.example.vendingmachineservice.vendingorder.VendingOrderRequest`
+- `OrderStatus`: reverse relations `1`, query `Q.orderStatuses()`, save `new OrderStatus().auditAs("comment").save(userContext)`, request `com.example.vendingmachineservice.orderstatus.OrderStatusRequest`

@@ -4,7 +4,7 @@
       name="vending-machine-service"
       cfg_mask_china_mobile="false"
       data_service="sqlite"
-      org="doublechaintech"
+      org="example"
       _module_key="root">
 
   <vending_machine _name="Vending Machine"

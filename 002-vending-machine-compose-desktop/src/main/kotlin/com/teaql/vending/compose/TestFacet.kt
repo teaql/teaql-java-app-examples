@@ -1,6 +1,6 @@
 package com.teaql.vending.compose
 
-import com.doublechaintech.vendingmachineservice.Q
+import com.example.vendingmachineservice.Q
 
 fun main() {
     SystemLogger.log("Starting TestFacet...")

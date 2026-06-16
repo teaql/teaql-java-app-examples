@@ -1,6 +1,6 @@
 # TeaQL API Guide
 
-Generated for `com.doublechaintech.vendingmachineservice`. Domain: **vending-machine-service**.
+Generated for `com.example.vendingmachineservice`. Domain: **vending-machine-service**.
 
 ---
 
@@ -219,7 +219,7 @@ int version = E.vendingMachine(entity).version().value();
 
 ## Part 2 — Domain Graph
 
-Package: `com.doublechaintech.vendingmachineservice`
+Package: `com.example.vendingmachineservice`
 
 ### Entity: VendingMachine
 

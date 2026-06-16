@@ -1,12 +1,12 @@
 package com.teaql.vending.compose
 
-import com.doublechaintech.vendingmachineservice.Q
-import com.doublechaintech.vendingmachineservice.product.Product
-import com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine
-import com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder
-import com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem
-import com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment
-import com.doublechaintech.vendingmachineservice.EntityMetaRegistry
+import com.example.vendingmachineservice.Q
+import com.example.vendingmachineservice.product.Product
+import com.example.vendingmachineservice.vendingmachine.VendingMachine
+import com.example.vendingmachineservice.vendingorder.VendingOrder
+import com.example.vendingmachineservice.vendingorderitem.VendingOrderItem
+import com.example.vendingmachineservice.orderpayment.OrderPayment
+import com.example.vendingmachineservice.EntityMetaRegistry
 import io.teaql.core.meta.SimpleEntityMetaFactory
 import io.teaql.core.sqlite.SqliteDataServiceExecutor
 import io.teaql.provider.jdbc.JdbcSqlExecutor
@@ -403,7 +403,7 @@ fun fetchOrders(searchKeyword: String = ""): AdminDashboardData {
             )
 
         if (searchKeyword.isNotBlank()) {
-            query = query.findWithJson("{\"title\":\"$searchKeyword\"}") as com.doublechaintech.vendingmachineservice.vendingorder.VendingOrderRequest<VendingOrder>
+            query = query.findWithJson("{\"title\":\"$searchKeyword\"}") as com.example.vendingmachineservice.vendingorder.VendingOrderRequest<VendingOrder>
         }
 
         val ordersSmartList = query.comment("fetch").purpose("admin dashboard").executeForList(ctx)

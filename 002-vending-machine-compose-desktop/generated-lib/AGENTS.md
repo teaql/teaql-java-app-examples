@@ -1,6 +1,6 @@
 # TeaQL Java Coding Agent Instructions
 
-This project uses the TeaQL-generated Java domain package `com.doublechaintech.vendingmachineservice`.
+This project uses the TeaQL-generated Java domain package `com.example.vendingmachineservice`.
 
 ## Core Rule
 
@@ -53,8 +53,8 @@ When the environment variable `TEAQL_ENFORCE_INTENT` is set to `strict`, missing
 ## Main Imports
 
 ```java
-import com.doublechaintech.vendingmachineservice.E;
-import com.doublechaintech.vendingmachineservice.Q;
+import com.example.vendingmachineservice.E;
+import com.example.vendingmachineservice.Q;
 ```
 
 The generated Java stack provides:

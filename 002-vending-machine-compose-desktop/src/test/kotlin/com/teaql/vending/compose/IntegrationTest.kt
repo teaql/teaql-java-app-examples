@@ -1,6 +1,6 @@
 package com.teaql.vending.compose
 
-import com.doublechaintech.vendingmachineservice.Q
+import com.example.vendingmachineservice.Q
 import io.teaql.core.meta.SimpleEntityMetaFactory
 import io.teaql.provider.jdbc.JdbcSqlExecutor
 import io.teaql.runtime.TeaQLRuntime
@@ -25,7 +25,7 @@ class IntegrationTest {
             val customLogSink = GlobalLiveLogsSink()
             
             val metaFactory = SimpleEntityMetaFactory()
-            com.doublechaintech.vendingmachineservice.EntityMetaRegistry().assemble(metaFactory)
+            com.example.vendingmachineservice.EntityMetaRegistry().assemble(metaFactory)
             io.teaql.core.meta.EntityMetaFactory.registerGlobal(metaFactory)
             
             var connected = false

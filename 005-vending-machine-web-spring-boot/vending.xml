@@ -4,7 +4,7 @@
       name="vending-machine-service"
       cfg_mask_china_mobile="false"
       data_service="postgres"
-      org="doublechaintech"
+      org="example"
       version="0.0.1-SNAPSHOT"
       _module_key="root">
 

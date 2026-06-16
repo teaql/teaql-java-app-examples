@@ -7,7 +7,7 @@
 > There are no standard setter methods. The entity structure is entirely proprietary and dynamically generated.
 > **RULE:** If you encounter a compilation error like `cannot find symbol` or `method not found` when calling a method (e.g., `updateXxx()`), **ABSOLUTELY DO NOT GUESS** another method name. You must immediately use the `view_file` tool to read the generated source code for the entity and find the exact method signature, or stop and ask the user for help.
 
-This workspace is the Spring Boot runtime for the TeaQL domain package `com.doublechaintech.vendingmachineservice`.
+This workspace is the Spring Boot runtime for the TeaQL domain package `com.example.vendingmachineservice`.
 
 > [!CAUTION]
 > **AI AGENT GUARDRAIL: DO NOT BYPASS TEAQL ON COMPILATION/RUNTIME ERRORS**
@@ -104,8 +104,8 @@ Hard rule: generated setters are not business APIs. New business code must not c
 ## Main Imports
 
 ```java
-import com.doublechaintech.vendingmachineservice.Q;
-import com.doublechaintech.vendingmachineservice.VendingMachineServiceUserContext;
+import com.example.vendingmachineservice.Q;
+import com.example.vendingmachineservice.VendingMachineServiceUserContext;
 import io.teaql.core.web.WebResponse;
 ```
 
@@ -167,17 +167,17 @@ For multilingual support and translation of domain terms (e.g. validation error 
 
 These examples use entities with the highest reverse relation counts. A high reverse relation count means many other objects point back to this entity, making it a stronger aggregate-root candidate.
 
-- `VendingMachine`: `Q.vendingMachines()`, reverse relations `4`, class `com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine`
-- `VendingOrder`: `Q.vendingOrders()`, reverse relations `2`, class `com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder`
-- `OrderStatus`: `Q.orderStatuses()`, reverse relations `1`, class `com.doublechaintech.vendingmachineservice.orderstatus.OrderStatus`
+- `VendingMachine`: `Q.vendingMachines()`, reverse relations `4`, class `com.example.vendingmachineservice.vendingmachine.VendingMachine`
+- `VendingOrder`: `Q.vendingOrders()`, reverse relations `2`, class `com.example.vendingmachineservice.vendingorder.VendingOrder`
+- `OrderStatus`: `Q.orderStatuses()`, reverse relations `1`, class `com.example.vendingmachineservice.orderstatus.OrderStatus`
 
 ## All Domain Entry Points
 
-- `VendingMachine`: `Q.vendingMachines()`, reverse relations `4`, class `com.doublechaintech.vendingmachineservice.vendingmachine.VendingMachine`
-- `OrderStatus`: `Q.orderStatuses()`, reverse relations `1`, class `com.doublechaintech.vendingmachineservice.orderstatus.OrderStatus`
-- `PaymentMethod`: `Q.paymentMethods()`, reverse relations `1`, class `com.doublechaintech.vendingmachineservice.paymentmethod.PaymentMethod`
-- `PaymentStatus`: `Q.paymentStatuses()`, reverse relations `1`, class `com.doublechaintech.vendingmachineservice.paymentstatus.PaymentStatus`
-- `Product`: `Q.products()`, reverse relations `1`, class `com.doublechaintech.vendingmachineservice.product.Product`
-- `VendingOrder`: `Q.vendingOrders()`, reverse relations `2`, class `com.doublechaintech.vendingmachineservice.vendingorder.VendingOrder`
-- `OrderPayment`: `Q.orderPayments()`, reverse relations `0`, class `com.doublechaintech.vendingmachineservice.orderpayment.OrderPayment`
-- `VendingOrderItem`: `Q.vendingOrderItems()`, reverse relations `0`, class `com.doublechaintech.vendingmachineservice.vendingorderitem.VendingOrderItem`
+- `VendingMachine`: `Q.vendingMachines()`, reverse relations `4`, class `com.example.vendingmachineservice.vendingmachine.VendingMachine`
+- `OrderStatus`: `Q.orderStatuses()`, reverse relations `1`, class `com.example.vendingmachineservice.orderstatus.OrderStatus`
+- `PaymentMethod`: `Q.paymentMethods()`, reverse relations `1`, class `com.example.vendingmachineservice.paymentmethod.PaymentMethod`
+- `PaymentStatus`: `Q.paymentStatuses()`, reverse relations `1`, class `com.example.vendingmachineservice.paymentstatus.PaymentStatus`
+- `Product`: `Q.products()`, reverse relations `1`, class `com.example.vendingmachineservice.product.Product`
+- `VendingOrder`: `Q.vendingOrders()`, reverse relations `2`, class `com.example.vendingmachineservice.vendingorder.VendingOrder`
+- `OrderPayment`: `Q.orderPayments()`, reverse relations `0`, class `com.example.vendingmachineservice.orderpayment.OrderPayment`
+- `VendingOrderItem`: `Q.vendingOrderItems()`, reverse relations `0`, class `com.example.vendingmachineservice.vendingorderitem.VendingOrderItem`

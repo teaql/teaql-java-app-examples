@@ -1,6 +1,6 @@
 # TeaQL Java Coding Agent Instructions
 
-This project uses the TeaQL-generated Java domain package `com.doublechaintech.todo`.
+This project uses the TeaQL-generated Java domain package `com.example.todo`.
 
 ## Core Rule
 
@@ -53,8 +53,8 @@ When the environment variable `TEAQL_ENFORCE_INTENT` is set to `strict`, missing
 ## Main Imports
 
 ```java
-import com.doublechaintech.todo.E;
-import com.doublechaintech.todo.Q;
+import com.example.todo.E;
+import com.example.todo.Q;
 ```
 
 The generated Java stack provides:
